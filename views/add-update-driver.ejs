@@ -1,0 +1,124 @@
+<div class="normalheader transition animated fadeIn">
+  <div class="hpanel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="font-light m-b-xs">
+            <%= (Object.keys(driver).length) ? 'Edit' : 'Add' %> Driver
+          </h2>
+          <div id="hbreadcrumb">
+            <ol class="hbreadcrumb breadcrumb">
+              <li><a href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+              <li><a href="<%= sails.config.base_url %>driver">Driver List</a></li>
+              <li class="active">
+                <%= (Object.keys(driver).length) ? 'Edit' : 'Add' %> Driver</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="hpanel">
+      <div class="panel-body">
+        <% if(!(Object.keys(driver).length)){ %>
+        <form action="<%= sails.config.base_url %>driver/add" method="post" enctype="multipart/form-data"
+              id="add-driver" class='form-horizontal' data-parsley-validate='true'>
+          <% }else{ %>
+          <form action="<%= sails.config.base_url %>driver/edit/<%= req.params.id %>" method="post"
+                enctype="multipart/form-data"
+                id="add-driver" class='form-horizontal' data-parsley-validate='true'>
+            <% } %>
+
+            <% if (req.session.flash) { %>
+            <%- req.flash('flashMessage') %>
+            <% } %>
+            <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
+              <label for="last_name" class="col-md-4 control-label">Name*</label>
+              <div class="col-md-6">
+                <input type="text" name="name" class="form-control" id="name" required
+                       value="<%= (driver.name) ? (driver.name) : (req.param('name')) ? req.param('name') : '' %>"
+                       maxlength="<%= sails.config.length.name %>"
+                       data-parsley-required-message="<%= Driver.message.name_required %>"
+                       data-parsley-maxlength-message="<%= Driver.message.name_maxlength %>"
+                       pattern="<%= sails.config.regex.name %>"
+                       data-parsley-pattern-message="<%= Driver.message.name_pattern %>"
+                       placeholder="Name"/>
+                <span class="help-block">
+                <strong><%= (errors.name != undefined) ? errors.name.message : '' %>
+                </strong>
+              </span>
+              </div>
+            </div>
+            <div class="form-group <%= (errors.email != undefined) ? " has-error" : "" %>">
+              <label for="email" class="col-md-4 control-label">Email*</label>
+              <div class="col-md-6">
+                <input type="email" name="email" class="form-control" id="email" required
+                       value="<%= (driver.email) ? (driver.email) : (req.param('email')) ? req.param('email') : '' %>"
+                       maxlength="<%= sails.config.length.email %>" <%= (Object.keys(driver).length) ? "disabled" : '' %>
+                       data-parsley-type="email"
+                       data-parsley-required-message="<%= WaterSupplier.message.email_required %>"
+                       data-parsley-maxlength-message="<%= WaterSupplier.message.email_maxlength %>"
+                       data-parsley-type-message="<%= WaterSupplier.message.email_valid %>"
+                       placeholder="Email"/>
+                <span class="help-block">
+                <strong><%= (errors.email != undefined) ? errors.email.message : '' %>
+                </strong>
+              </span>
+              </div>
+            </div>
+
+            <div class="form-group <%= (errors.mobile_number != undefined) ? " has-error" : "" %>">
+              <label for="contact_no" class="col-md-4 control-label">Mobile Number*</label>
+              <div class="col-md-6">
+                <input type="text" name="mobile_number" class="form-control" id="mobile_number"
+                       value="<%= (driver.mobile_number) ? (driver.mobile_number) : (req.param('mobile_number')) ? req.param('mobile_number') : '' %>"
+                       required
+                       data-parsley-length="[<%= sails.config.length.min_mobile_number %>, <%= sails.config.length.max_mobile_number %>]"
+                       data-parsley-required-message="<%= Driver.message.mobile_number_required %>"
+                       data-parsley-length-message="<%= Driver.message.mobile_number_length %>"
+                       data-parsley-pattern-message="<%= Driver.message.mobile_number_pattern %>"
+                       placeholder="Mobile Number"/>
+                <span class="help-block">
+                <strong><%= (errors.mobile_number != undefined) ? errors.mobile_number.message : '' %>
+                </strong>
+              </span>
+              </div>
+            </div>
+
+            <div class="form-group <%= (errors.address != undefined) ? " has-error" : "" %>">
+                <label for="is_active" class="col-md-4 control-label">Address*</label>
+                <div class="col-md-6">
+                  <input type="text" onFocus="geolocate()" name="address" class="form-control" required id="address"
+                         value="<%= (driver.address) ? (driver.address) : (req.param('address')) ? req.param('address') : '' %>"
+                         maxlength="<%= sails.config.length.address %>"
+                         data-parsley-required-message="<%= Driver.message.address_required %>"
+                         data-parsley-maxlength-message="<%= Driver.message.address_maxlength %>"
+                         placeholder="Address"/>
+                  <span class="help-block">
+                <strong><%= (errors.address != undefined) ? errors.address.message : '' %>
+                </strong>
+              </span>
+                  <input type="hidden" name="latitude" id="latitude" value="<%= (driver.latitude) ? (driver.latitude) : (req.param('latitude')) ? req.param('latitude') : '' %>"/>
+                  <input type="hidden" name="longitude" id="longitude" value="<%= (driver.longitude) ? (driver.longitude) : (req.param('longitude')) ? req.param('longitude') : '' %>"/>
+                </div>
+              </div>           
+              
+
+            <div class="form-group <%= (errors.account_number != undefined) ? " has-error" : "" %>">
+              <div class="col-md-8 col-md-offset-4">
+                <button type="submit" class="btn btn-primary">
+                  <%= (Object.keys(driver).length) ? 'Update' : 'Add' %> Driver
+                </button>
+                <a class="btn btn-primary" href="<%= sails.config.base_url %>driver">Cancel</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

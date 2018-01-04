@@ -1,0 +1,25 @@
+<aside id="menu">
+  <div id="navigation">
+    <div class="profile-picture">
+      <a href="<%= sails.config.base_url %>"><img src="<%= (req.session.user) ? req.session.user.photoURL: sails.config.base_url+ 'images/profile.png' %>"></a>
+      <div class="stats-label text-color">
+        <span class="font-extra-bold font-uppercase"><%= (req.session.user) ? req.session.user.displayName: 'Admin' %></span>
+      </div>
+    </div>
+    <ul class="nav" id="side-menu">
+      <li>
+        <a href="<%= sails.config.base_url %>bin" title="Manage Bin"><span
+            class="nav-label">manage Bin</span></a>
+      </li>
+      <li>
+        <a href="<%= sails.config.base_url %>city" title="Manage Area"><span class="nav-label">Manage Area</span></a>
+      </li>
+      <li>
+        <a href="<%= sails.config.base_url %>bin/search" title="Search Bin"><span class="nav-label">Search Bin</span></a>
+      </li>
+      <li>
+        <a href="<%= sails.config.base_url %>dashboard/profile" title="Profile"><span class="nav-label">Profile</span></a>
+      </li>
+    </ul>
+  </div>
+</aside>

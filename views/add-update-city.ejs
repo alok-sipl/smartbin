@@ -1,0 +1,89 @@
+<div class="normalheader transition animated fadeIn">
+  <div class="hpanel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="font-light m-b-xs">
+            <%= (type) ? 'Add City' : 'Add Location' %>
+          </h2>
+          <div id="hbreadcrumb">
+            <ol class="hbreadcrumb breadcrumb">
+              <li><a href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+              <li><a href="<%= sails.config.base_url %>device">City, Location List</a></li>
+              <li class="active">
+                <%= (type) ? 'Add City' : 'Add Location' %>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="hpanel">
+      <div class="panel-body">
+        <form action="<%= sails.config.base_url %>city/addCountry" method="post"
+              id="add-city" class='form-horizontal' data-parsley-validate='true'>
+          <div class="form-group">
+            <label for="first_name" class="col-md-4 control-label">Country*</label>
+            <div class="col-md-6">
+              <select name="country" id="country" class="form-control" required
+                      data-parsley-required-message="<%= City.message.country_required %>">
+                <option value="">Select Country</option>
+                <%
+                if(Object.keys(country).length){
+                  for(var key in country) { %>
+                <option value="<%= key %>"><%= country[key].name %></option>
+                <% }
+                } %>
+              </select>
+            </div>
+          </div>
+          <% if(type){ %>
+          <div class="form-group">
+            <label for="is_active" class="col-md-4 control-label">City*</label>
+            <div class="col-md-6">
+              <input type="text" name="city" id="city" class="form-control" required
+                     data-parsley-required-message="<%= City.message.city_required %>"
+                     data-parsley-maxlength-message="<%= City.message.city_maxlength %>"
+                     placeholder="City"/>
+            </div>
+          </div>
+          <% }else{ %>
+          <div class="form-group">
+            <label for="is_active" class="col-md-4 control-label">City*</label>
+            <div class="col-md-6">
+              <select name="city" id="city" class="form-control" required
+                      data-parsley-required-message="<%= City.message.city_required %>">
+                <option value="">Select City</option>
+              </select>
+            </div>
+          </div>
+          <% } %>
+          <input type="hidden" name="type" value="<%= type %>"/>
+          <% if(type == 1){ %>
+          <div class="form-group">
+            <label for="is_active" class="col-md-4 control-label">Area*</label>
+            <div class="col-md-6">
+              <input type="text" name="area" class="form-control" required id="area" value=""
+                     data-parsley-required-message="<%= City.message.area_required %>"
+                     data-parsley-maxlength-message="<%= City.message.area_maxlength %>"
+                     placeholder="Area"/>
+            </div>
+          </div>
+          <% } %>
+          <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+              <button type="submit" class="btn btn-primary">
+                <%= (type) ? 'Save City' : 'Update City' %>
+              </button>
+              <a class="btn btn-primary" href="<%= sails.config.base_url %>city">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

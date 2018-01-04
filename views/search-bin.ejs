@@ -1,0 +1,105 @@
+<style>
+#map-canvas { 
+    height: 500px; 
+    width: 900px;
+}
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= sails.config.google_key %>&libraries=places&sensor=false"></script>
+
+<div>
+<select onchange="resetbins()" name="select_area" onchange="getState(this.value)" id="select_area" class="form-control">
+    <option value="">Search Bin</option>
+        <% if(Object.keys(areas).length){
+            for(var key in areas) { %>
+                <option value="<%= key %>"><%= areas[key].name %>
+                </option>
+        <% } } %>
+</select>
+</div>
+
+<div id="map-canvas"></div>
+
+
+
+<script>
+var addresses = '';
+var message = '';
+var delay = 100;
+var nextAddress = 0;
+var infowindow = new google.maps.InfoWindow();
+var geo = new google.maps.Geocoder();
+var bounds = new google.maps.LatLngBounds();
+var markers=[];
+var latlng = new google.maps.LatLng(21.833524, 75.614989);
+var mapOptions = {
+    zoom: 15,
+    center: latlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+}
+var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+function filterbins() {
+var selected_area = $('#select_area').val();
+    $.ajax({
+        url: '/bin/filterbins',
+        type: "post",
+        dataType: "json",
+        beforeSend: function() {
+        },
+        data: {selected_area: selected_area},
+        cache: true,
+        error: function() {
+        },
+        success: function(e) {
+            $.each(e.bins, function(i, option) {
+                if (option.latitude != null && option.latitude != "") {
+                    var search = option.location;
+                    createmarkers(search, option.latitude, option.longitude);
+                } else {
+                    //console.log(option.lattitude+" else");
+                }
+            });
+        },
+        complete: function(jqXHR, textStatus) {
+           
+        }
+    });
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function resetbins() {
+    setMapOnAll(null);
+    filterbins();
+}
+
+function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+
+function createmarkers(add, lat, lng) {
+    var contentString = add;
+
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat, lng),
+        map: map,
+    });
+    map.setCenter(new google.maps.LatLng(lat, lng));
+    markers.push(marker);   
+
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(contentString);
+        infowindow.open(map, marker);
+    });
+
+    google.maps.event.addListener(marker, 'mouseover', function() {
+        infowindow.setContent(contentString);
+        infowindow.open(map, marker);
+    });
+
+    bounds.extend(marker.position);
+}
+
+filterbins();
+</script>

@@ -1,0 +1,162 @@
+<div class="normalheader transition animated fadeIn">
+  <div class="hpanel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="font-light m-b-xs">
+            Update Profile
+          </h2>
+          <div id="hbreadcrumb">
+            <ol class="hbreadcrumb breadcrumb">
+              <li><a href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+              <li class="active">Update Proflie
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="hpanel">
+      <div class="panel-body">
+        <form action="<%= sails.config.base_url %>dashboard/profile" method="post" enctype="multipart/form-data"
+              id="profile" class='form-horizontal' data-parsley-validate='true'>
+          <% if (req.session.flash) { %>
+          <%- req.flash('flashMessage') %>
+          <% } %>
+          <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
+            <label for="name" class="col-md-4 control-label">Name*</label>
+            <div class="col-md-6">
+              <input type="text" name="name" class="form-control" id="name"
+                     value="<%= (user.name != undefined) ? user.name : "" %>"
+                     required
+                     maxlength="<%= sails.config.length.name %>"
+                     data-parsley-required-message="<%= User.message.name_required %>"
+                     data-parsley-maxlength-message="<%= User.message.name_maxlength %>"
+                     pattern="<%= sails.config.regex.name %>"
+                     data-parsley-pattern-message="<%= User.message.name_pattern %>"
+                     placeholder="Name"/>
+              <span class="help-block">
+                <strong><%= (errors.name != undefined) ? errors.name.message : '' %>
+                </strong>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email" class="col-md-4 control-label">Email*</label>
+            <div class="col-md-6">
+              <input type="email" name="email" class="form-control" id="email"
+                     value="<%= user.email %>"
+                     disabled
+                     placeholder="Email"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="mobile_number" class="col-md-4 control-label">Mobile Number</label>
+            <div class="col-md-6">
+              <input type="text" name="mobile_number" class="form-control" id="mobile_number"
+                     value="<%= user.phone %>"
+                     disabled
+                     placeholder="Mobile Number"/>
+            </div>
+          </div>
+          <div class="form-group <%= (errors.account_number != undefined) ? " has-error" : "" %>">
+            <label for="account_number" class="col-md-4 control-label">Account Number</label>
+            <div class="col-md-6">
+              <input type="text" name="account_number" class="form-control" id="account_number"
+                     value="<%= user.account_number %>"
+                     data-parsley-type="alphanum"
+                     data-parsley-length="[<%= sails.config.length.account_number %>, <%= sails.config.length.account_number %>]"
+                     data-parsley-length-message="<%= User.message.account_number_length %>"
+                     data-parsley-type-message="<%= User.message.account_number_alphanumeric %>"
+                     placeholder="Account Number"/>
+              <span class="help-block">
+                <strong><%= (errors.account_number != undefined) ? errors.account_number.message : '' %>
+                </strong>
+              </span>
+            </div>
+          </div>
+          <div class="form-group <%= (errors.country != undefined) ? " has-error" : "" %>">
+            <label for="country" class="col-md-4 control-label">Country*</label>
+            <div class="col-md-6">
+              <select name="country" onchange="getCity(this.value)" id="country" class="form-control" required
+                      data-parsley-required-message="<%= User.message.country_required %>">
+                <option value="">Select Country</option>
+                <%
+                if(Object.keys(countries).length){
+                  for(var key in countries) { %>
+                <option <%= (key == user.country_id) ? "selected" : "" %>
+                  value="<%= key %>"><%= countries[key].name %></option>
+                <% }
+                } %>
+              </select>
+              <span class="help-block">
+                <strong><%= (errors.country != undefined) ? errors.country.message : '' %>
+                </strong>
+              </span>
+            </div>
+          </div>
+          <input type="hidden" name="country_name" id="country_name" value="<%= (user.city_name) ? (user.city_name) : '' %>"/>
+          <div class="form-group <%= (errors.city != undefined) ? " has-error" : "" %>">
+            <label for="city" class="col-md-4 control-label">City*</label>
+            <div class="col-md-6">
+              <select name="city" id="city" onchange="getSubCity(this.value)" class="form-control" required
+                      data-parsley-required-message="<%= User.message.city_required %>">
+                <option value="">Select City</option>
+                <%
+                if(Object.keys(cities).length){
+                  for(var key in cities) { %>
+                <option <%= (key == user.city_id) ? "selected" : "" %>
+                  value="<%= key %>"><%= cities[key].name %></option>
+                <% }
+                } %>
+              </select>
+              <span class="help-block">
+                <strong><%= (errors.city != undefined) ? errors.city.message : '' %>
+                </strong>
+              </span>
+            </div>
+          </div>
+          <input type="hidden" name="city_name" id="city_name" value="<%= (user.city_name) ? (user.city_name) : '' %>"/>
+          <div class="form-group <%= (errors.area != undefined) ? " has-error" : "" %>">
+            <label for="area" class="col-md-4 control-label">Area*</label>
+            <div class="col-md-6">
+              <input type="text" name="area" class="form-control" required id="area"
+                     value="<%= user.area %>"
+                     data-parsley-required-message="<%= User.message.area_required %>"
+                     data-parsley-maxlength-message="<%= User.message.area_maxlength %>"
+                     placeholder="Area"/>
+              <span class="help-block">
+                <strong><%= (errors.area != undefined) ? errors.area.message : '' %>
+                </strong>
+              </span>
+            </div>
+            <input type="hidden" name="latitude" id="latitude" value="<%= (user.latitude) ? (user.latitude) : (req.param('latitude')) ? req.param('latitude') : '' %>"/>
+            <input type="hidden" name="longitude" id="longitude" value="<%= (user.longitude) ? (user.longitude) : (req.param('longitude')) ? req.param('longitude') : '' %>"/>
+          </div>
+          <div class="form-group <%= (errors.image != undefined) ? " has-error" : "" %>">
+            <label for="image" class="col-md-4 control-label">Profile Picture</label>
+            <div class="col-md-6">
+              <input type="file" class="form-control" name="image" id="image"/>
+              <span class="help-block">
+                <strong><%= (errors.image != undefined) ? errors.image.message : '' %>
+                </strong>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+              <button type="submit" class="btn btn-primary">
+                Update Profile
+              </button>
+              <a class="btn btn-primary" href="<%= sails.config.base_url %>dashboard">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

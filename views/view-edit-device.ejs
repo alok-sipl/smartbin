@@ -1,0 +1,131 @@
+<div class="normalheader transition animated fadeIn">
+  <div class="hpanel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="font-light m-b-xs">
+            <%= (isEdit) ? "Update" : "View" %> Device
+          </h2>
+          <div id="hbreadcrumb">
+            <ol class="hbreadcrumb breadcrumb">
+              <li><a href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+              <li class="active"> <%= (isEdit) ? "Edit" : "View" %> Device
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="hpanel">
+      <div class="panel-body">
+        <form action="<%= sails.config.base_url %>dashboard/profile" method="post" enctype="multipart/form-data"
+              id="profile" class='form-horizontal' data-parsley-validate='true'>
+          <% if (req.session.flash) { %>
+          <%- req.flash('flashMessage') %>
+          <% } %>
+          <div class="form-group <%= (errors.device_id != undefined) ? " has-error" : "" %>">
+            <label for="device_id" class="col-md-4 control-label">Device Id*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <input type="text" name="device_id" class="form-control" id="device_id"
+                     value="<%= (device.device_id) ? (device.device_id) : '' %>"
+                     required
+                     pattern="<%= sails.config.regex.device_id %>"
+                     data-parsley-required-message="<%= Device.message.device_id_required %>"
+                     maxlength="<%= sails.config.length.device_id %>"
+                     data-parsley-device_id-message="<%= Device.message.device_id_size %>"
+                     pattern="<%= sails.config.regex.alpha_numeric %>"
+                     data-parsley-pattern-message="<%= Device.message.device_id_pattern %>" placeholder="Device Id"/>
+              <span class="help-block">
+                <strong><%= (errors.device_id != undefined) ? errors.device_id.message : '' %>
+                </strong>
+              </span>
+              <% }else{ %>
+              <span class=""><%= (device.device_id != undefined) ? device.device_id : "" %></span>
+              <% } %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="device_name" class="col-md-4 control-label">Device Name*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <input type="text" name="device_name" class="form-control" id="device_name"
+                     value="<%= (device.device_name != undefined) ? device.device_name : "Device Not Set" %>"
+                     disabled/>
+              <% }else{ %>
+              <span class=""><%= (device.device_name != undefined) ? device.device_name : "Device Not Set" %></span>
+              <% } %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="user_name" class="col-md-4 control-label">Associate User</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <input type="text" name="user_name" class="form-control" id="user_name"
+                     value="<%= (device.user_name != undefined) ? device.user_name : "User is not attached" %>"
+                     disabled
+                     placeholder="User Name"/>
+              <% }else{ %>
+              <span class=""><%= (device.user_name != undefined) ? device.user_name : "User is not attached" %></span>
+              <% } %>
+            </div>
+          </div>
+          <div class="form-group <%= (errors.area != undefined) ? " has-error" : "" %>">
+            <label for="area" class="col-md-4 control-label">Tank Location</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <input type="text" onFocus="geolocate()" name="area" class="form-control" required id="area"
+                     value="<%= (device.area) ? (device.area) : '' %>"
+                     maxlength="<%= sails.config.length.address %>"
+                     data-parsley-required-message="<%= WaterSupplier.message.area_required %>"
+                     data-parsley-maxlength-message="<%= WaterSupplier.message.area_maxlength %>"
+                     placeholder="Area"/>
+              <span class="help-block">
+                <strong><%= (errors.area != undefined) ? errors.area.message : '' %>
+                </strong>
+              </span>
+              <% }else{ %>
+              <span class=""><%= (device.area != undefined) ? device.area : "Not Specified" %></span>
+              <% } %>
+            </div>
+          </div>
+          <div class="form-group <%= (errors.status != undefined) ? " has-error" : "" %>">
+            <label for="is_active" class="col-md-4 control-label">Status*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <select name="status" id="status" class="form-control" required
+                      data-parsley-required-message="<%= User.message.status_required %>">
+                <option <%= (device.is_deleted == undefined) ? "selected" : "" %> value="">Select Status</option>
+                <option <%= (device.is_deleted == false) ? "selected" : "" %> value="true">Active</option>
+                <option <%= (device.is_deleted == true) ? "selected" : "" %> value="false">In Active</option>
+              </select>
+              <span class="help-block">
+                <strong><%= (errors.status != undefined) ? errors.status.message : '' %>
+                </strong>
+
+                <% }else{ %>
+                <span class=""><%= (device.is_deleted != undefined) ? ((device.is_deleted) ? "In Active" : "Active") : "Not Selected" %></span>
+                <% } %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+              <% if(isEdit){ %>
+              <button type="submit" class="btn btn-primary">
+                Update Device
+              </button>
+              <a class="btn btn-primary" href="<%= sails.config.base_url %>device">Cancel</a>
+              <% }else{ %>
+              <a class="btn btn-primary" href="<%= sails.config.base_url %>device">Back</a>
+              <% } %>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

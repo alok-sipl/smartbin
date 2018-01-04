@@ -1,0 +1,130 @@
+<div class="normalheader transition animated fadeIn">
+  <div class="hpanel">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="font-light m-b-xs">
+            <% console.log("Subcities id:- ", subcities.city_id); %>
+            <%= (isEdit) ? "Update" : "View" %> Location: <%= (subcities.name != undefined) ? subcities.name : "" %>
+          </h2>
+          <div id="hbreadcrumb">
+            <ol class="hbreadcrumb breadcrumb">
+              <li><a href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+              <li class="active"> <%= (isEdit) ? "Update" : "View" %> Location
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <div class="hpanel">
+      <div class="panel-body">
+        <form action="<%= sails.config.base_url %>city/edit" method="post"
+              id="profile" class='form-horizontal' data-parsley-validate='true'>
+          <% if (req.session.flash) { %>
+          <%- req.flash('flashMessage') %>
+          <% } %>
+          <div class="form-group <%= (errors.country != undefined) ? " has-error" : "" %>">
+            <label for="is_active" class="col-md-4 control-label">Country*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <select name="country" id="country" class="form-control" required
+                      data-parsley-required-message="<%= User.message.country_required %>">
+                <option value="">Select Country</option>
+                <%
+                if(countries != undefined && Object.keys(countries).length){
+                  for(var key in countries) {
+                %>
+                <option <%= (key == cities[subcities.city_id].country_id) ? "selected" : "" %>
+                  value="<%= key %>"><%= countries[key].name %></option>
+                <% }
+                } %>
+              </select>
+              <span class="help-block">
+                <strong><%= (errors.country != undefined) ? errors.country.message : '' %>
+                </strong>
+
+                <% }else{ %>
+                <span class=""><%= (city.country_name != undefined) ? city.country_name : "" %></span>
+                <% } %>
+            </div>
+          </div>
+          <div class="form-group <%= (errors.city != undefined) ? " has-error" : "" %>">
+            <label for="is_active" class="col-md-4 control-label">State*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <select name="city" id="city" class="form-control" required
+                      data-parsley-required-message="<%= User.message.city_required %>">
+                <option value="">Select City</option>
+                <%
+                if(cities != undefined && Object.keys(cities).length){
+                  for(var key in cities) {
+                %>
+                <option <%= (key == cities[subcities.city_id]) ? "selected" : "" %>
+                  value="<%= key %>"><%= cities[key].name %></option>
+                <% }
+                } %>
+              </select>
+              <span class="help-block">
+                <strong><%= (errors.city != undefined) ? errors.city.message : '' %>
+                </strong>
+
+                <% }else{ %>
+                <span class=""><%= (city.city_name != undefined) ? city.city_name : "" %></span>
+                <% } %>
+            </div>
+          </div>
+          <div class="form-group <%= (errors.city != undefined) ? " has-error" : "" %>">
+            <label for="email" class="col-md-4 control-label">City*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <input type="text" name="city" class="form-control" id="city"
+                     value="<%= subcities.name %>"
+                     placeholder="City"/>
+              <% }else{ %>
+              <span class=""><%= (subcities.name != undefined) ? subcities.name : "" %></span>
+              <% } %>
+            </div>
+          </div>
+          <input type="hidden" name="city_id" value="<%= req.params.id %>">
+          <div class="form-group <%= (errors.status != undefined) ? " has-error" : "" %>">
+            <label for="is_active" class="col-md-4 control-label">Status*</label>
+            <div class="col-md-6">
+              <% if(isEdit){ %>
+              <select name="status" id="status" class="form-control" required
+                      data-parsley-required-message="<%= User.message.status_required %>">
+                <option <%= (subcities.is_deleted == undefined) ? "selected" : "" %> value="">Select Status</option>
+                <option <%= (subcities.is_deleted == false) ? "selected" : "" %> value="true">Active</option>
+                <option <%= (subcities.is_deleted == true) ? "selected" : "" %> value="false">In Active</option>
+              </select>
+              <span class="help-block">
+                <strong><%= (errors.status != undefined) ? errors.status.message : '' %>
+                </strong>
+
+                <% }else{ %>
+                <span
+                  class=""><%= (subcities.is_deleted != undefined) ? ((subcities.is_deleted) ? "In Active" : "Active") : "Not Selected" %></span>
+                <% } %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-8 col-md-offset-4">
+              <% if(isEdit){ %>
+              <button type="submit" class="btn btn-primary">
+                Update Location
+              </button>
+              <a class="btn btn-primary" href="<%= sails.config.base_url %>city">Cancel</a>
+              <% }else{ %>
+              <a class="btn btn-primary" href="<%= sails.config.base_url %>city">Back</a>
+              <% } %>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
