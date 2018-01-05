@@ -83,8 +83,8 @@ module.exports = {
    // environment: process.env.NODE_ENV || 'development'
 
    app_name: 'Smart Bin',
-   base_url: 'http://localhost:1337/',
-   admin_url: 'http://localhost:1337/admin',
+   base_url: 'https://smart-bin.herokuapp.com/',
+   admin_url: 'https://smart-bin.herokuapp.com/admin',
    google_key: "AIzaSyDKqiSzlWOyPDonL16HF3xHeFXRtgwKOKU" ,
   admin_email : 'ravi_sipl@systematixindia.com',
   authentication_email : 'ravi_sipl@systematixindia.com',
