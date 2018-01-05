@@ -42,7 +42,7 @@ module.exports = {
                 req.session.authenticated= true;
                 req.session.user = user;
                 req.session.userid = (Object.keys(adminDetail)[0]) ? Object.keys(adminDetail)[0] : '';
-                return res.redirect(sails.config.base_url+'supplier');
+                return res.redirect(sails.config.base_url+'bin');
               }else{
                 req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
                 return res.redirect(sails.config.base_url);
@@ -77,7 +77,7 @@ module.exports = {
      * @param  req
      */
   signUp: function (req, res) {
-    firebase.auth().createUserWithEmailAndPassword('test@mailina.khandel@systematixindia.com', '123456')
+    firebase.auth().createUserWithEmailAndPassword('admin@gmail.com', '123456')
       .then(function () {
         user = firebase.auth().currentUser;
       }).then(function (){
@@ -88,22 +88,12 @@ module.exports = {
       }).then(function (){
         var ref = db.ref().child("users");
         var data = {
-          email: 'rahul.khandel@systematixindia.com',
+          email: 'admin@gmail.com',
           password: '123456',
-          name: "Rahul Khandelwal",
-          account_number: 6304544275,
-          area: "Mari Mata Square",
-          city_id: "-L0E-tknbeJKkXDSQHzr",
-          city_name: "CL",
-          country_id: "-L0E-tknbeJKkXDSQHzr",
-          country_name: "United States",
-          is_online: true,
-          is_admin: true,
+          name: "Admin",
           phone: "9713997998",
           id: user.uid,
           is_deleted: false,
-          is_user_notification: true,
-          is_device_notification: true,
           created_at: Date.now(),
           modified_at: Date.now(),
         }
