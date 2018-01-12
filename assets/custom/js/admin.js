@@ -3,7 +3,7 @@
  */
 
  /*var BASE_URL = 'https://smart-bin.herokuapp.com';*/
- var BASE_URL = 'https://smart-bin.herokuapp.com';
+ var BASE_URL = 'http://localhost:1337';
  /* All message will be declared here */
  var CONST = {
   MSGTIMEOUT: 4000,
