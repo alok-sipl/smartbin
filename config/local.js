@@ -27,7 +27,7 @@
  * http://sailsjs.org/#!/documentation/anatomy/myApp/config/local.js.html
  */
 
-module.exports = {
+ module.exports = {
 
   /***************************************************************************
    * Your SSL certificate and key, if you want to be able to serve HTTP      *
@@ -83,16 +83,19 @@ module.exports = {
    // environment: process.env.NODE_ENV || 'development'
 
    app_name: 'Smart Bin',
+  /* base_url: 'https://smart-bin.herokuapp.com/',
+   admin_url: 'https://smart-bin.herokuapp.com/admin',
+   */  
    base_url: 'https://smart-bin.herokuapp.com/',
    admin_url: 'https://smart-bin.herokuapp.com/admin',
    google_key: "AIzaSyDKqiSzlWOyPDonL16HF3xHeFXRtgwKOKU" ,
-  admin_email : 'ravi_sipl@systematixindia.com',
-  authentication_email : 'ravi_sipl@systematixindia.com',
-  authentication_password : 'target@2015',
-  per_page_data : 9,
+   admin_email : 'ravi_sipl@systematixindia.com',
+   authentication_email : 'ravi_sipl@systematixindia.com',
+   authentication_password : '*******',
+   per_page_data : 9,
 
-  /* Validation message setting */
-  length:{
+   /* Validation message setting */
+   length:{
     name: 65,
     company_name: 125,
     account_number: 10,
@@ -161,6 +164,8 @@ module.exports = {
     bin_edit_error: "Error in updating bin",
     profile_update_success: "Profile update successfully",
     profile_update_error: "Error in updating profile",
+    mobile_number_already_exist: " Mobile number already registered",
+    vehicle_number_already_exist: "Vehicle number already added",
   },
 
   email_message:{

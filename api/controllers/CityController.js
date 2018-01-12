@@ -711,14 +711,14 @@ module.exports = {
    * @param  req
    */
 function getCityList(snap, countries){
-  console.log(countries);
+    cities ={}
+    return cities;
+/*  console.log(countries);
   if(Object.keys(snap).length){
     snap.forEach(function (childSnap) {
       city = childSnap.val();
       updateCity = city;
       country_id = city.country_id;
-      //console.log("id is-->", country_id);
-      //console.log("Country id is-->", countries[country_id]['name']);
       updateCity.city_id =  childSnap.key;
       updateCity.country_name =  countries[country_id]['name'];
       cities.push(updateCity);
@@ -728,7 +728,7 @@ function getCityList(snap, countries){
     cities ={}
     return cities;
   }
-}
+*/}
 
 
 

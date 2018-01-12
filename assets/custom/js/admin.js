@@ -2,10 +2,10 @@
  * Main set common settings of the application
  */
 
-var BASE_URL = 'https://smart-bin.herokuapp.com';
-
-/* All message will be declared here */
-var CONST = {
+ /*var BASE_URL = 'https://smart-bin.herokuapp.com';*/
+ var BASE_URL = 'https://smart-bin.herokuapp.com';
+ /* All message will be declared here */
+ var CONST = {
   MSGTIMEOUT: 4000,
 }
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
  *  For manage all actions for the admin
  */
 
-$(document).ready(function () {
+ $(document).ready(function () {
 
   /* Check/uncheck the tank type for supplier */
   $('#check_all').click(function () {
@@ -226,7 +226,7 @@ function fillInAddress() {
 }
 
 /* Bias the autocomplete object to the user's geographical location,
- as supplied by the browser's 'navigator.geolocation' object. */
+as supplied by the browser's 'navigator.geolocation' object. */
 function geolocate() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -267,7 +267,7 @@ var helper = {
    * @method: checkResponse
    * @desc: CHeck error messages in response
    */
-  checkResponse: function (response) {
+   checkResponse: function (response) {
     if (response.status == false && typeof response.errors != 'undefined' && response.errors.length > 0) {
       var message = '';
       response.errors.forEach(function (val) {
@@ -281,14 +281,14 @@ var helper = {
    * @method: showLoader
    * @desc: Show loader
    */
-  showLoader: function () {
+   showLoader: function () {
     $(".splash").show();
   },
   /*
    * @method: hideLoader
    * @desc: hide loader
    */
-  hideLoader: function () {
+   hideLoader: function () {
     $(".splash").hide();
   },
   /*
@@ -296,22 +296,22 @@ var helper = {
    * @desc: Delete confirmation dialog
    * @param fn: function execute after the cofirm
    */
-  deleteConfirmation: function (fn) {
+   deleteConfirmation: function (fn) {
     swal({
-        title: "Are you sure?",
-        text: "You will not be able to recover!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#DD6B55',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: "No, cancel please!",
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
-          fn();
-        }
-      });
+      title: "Are you sure?",
+      text: "You will not be able to recover!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: "No, cancel please!",
+      closeOnCancel: true
+    },
+    function (isConfirm) {
+      if (isConfirm) {
+        fn();
+      }
+    });
   }
 
 
@@ -384,28 +384,28 @@ $(document).ready(function () {
     mtype: "GET",
     datatype: "json",
     colModel: [
-      {label: 'City', name: 'name', width: 300, search: true},
-      {label: 'Country', name: 'country_name', width: 150},
-      {
-        label: 'Status', name: 'is_deleted', width: 100, search: false,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
-        }
-      },
-      {
-        label: 'Action', name: 'city_id', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '<a title="View Location" href="' + BASE_URL + '/city/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
-          action += '<a title="Edit City" href="' + BASE_URL + '/city/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="" data-status="true" data-url="' + BASE_URL + '/city/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="" data-status="false" data-url="' + BASE_URL + '/city/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
-          return action;
-        }
+    {label: 'City', name: 'name', width: 300, search: true},
+    {label: 'Country', name: 'country_name', width: 150},
+    {
+      label: 'Status', name: 'is_deleted', width: 100, search: false,
+      formatter: function (cellvalue) {
+        status = cellvalue;
+        return (cellvalue == false) ? "Active" : "In active";
       }
+    },
+    {
+      label: 'Action', name: 'city_id', search: false, width: 150, align: "center",
+      formatter: function (cellvalue) {
+        var action = '<a title="View Location" href="' + BASE_URL + '/city/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
+        action += '<a title="Edit City" href="' + BASE_URL + '/city/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+        if (status) {
+          action += '<a data-tooltip="" title="" data-status="true" data-url="' + BASE_URL + '/city/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+        } else {
+          action += '<a data-tooltip="" title="" data-status="false" data-url="' + BASE_URL + '/city/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
+        }
+        return action;
+      }
+    }
     ],
     viewrecords: true,
     width: 945,
@@ -415,278 +415,385 @@ $(document).ready(function () {
     gridview: true,
     pager: "#city-grid-pager",
   });
-  jQuery("#city-grid").jqGrid('filterToolbar', {
-    searchOperators: true, stringResult: true, searchOnEnter: false
-  });
+jQuery("#city-grid").jqGrid('filterToolbar', {
+  searchOperators: true, stringResult: true, searchOnEnter: false
+});
 
-  /* Contact page grid */
-  $("#contact-grid").jqGrid({
-    url: BASE_URL + '/contact/contactList',
-    mtype: "GET",
-    datatype: "json",
-    colModel: [
-      {label: 'Name', name: 'name', width: 250, search: true},
-      {label: 'Email', name: 'email', width: 300, search: true},
-      {label: 'Query', name: 'query', width: 450},
-      {
-        label: 'Action', name: 'contact_id', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '<a href="' + BASE_URL + 'contact/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
-          return action;
-        }
+/* Contact page grid */
+$("#contact-grid").jqGrid({
+  url: BASE_URL + '/contact/contactList',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Name', name: 'name', width: 250, search: true},
+  {label: 'Email', name: 'email', width: 300, search: true},
+  {label: 'Query', name: 'query', width: 450},
+  {
+    label: 'Action', name: 'contact_id', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '<a href="' + BASE_URL + 'contact/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#contact-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#contact-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+
+/* Devide page grid */
+
+var status = false;
+$("#device-grid").jqGrid({
+  url: BASE_URL + '/device/deviceList',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Device Id', name: 'device_id', width: 150, search: true},
+  {
+    label: 'Device Name', name: 'name', width: 300, search: true,
+    formatter: function (cellvalue) {
+      return (cellvalue == undefined) ? "--" : cellvalue;
+    }
+  },
+  {
+    label: 'User Name', name: 'phone', width: 150,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      return (cellvalue == undefined) ? "Not Assigned" : cellvalue;
+    }
+  },
+  {
+    label: 'Location', name: 'area', width: 250,
+    formatter: function (cellvalue) {
+      return (cellvalue == undefined) ? "--" : cellvalue;
+    }
+  },
+  {
+    label: 'Last Inactive Time', name: 'city_name', width: 150, search: false,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      return (cellvalue == undefined) ? "--" : cellvalue;
+    }
+  },
+  {
+    label: 'Status', name: 'id_deleted', width: 100, search: false,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      return (cellvalue == false) ? "Active" : "In active";
+    }
+  },
+  {
+    label: 'Action', name: 'device_unique_id', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '<a title="View Device Detail" href="' + BASE_URL + '/device/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
+      action += '<a title="Edit Device Detail" href="' + BASE_URL + '/device/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+      if (status) {
+        action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/device/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+      } else {
+        action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/device/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
       }
-    ],
-    viewrecords: true,
-    width: 945,
-    height: 250,
-    rowNum: 10,
-    loadonce: true,
-    gridview: true,
-    pager: "#contact-grid-pager",
-    /*guiStyle: "bootstrap",*/
-  });
-  jQuery("#contact-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#device-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#device-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
-  /* Devide page grid */
-
-  var status = false;
-  $("#device-grid").jqGrid({
-    url: BASE_URL + '/device/deviceList',
-    mtype: "GET",
-    datatype: "json",
-    colModel: [
-      {label: 'Device Id', name: 'device_id', width: 150, search: true},
-      {
-        label: 'Device Name', name: 'name', width: 300, search: true,
-        formatter: function (cellvalue) {
-          return (cellvalue == undefined) ? "--" : cellvalue;
-        }
-      },
-      {
-        label: 'User Name', name: 'phone', width: 150,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == undefined) ? "Not Assigned" : cellvalue;
-        }
-      },
-      {
-        label: 'Location', name: 'area', width: 250,
-        formatter: function (cellvalue) {
-          return (cellvalue == undefined) ? "--" : cellvalue;
-        }
-      },
-      {
-        label: 'Last Inactive Time', name: 'city_name', width: 150, search: false,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == undefined) ? "--" : cellvalue;
-        }
-      },
-      {
-        label: 'Status', name: 'id_deleted', width: 100, search: false,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
-        }
-      },
-      {
-        label: 'Action', name: 'device_unique_id', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '<a title="View Device Detail" href="' + BASE_URL + '/device/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
-          action += '<a title="Edit Device Detail" href="' + BASE_URL + '/device/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/device/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/device/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
-          return action;
-        }
+/* Location page grid */
+var status = false;
+$("#location-grid").jqGrid({
+  url: BASE_URL + '/city/subCityList',
+  postData: {cityId: $("#city_id").val()},
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Sub City', name: 'name', width: 300, search: true},
+  {label: 'City', name: 'city_name', width: 150},
+  {
+    label: 'Status', name: 'is_deleted', width: 100,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      return (cellvalue == false) ? "Active" : "In active";
+    }
+  },
+  {
+    label: 'Action', name: 'city_id', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '<a href="' + BASE_URL + '/city/editLocation/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+      if (status) {
+        action += '<a data-tooltip="" title="" data-status="true" data-url="' + BASE_URL + '/city/updateLocation/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+      } else {
+        action += '<a data-tooltip="" title="" data-status="false" data-url="' + BASE_URL + '/city/updateLocation/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
       }
-    ],
-    viewrecords: true,
-    width: 945,
-    height: 250,
-    rowNum: 10,
-    loadonce: true,
-    gridview: true,
-    pager: "#device-grid-pager",
-    /*guiStyle: "bootstrap",*/
-  });
-  jQuery("#device-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#location-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#location-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
-  /* Location page grid */
-  var status = false;
-  $("#location-grid").jqGrid({
-    url: BASE_URL + '/city/subCityList',
-    postData: {cityId: $("#city_id").val()},
-    mtype: "GET",
-    datatype: "json",
-    colModel: [
-      {label: 'Sub City', name: 'name', width: 300, search: true},
-      {label: 'City', name: 'city_name', width: 150},
-      {
-        label: 'Status', name: 'is_deleted', width: 100,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
-        }
-      },
-      {
-        label: 'Action', name: 'city_id', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '<a href="' + BASE_URL + '/city/editLocation/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="" data-status="true" data-url="' + BASE_URL + '/city/updateLocation/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="" data-status="false" data-url="' + BASE_URL + '/city/updateLocation/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
-          return action;
-        }
+/* User listing grid */
+$("#user-grid").jqGrid({
+  url: BASE_URL + '/user/userlist',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Name', name: 'name', width: 200, search: true},
+  {label: 'Email', name: 'email', width: 320, search: true},
+  {label: 'Contact Number', name: 'phone', width: 150, align: "right"},
+  {label: 'Location', name: 'area', width: 250},
+  {label: 'City', name: 'city_name', width: 150},
+  {label: 'Country', name: 'country_name', width: 130},
+  {
+    label: 'Status', name: 'id_deleted', width: 100, search: false,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      return (cellvalue == false) ? "Active" : "In active";
+    }
+  },
+  {
+    label: 'Action', name: 'user_id', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '<a title="View User Detail" href="' + BASE_URL + '/user/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
+      action += '<a title="Edit User Detail" href="' + BASE_URL + '/user/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+      if (status) {
+        action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/user/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+      } else {
+        action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/user/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
       }
-    ],
-    viewrecords: true,
-    width: 945,
-    height: 250,
-    rowNum: 10,
-    loadonce: true,
-    gridview: true,
-    pager: "#location-grid-pager",
-    /*guiStyle: "bootstrap",*/
-  });
-  jQuery("#location-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#user-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#user-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
-  /* User listing grid */
-  $("#user-grid").jqGrid({
-    url: BASE_URL + '/user/userlist',
-    mtype: "GET",
-    datatype: "json",
-    colModel: [
-      {label: 'Name', name: 'name', width: 200, search: true},
-      {label: 'Email', name: 'email', width: 320, search: true},
-      {label: 'Contact Number', name: 'phone', width: 150, align: "right"},
-      {label: 'Location', name: 'area', width: 250},
-      {label: 'City', name: 'city_name', width: 150},
-      {label: 'Country', name: 'country_name', width: 130},
-      {
-        label: 'Status', name: 'id_deleted', width: 100, search: false,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
-        }
-      },
-      {
-        label: 'Action', name: 'user_id', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '<a title="View User Detail" href="' + BASE_URL + '/user/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a>';
-          action += '<a title="Edit User Detail" href="' + BASE_URL + '/user/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/user/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/user/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
-          return action;
-        }
+
+/* Driver listing grid */
+$("#driver-grid").jqGrid({
+  url: BASE_URL + '/driver/driverlist',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Name', name: 'name', width: 200, search: true},
+  {label: 'ward', name: 'ward_name', width: 320, search: true},
+  {label: 'Contact Number', name: 'mobile_number', width: 150},
+  {label: 'Address', name: 'address', width: 250},
+  {
+    label: 'Status', name: 'is_deleted', width: 100, search: false,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      console.log(cellvalue);
+      return (cellvalue == false || cellvalue == 'false') ? "Active" : "In active";
+    }
+  },
+  {
+    label: 'Action', name: 'user_id', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '';
+      action += '<a title="Edit Driver Detail" href="' + BASE_URL + '/driver/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+      if (status) {
+        action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/driver/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+      } else {
+        action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/driver/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
       }
-    ],
-    viewrecords: true,
-    width: 945,
-    height: 250,
-    rowNum: 10,
-    loadonce: true,
-    gridview: true,
-    pager: "#user-grid-pager",
-    /*guiStyle: "bootstrap",*/
-  });
-  jQuery("#user-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#driver-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#driver-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
 
-  /* Driver listing grid */
-  $("#driver-grid").jqGrid({
-    url: BASE_URL + '/driver/driverlist',
-    mtype: "GET",
-    datatype: "json",
-    colModel: [
-      {label: 'Name', name: 'name', width: 200, search: true},
-      {label: 'Email', name: 'email', width: 320, search: true},
-      {label: 'Contact Number', name: 'mobile_number', width: 150},
-      {label: 'Address', name: 'address', width: 250},
-      {
-        label: 'Status', name: 'id_deleted', width: 100, search: false,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
-        }
-      },
-      {
-        label: 'Action', name: 'user_id', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '';
-          action += '<a title="Edit Driver Detail" href="' + BASE_URL + '/driver/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/driver/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/driver/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
-          return action;
-        }
+
+/* Bin listing grid */
+$("#bin-grid").jqGrid({
+  url: BASE_URL + '/bin/binlist',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Bin ID', name: 'id', width: 200, search: true},
+  {label: 'Name', name: 'name', width: 200, search: true},
+  {label: 'Ward', name: 'ward_name', width: 200, search: true},
+  {label: 'Area', name: 'area_name', width: 200, search: true},
+  {label: 'Location', name: 'location', width: 200, search: true},
+  {
+    label: 'Status', name: 'is_deleted', width: 100, search: false,
+    formatter: function (cellvalue) {
+      status = cellvalue;
+      return (cellvalue == false) ? "Active" : "In active";
+    }
+  },
+  {
+    label: 'Action', name: 'bin_key', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '';
+      action += '<a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+      if (status) {
+        action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+      } else {
+        action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
       }
-    ],
-    viewrecords: true,
-    width: 945,
-    height: 250,
-    rowNum: 10,
-    loadonce: true,
-    gridview: true,
-    pager: "#driver-grid-pager",
-    /*guiStyle: "bootstrap",*/
-  });
-  jQuery("#driver-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#bin-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#bin-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+
+/* Bin listing grid */
+$("#bin-grid-searchpage").jqGrid({
+  url: BASE_URL + '/bin/binlist',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Name', name: 'name', width: 200, search: true},
+  {label: 'Ward', name: 'ward_name', width: 200, search: true},
+  {label: 'Filling Status', name: 'latest_dust_level', width: 200, search: true,
+  formatter: function (cellvalue) {
+    status = cellvalue;
+    var level = '';
+    if(cellvalue){
+      
+    }else{
+      cellvalue = '';
+    }
+    if(cellvalue < 40){
+      level = '<span>'+cellvalue+'</span>';
+    }else if(cellvalue >= 40 && cellvalue < 70){
+      level = '<span style="color:orange">'+cellvalue+'</span>';
+    }else{
+      level = '<span style="color:red">'+cellvalue+'</span>';
+    } 
+    return level;
+  }
+},
+{label: 'Area', name: 'area_name', width: 200, search: true},
+{label: 'Location', name: 'location', width: 200, search: true},
+{
+  label: 'Status', name: 'is_deleted', width: 100, search: false,
+  formatter: function (cellvalue) {
+    status = cellvalue;
+    return (cellvalue == false) ? "Active" : "In active";
+  }
+},
+{
+  label: 'Action', name: 'bin_key', search: false, width: 150, align: "center",
+  formatter: function (cellvalue) {
+    var action = '';
+    action += '<a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+    if (status) {
+      action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+    } else {
+      action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
+    }
+    return action;
+  }
+}
+],
+viewrecords: true,
+width: 945,
+height: 250,
+rowNum: 10,
+loadonce: true,
+gridview: true,
+pager: "#bin-grid-pager-searchpage",
+/*guiStyle: "bootstrap",*/
+});
+jQuery("#bin-grid-searchpage").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
 
 
-  /* Bin listing grid */
-  $("#bin-grid").jqGrid({
-    url: BASE_URL + '/bin/binlist',
-    mtype: "GET",
-    datatype: "json",
-    colModel: [
-      {label: 'Bin ID', name: 'id', width: 200, search: true},
-      {label: 'Name', name: 'name', width: 200, search: true},
-      {label: 'Country', name: 'country_name', width: 200, search: true},
-      {label: 'State', name: 'state_name', width: 200, search: true},
-      {label: 'City', name: 'city_name', width: 200, search: true},
-      {label: 'Area', name: 'area_name', width: 200, search: true},
-      {label: 'Location', name: 'location', width: 200, search: true},
-      {
-        label: 'Status', name: 'id_deleted', width: 100, search: false,
-        formatter: function (cellvalue) {
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
-        }
-      },
-      {
-        label: 'Action', name: 'bin_key', search: false, width: 150, align: "center",
-        formatter: function (cellvalue) {
-          var action = '';
-          action += '<a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
-          return action;
-        }
+
+/* Vehicle listing grid */
+$("#vehicle-grid").jqGrid({
+  url: BASE_URL + '/vehicle/vehiclelist',
+  mtype: "GET",
+  datatype: "json",
+  colModel: [
+  {label: 'Name', name: 'name', width: 200, search: true},
+  {label: 'Number', name: 'number', width: 200, search: true},
+
+  {label: 'Assign To', name: 'assign_to_name', width: 200, search: true},
+    {label: 'Type', name: 'type_name', width: 200, search: true},
+   {
+    label: 'Status', name: 'is_deleted', width: 100, search: false,
+    formatter: function (cellvalue) {
+      console.log(cellvalue);
+      status = cellvalue;
+      return (cellvalue == false) ? "Active" : "In active";
+    }
+  },
+  {
+    label: 'Action', name: 'vehicle_key', search: false, width: 150, align: "center",
+    formatter: function (cellvalue) {
+      var action = '';
+      action += '<a title="Edit Bin Detail" href="' + BASE_URL + '/vehicle/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
+      if (status) {
+        action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/vehicle/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+      } else {
+        action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/vehicle/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
       }
-    ],
-    viewrecords: true,
-    width: 945,
-    height: 250,
-    rowNum: 10,
-    loadonce: true,
-    gridview: true,
-    pager: "#bin-grid-pager",
-    /*guiStyle: "bootstrap",*/
-  });
-  jQuery("#bin-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+      return action;
+    }
+  }
+  ],
+  viewrecords: true,
+  width: 945,
+  height: 250,
+  rowNum: 10,
+  loadonce: true,
+  gridview: true,
+  pager: "#vehicle-grid-pager",
+  /*guiStyle: "bootstrap",*/
+});
+jQuery("#vehicle-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
 });

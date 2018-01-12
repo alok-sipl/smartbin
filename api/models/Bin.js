@@ -33,6 +33,7 @@ module.exports = {
     "bin_image_required": "Bin Image is required",
     "company_image_maxsize": "Company logo should not be larger than 4 Mb",
     "invalid_file": "Invalid file format",
+    "ward_required" : "Ward is required"
   },
 
   attributes: {

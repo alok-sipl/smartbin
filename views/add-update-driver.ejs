@@ -53,7 +53,8 @@
               </span>
               </div>
             </div>
-            <div class="form-group <%= (errors.email != undefined) ? " has-error" : "" %>">
+
+          <!--  <div class="form-group <%= (errors.email != undefined) ? " has-error" : "" %>">
               <label for="email" class="col-md-4 control-label">Email*</label>
               <div class="col-md-6">
                 <input type="email" name="email" class="form-control" id="email" required
@@ -69,7 +70,7 @@
                 </strong>
               </span>
               </div>
-            </div>
+            </div> -->
 
             <div class="form-group <%= (errors.mobile_number != undefined) ? " has-error" : "" %>">
               <label for="contact_no" class="col-md-4 control-label">Mobile Number*</label>
@@ -102,11 +103,27 @@
                 <strong><%= (errors.address != undefined) ? errors.address.message : '' %>
                 </strong>
               </span>
-                  <input type="hidden" name="latitude" id="latitude" value="<%= (driver.latitude) ? (driver.latitude) : (req.param('latitude')) ? req.param('latitude') : '' %>"/>
-                  <input type="hidden" name="longitude" id="longitude" value="<%= (driver.longitude) ? (driver.longitude) : (req.param('longitude')) ? req.param('longitude') : '' %>"/>
-                </div>
+                 </div>
               </div>           
               
+             <div class="form-group <%= (errors.ward != undefined) ? " has-error" : "" %>">
+      <label for="is_active" class="col-md-4 control-label">Ward</label>
+      <div class="col-md-6">
+      <div class="tank_type">
+
+      <%
+      if(Object.keys(wards).length){
+        for(var key in wards) { 
+          %>
+          <input type="checkbox" class="ward" name="ward" value="<%= key %>"  <% if (driver.ward && driver.ward.indexOf(key) > -1) { %> checked <% } %> /> <%= wards[key].name %>  <br>
+              <% }} %> 
+          </div>
+          <span class="help-block">
+          <strong><%= (errors.ward != undefined) ? errors.ward.message : '' %>
+          </strong>
+          </span>
+          </div>
+          </div>
 
             <div class="form-group <%= (errors.account_number != undefined) ? " has-error" : "" %>">
               <div class="col-md-8 col-md-offset-4">
