@@ -13,21 +13,46 @@
      * `VehicleController.create()`
      */
      create: function (req, res) {
-       var ref = db.ref("circles");
-        var ward = [];
-        ward.push('-L2KIB-k19hAD5ZQtPIx');
-        ward.push('-L2KJ0fCuEMiUkKcRCmv');
-        var _newVehicle = {
-            name: 'Circle 1',
-            ward: ward,
-            is_deleted: false
-        };
-        ref.push(_newVehicle).then(function (_circle) {
-           console.log("Circle created: " + JSON.stringify(_circle));
-           return res.redirect("circle");
+
+       var ref = db.ref();
+       var circle = ref.child("circles/-L2TxNe8boIvuTly8hdd ");
+       var ward = [];
+       ward.push('-L2KIB-k19hAD5ZQtPIx');
+       ward.push('-L2KJ0fCuEMiUkKcRCmv');
+       ward.push('-L2KJ0fCuEMiUkKcRCmv');
+       ward.push('-L2KJ0fCuEMiUkKcRCmv');
+       ward.push('-L2KJ0fCuEMiUkKcRCmv');
+       var _newVehicle = {
+        name: '1',
+        ward: ward,
+        is_deleted: false
+      };
+      circle.push(_newVehicle).then(function (_circle) {
+       console.log("Circle created: " + JSON.stringify(_circle));
+         //  return res.redirect("circle");
        }, function (error) {
         console.error("Error on createCircle");
         console.error(JSON.stringify(err));
-    });
+      });
+
+    },
+
+     /*
+  * Name: getCircleByCity
+  * Created By: A-SIPL
+  * Created Date: 15-jan-2018
+  * Purpose: a get circle of the selected city
+  * @param  type
+  */
+  getCircleByCity: function (req, res) {
+     if(req.body.id) {
+              var ref = db.ref("circles/" + req.body.id);
+              ref.once("value", function (snapshot) {
+        return res.json(snapshot.val());
+      });
+    }else{
+      return res.json({});
     }
+  }
+
   }

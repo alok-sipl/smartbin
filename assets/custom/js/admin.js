@@ -2,8 +2,8 @@
  * Main set common settings of the application
  */
 
- /*var BASE_URL = 'https://smart-bin.herokuapp.com';*/
  var BASE_URL = 'https://smart-bin.herokuapp.com';
+ // var BASE_URL = 'http://localhost:1337';
  /* All message will be declared here */
  var CONST = {
   MSGTIMEOUT: 4000,
@@ -139,6 +139,74 @@ function getArea(cityId) {
 }
 
 
+
+
+/* On change circle get ward list */
+function getWardByCircle(circleId) {
+  if (circleId !== "" || circleId !== undefined) {
+    $.ajax({
+      url: BASE_URL + '/ward/getWardByCircle',
+      data: {id: circleId},
+      type: 'POST',
+      success: function (result) {
+        console.log('Response getWardByCircle', result);
+        $('#ward').append('<option value="">Select Ward</option>');
+        $.each(result, function (i, obj) {
+          $('#ward').append('<option value="' + i + '">' + obj.name + '</option>');
+        });
+       },
+      error: function (textStatus, errorThrown) {
+        alert('Something went wronge');
+        location.reload();
+      }
+    });
+  }
+}
+
+/* On change ward get area list */
+function getAreaByWard(wardId) {
+  if (wardId !== "" || wardId !== undefined) {
+    $.ajax({
+      url: BASE_URL + '/area/getAreaByWard',
+      data: {id: wardId},
+      type: 'POST',
+      success: function (result) {
+        console.log('Response', result);
+        $('#area').append('<option value="">Select Area</option>');
+        $.each(result, function (i, obj) {
+          $('#area').append('<option value="' + i + '">' + obj.name + '</option>');
+        });
+       },
+      error: function (textStatus, errorThrown) {
+        alert('Something went wronge');
+        location.reload();
+      }
+    });
+  }
+}
+
+
+/* On change city get circle list */
+function getCircle(cityId) {
+  if (cityId !== "" || cityId !== undefined) {
+    $.ajax({
+      url: BASE_URL + '/circle/getCircleByCity',
+      data: {id: cityId},
+      type: 'POST',
+      success: function (result) {
+        console.log('Response', result);
+        $('#circle').append('<option value="">Select Area</option>');
+        $.each(result, function (i, obj) {
+          $('#circle').append('<option value="' + i + '">' + obj.name + '</option>');
+        });
+       },
+      error: function (textStatus, errorThrown) {
+        alert('Something went wronge');
+        location.reload();
+      }
+    });
+  }
+}
 
 /* On change country get states list */
 function getState(coutryId) {

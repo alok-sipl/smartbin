@@ -5,14 +5,15 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var db = sails.config.globals.firebasedb();
-module.exports = {
+ var db = sails.config.globals.firebasedb();
+ module.exports = {
   /**
    * CommentController.create()
    */
-  index: function (req, res) {
+   index: function (req, res) {
     return res.view('city-listing', {title: sails.config.title.city_list});
   },
+
 
   /*
     * Name: cityList
@@ -21,19 +22,21 @@ module.exports = {
     * Purpose: get all city data
     * @param  type
     */
-  cityList: function (req, res) {
-    cities = [];
-    countries = [];
-    var ref = db.ref('countries');
-    ref.once("value", function (snapshot) {
-      countries = snapshot.val();
-      var ref = db.ref("cities");
-      ref.once('value', function (snap) {
-        var cityJson     = (Object.keys(snap).length) ? getCityList(snap, countries) : {};
-        return res.json({'rows':cityJson});
+    cityList: function (req, res) {
+      cities = [];
+      countries = [];
+      var ref = db.ref('countries');
+      ref.once("value", function (snapshot) {
+        countries = snapshot.val();
+        console.log(countries);
+        var ref = db.ref("cities");
+        ref.once('value', function (snap) {
+          console.log(snap.val());
+          var cityJson     = (Object.keys(snap).length) ? getCityList(snap, countries) : {};
+          return res.json({'rows':cityJson});
+        });
       });
-    });
-  },
+    },
 
   /*
     * Name: addCity
@@ -42,29 +45,29 @@ module.exports = {
     * Purpose: add new city location
     * @param  type
     */
-  addCity: function (req, res) {
-    async.waterfall([
-      function (cb) {
-        if (req.method == 'GET') {
-          var country = {};
-          var city = {};
-          var ref = db.ref('countries');
-          ref.once("value", function (snapshot) {
-            country = snapshot.val();
-            return res.view('add-update-city', {title: sails.config.title.add_city, 'country': country, type: req.params.id});
-          });
-        } else {
-          var ref = db.ref();
-          var postsRef = db.ref('countries/' + req.param('country'));
-          postsRef.push({
-            name: req.param('city'),
-            is_deleted: 0
-          });
-          return res.redirect('city');
+    addCity: function (req, res) {
+      async.waterfall([
+        function (cb) {
+          if (req.method == 'GET') {
+            var country = {};
+            var city = {};
+            var ref = db.ref('countries');
+            ref.once("value", function (snapshot) {
+              country = snapshot.val();
+              return res.view('add-update-city', {title: sails.config.title.add_city, 'country': country, type: req.params.id});
+            });
+          } else {
+            var ref = db.ref();
+            var postsRef = db.ref('countries/' + req.param('country'));
+            postsRef.push({
+              name: req.param('city'),
+              is_deleted: 0
+            });
+            return res.redirect('city');
+          }
         }
-      }
-    ])
-  },
+        ])
+    },
 
   /*
     * Name: updateCity
@@ -73,19 +76,19 @@ module.exports = {
     * Purpose: add new city location
     * @param  type
     */
-  updateCity: function (req, res) {
-    async.waterfall([
-      function(cb) {
-        var ref = db.ref();
-        var postsRef = ref.child("countries/-L0E-tknbeJKkXDSQHzr/");
-        var newPostRef = postsRef.push();
-        newPostRef.set({
-          name: 'Alok ',
-          is_deleted: 0,
-        });
-      }
-    ])
-  },
+    updateCity: function (req, res) {
+      async.waterfall([
+        function(cb) {
+          var ref = db.ref();
+          var postsRef = ref.child("countries/-L0E-tknbeJKkXDSQHzr/");
+          var newPostRef = postsRef.push();
+          newPostRef.set({
+            name: 'Alok ',
+            is_deleted: 0,
+          });
+        }
+        ])
+    },
 
 
   /*
@@ -196,8 +199,8 @@ module.exports = {
           is_deleted: false
         });
       }
-    ])
-  },
+      ])
+},
 
 
   /*
@@ -231,7 +234,7 @@ module.exports = {
           is_deleted: false
         });
       }
-    ])
+      ])
   },
 
 
@@ -242,30 +245,30 @@ module.exports = {
 * Purpose: add likes on supplier
 * @param  type
 */
-  addLikes: function (req, res) {
-    var ref = db.ref();
-    var likes = ref.child("likes");
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0UbCoAiFk06mBEYfDZ",
-      supplier_id: "-L12NuoTcIk4d7WfNa6k"
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0UbCoAiFk06mBEYfDZ",
-      supplier_id: "-L12ON6YsFBFRd29plTr"
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "-L12Qr3gWN1bqsLjis6S"
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L11mL6iWoNEfcwGf3m4",
-      supplier_id: "-L12NuoTcIk4d7WfNa6k"
-    });
-  },
+addLikes: function (req, res) {
+  var ref = db.ref();
+  var likes = ref.child("likes");
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0UbCoAiFk06mBEYfDZ",
+    supplier_id: "-L12NuoTcIk4d7WfNa6k"
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0UbCoAiFk06mBEYfDZ",
+    supplier_id: "-L12ON6YsFBFRd29plTr"
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "-L12Qr3gWN1bqsLjis6S"
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L11mL6iWoNEfcwGf3m4",
+    supplier_id: "-L12NuoTcIk4d7WfNa6k"
+  });
+},
 
 
   /*
@@ -275,112 +278,112 @@ module.exports = {
 * Purpose: add reading data
 * @param  type
 */
-  deviceReading: function (req, res) {
-    var ref = db.ref();
-    var likes = ref.child("device_reading");
-    var newSubCities = likes.push();
-    newSubCities.set({
-      device_id: "-L0oJuC3wNmUAnuic-or",
-      reading: "20",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "12",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "13",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "13",
-      created_date: Date.now()
-    });
+deviceReading: function (req, res) {
+  var ref = db.ref();
+  var likes = ref.child("device_reading");
+  var newSubCities = likes.push();
+  newSubCities.set({
+    device_id: "-L0oJuC3wNmUAnuic-or",
+    reading: "20",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "12",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "13",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "13",
+    created_date: Date.now()
+  });
 
-    newSubCities.set({
-      device_id: "-L0oJuC3wNmUAnuic-or",
-      reading: "40",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "42",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "42",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "13",
-      created_date: Date.now()
-    });
+  newSubCities.set({
+    device_id: "-L0oJuC3wNmUAnuic-or",
+    reading: "40",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "42",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "42",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "13",
+    created_date: Date.now()
+  });
 
-    newSubCities.set({
-      device_id: "-L0oJuC3wNmUAnuic-or",
-      reading: "20",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "12",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "13",
-      created_date: Date.now()
-    });
-    var newSubCities = likes.push();
-    newSubCities.set({
-      user_id: "-L0oJuC3wNmUAnuic-or",
-      supplier_id: "90",
-      created_date: Date.now()
-    });
-  },
-
-
-  like: function (req, res) {
-    db.ref('/users').orderByChild('name')
-      .startAt('Alok')
-      .endAt("Alok\uf8ff")
-      .once('value')
-      .then(function (snapshot) {
-        console.log(snapshot.val());
-      });
-  },
+  newSubCities.set({
+    device_id: "-L0oJuC3wNmUAnuic-or",
+    reading: "20",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "12",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "13",
+    created_date: Date.now()
+  });
+  var newSubCities = likes.push();
+  newSubCities.set({
+    user_id: "-L0oJuC3wNmUAnuic-or",
+    supplier_id: "90",
+    created_date: Date.now()
+  });
+},
 
 
-  orderBy: function (req, res) {
-    db.ref('/countries')
-      .orderByChild("name")
-      .limitToFirst(2)
-      .once('value')
-      .then(function (snapshot) {
-        console.log(snapshot.val());
-      });
-  },
+like: function (req, res) {
+  db.ref('/users').orderByChild('name')
+  .startAt('Alok')
+  .endAt("Alok\uf8ff")
+  .once('value')
+  .then(function (snapshot) {
+    console.log(snapshot.val());
+  });
+},
 
-  count: function (req, res) {
-    db.ref('/countries')
-      .once('value')
-      .then(function (snapshot) {
-        console.log(snapshot.numChildren());
-      });
-  },
+
+orderBy: function (req, res) {
+  db.ref('/countries')
+  .orderByChild("name")
+  .limitToFirst(2)
+  .once('value')
+  .then(function (snapshot) {
+    console.log(snapshot.val());
+  });
+},
+
+count: function (req, res) {
+  db.ref('/countries')
+  .once('value')
+  .then(function (snapshot) {
+    console.log(snapshot.numChildren());
+  });
+},
 
   /*
   * Name: getCityByCountry
@@ -391,12 +394,12 @@ module.exports = {
   */
   getCityByCountry: function (req, res) {
     if(req.body.id) {
-        const ref = db.ref('cities');
-        ref.orderByChild('country_id')
-          .equalTo(req.body.id)
-          .once("value",function (snapshot) {
-            return res.json(snapshot.val());
-          });
+      const ref = db.ref('cities');
+      ref.orderByChild('country_id')
+      .equalTo(req.body.id)
+      .once("value",function (snapshot) {
+        return res.json(snapshot.val());
+      });
     }else{
       return res.json({});
     }
@@ -412,12 +415,10 @@ module.exports = {
   */
   getCityByState: function (req, res) {
     if(req.body.id) {
-        const ref = db.ref('cities');
-        ref.orderByChild('state_id')
-          .equalTo(req.body.id)
-          .once("value",function (snapshot) {
-            return res.json(snapshot.val());
-          });
+      var ref = db.ref("cities/" + req.body.id);
+      ref.once("value", function (snapshot) {
+        return res.json(snapshot.val());
+      });
     }else{
       return res.json({});
     }
@@ -433,12 +434,12 @@ module.exports = {
   */
   getAreaByCity: function (req, res) {
     if(req.body.id) {
-        const ref = db.ref('areas');
-        ref.orderByChild('city_id')
-          .equalTo(req.body.id)
-          .once("value",function (snapshot) {
-            return res.json(snapshot.val());
-          });
+      const ref = db.ref('areas');
+      ref.orderByChild('city_id')
+      .equalTo(req.body.id)
+      .once("value",function (snapshot) {
+        return res.json(snapshot.val());
+      });
     }else{
       return res.json({});
     }
@@ -471,7 +472,7 @@ module.exports = {
           phone:"99999922222"
         });
       }
-    ])
+      ])
   },
 
 
@@ -503,7 +504,7 @@ module.exports = {
           mobile_number:"9713997998"
         });
       }
-    ])
+      ])
   },
 
 
@@ -514,7 +515,7 @@ module.exports = {
    * Purpose: show grid with data
    * @param  req
    */
-  view: function (req, res) {
+   view: function (req, res) {
     /* cities detail */
     var errors = {};
     var ref = db.ref("cities");
@@ -546,7 +547,7 @@ module.exports = {
    * Purpose: show grid with data
    * @param  req
    */
-  edit:function(req, res){
+   edit:function(req, res){
     if (req.method == "POST") {
       errors = ValidationService.validate(req);
       if (Object.keys(errors).length) {
@@ -594,7 +595,7 @@ module.exports = {
    * Purpose: Edit location
    * @param  req
    */
-  editLocation:function(req, res){
+   editLocation:function(req, res){
     if (req.method == "POST") {
       errors = ValidationService.validate(req);
       if (Object.keys(errors).length) {
@@ -647,7 +648,7 @@ module.exports = {
    * Purpose: show grid with data
    * @param  req
    */
-  subCity: function (req, res) {
+   subCity: function (req, res) {
     return res.view('subcity-listing', {title: sails.config.title.view_location});
   },
 
@@ -659,20 +660,20 @@ module.exports = {
     * Purpose: get all city data
     * @param  type
     */
-  subCityList: function (req, res) {
-    subCities = [];
-    cities = [];
-    var cityId = (req.query.cityId != undefined) ? req.params.id : '';
-    var ref = db.ref('cities/'+ req.query.cityId);
-    ref.once("value", function (snapshot) {
-      cities = snapshot.val();
-      var ref = db.ref("subcities");
-      ref.orderByChild("city_id").equalTo(req.query.cityId).once("value", function(snap) {
-        var cityJson     = (Object.keys(snap).length) ? getSubCityList(snap, cities) : {};
-        return res.json({'rows':cityJson});
+    subCityList: function (req, res) {
+      subCities = [];
+      cities = [];
+      var cityId = (req.query.cityId != undefined) ? req.params.id : '';
+      var ref = db.ref('cities/'+ req.query.cityId);
+      ref.once("value", function (snapshot) {
+        cities = snapshot.val();
+        var ref = db.ref("subcities");
+        ref.orderByChild("city_id").equalTo(req.query.cityId).once("value", function(snap) {
+          var cityJson     = (Object.keys(snap).length) ? getSubCityList(snap, cities) : {};
+          return res.json({'rows':cityJson});
+        });
       });
-    });
-  },
+    },
 
   /*
  * Name: updateStatus
@@ -681,24 +682,24 @@ module.exports = {
  * Purpose: Update status of city
  * @param  req
  */
-  updateStatus: function (req, res) {
-    var id = req.body.id;
-    var status = req.body.is_active;
-    if(id != ''){
-      db.ref('/cities/' + id)
-        .update({
-          'is_deleted': status
-        })
-        .then(function () {
-          return res.json({'status':true});
-        })
-        .catch(function (err) {
-          res.json({'status':false, 'message': err});
-        });
-    }else{
-      return res.json({'status':false, message: sails.config.flash.something_went_wronge});
-    }
-  },
+ updateStatus: function (req, res) {
+  var id = req.body.id;
+  var status = req.body.is_active;
+  if(id != ''){
+    db.ref('/cities/' + id)
+    .update({
+      'is_deleted': status
+    })
+    .then(function () {
+      return res.json({'status':true});
+    })
+    .catch(function (err) {
+      res.json({'status':false, 'message': err});
+    });
+  }else{
+    return res.json({'status':false, message: sails.config.flash.something_went_wronge});
+  }
+},
 };
 
 
@@ -710,16 +711,23 @@ module.exports = {
    * Purpose: sget the user grid dat
    * @param  req
    */
-function getCityList(snap, countries){
+   function getCityList(snap, countries){
     cities ={}
-    return cities;
-/*  console.log(countries);
+   return cities;
+  console.log(countries);
   if(Object.keys(snap).length){
     snap.forEach(function (childSnap) {
       city = childSnap.val();
       updateCity = city;
-      country_id = city.country_id;
+      country_id = childSnap.key;
       updateCity.city_id =  childSnap.key;
+      console.log("call 724 line no , countries");
+      console.log(countries);
+      console.log("city == ");
+      console.log(city);
+      console.log("country_id == ");
+      console.log(country_id);
+    
       updateCity.country_name =  countries[country_id]['name'];
       cities.push(updateCity);
     });
@@ -728,7 +736,7 @@ function getCityList(snap, countries){
     cities ={}
     return cities;
   }
-*/}
+}
 
 
 
@@ -739,20 +747,20 @@ function getCityList(snap, countries){
    * Purpose: sget the user grid data
    * @param  req
    */
-function getSubCityList(snap, cities){
-  if(Object.keys(snap).length){
-    snap.forEach(function (childSnap) {
-      subCity = childSnap.val();
-      updateSubCity = subCity;
-      city_id = subCity.city_id;
-      updateSubCity.city_id =  childSnap.key;
-      updateSubCity.city_name =  cities['name'];
-      subCities.push(updateSubCity);
-    });
-    return subCities;
-  }else{
-    subCities ={}
-    return subCities;
+   function getSubCityList(snap, cities){
+    if(Object.keys(snap).length){
+      snap.forEach(function (childSnap) {
+        subCity = childSnap.val();
+        updateSubCity = subCity;
+        city_id = subCity.city_id;
+        updateSubCity.city_id =  childSnap.key;
+        updateSubCity.city_name =  cities['name'];
+        subCities.push(updateSubCity);
+      });
+      return subCities;
+    }else{
+      subCities ={}
+      return subCities;
+    }
   }
-}
 

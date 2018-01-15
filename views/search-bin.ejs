@@ -4,6 +4,7 @@ height: 500px;
 width: 900px;
 }
 </style>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= sails.config.google_key %>&libraries=places&sensor=false"></script>
 
 <div>
 <select onchange="resetbins()" name="select_area" onchange="getState(this.value)" id="select_ward" class="form-control">

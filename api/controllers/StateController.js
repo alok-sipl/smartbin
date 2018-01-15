@@ -99,10 +99,8 @@
   */
   getStateByCountry: function (req, res) {
     if(req.body.id) {
-      const ref = db.ref('states');
-      ref.orderByChild('country_id')
-      .equalTo(req.body.id)
-      .once("value",function (snapshot) {
+              var ref = db.ref("states/" + req.body.id);
+              ref.once("value", function (snapshot) {
         return res.json(snapshot.val());
       });
     }else{

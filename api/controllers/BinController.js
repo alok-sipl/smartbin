@@ -4,10 +4,49 @@
  * @description :: Server-side logic for managing drivers
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+ var async = require('async');
  var db = sails.config.globals.firebasedb();
  var firebaseAuth = sails.config.globals.firebaseAuth();
 
  module.exports = {
+
+   /**
+     * `BinController.create()`
+     */
+     create: function (req, res) {
+      var ref = db.ref("bins");
+
+      var _newBin = {
+        alert_level : "85",
+        area_id : "-L0xcM9R_zgmOhLsyTUP",
+        city_id : "-L0xcM9R_zgmOhLsyOiJ",
+        country_id : "-L1pigYbq_ZQl009gBoU",
+        created_date : 1515232076118,
+        current_level : 44,
+        device_id : 865691034146928,
+        id : "865691034146928",
+        is_deleted : false,
+        latitude : 21.8116593,
+        location : "ISKCON ,KHARGONE",
+        longitude : 75.5834045,
+        modified_date : 1515232076118,
+        circle_id : "-L2e7fEvmHHh7Pj4R30f",
+        name : "ISKCON ,KHARGONE",
+        smoke : 0,
+        state_id : "-L0xcM9R_zgmOhLsyOiX",
+        ward_id : "-L2KJ0fCuEMiUkKcRCmv"
+      }
+
+
+      ref.push(_newBin).then(function (_bin) {
+       console.log("Bin created: " + JSON.stringify(_bin));
+      // return res.redirect("bins");
+    }, function (error) {
+      console.error("Error on createBin");
+      console.error(JSON.stringify(err));
+    });
+    },
+
   /*
      * Name: index
      * Created By: A-SIPL
@@ -31,23 +70,77 @@
    */
    binlist:function(req, res){
     bins = [];
-    areas = [];
-    wards = [];
-    var ref = db.ref("areas");
-    ref.once('value', function (areaSnapshot) {
-      areas = areaSnapshot.val();
-      /* ward listing*/
-      var ref = db.ref("wards");
-      ref.once("value", function (wardSnapshot) {
-        var wards = wardSnapshot.val();
-        var ref = db.ref("bins");
-        ref.once('value', function (snap) {
-          var cityJson     = (Object.keys(snap).length) ? getBinsList(snap, areas,wards) : {};
-          return res.json({'rows':cityJson});
+    var ref = db.ref("bins");
+    ref.once('value', function (snap) {
+      var tempBinRecords = [];
+      // Array's map method.
+       _.map(snap.val(),function (val, bin_key){
+            val.bin_key = bin_key;
+            tempBinRecords.push(val)
         });
-      });
+       //console.log(tempBinRecords);
+
+
+
+     if(Object.keys(snap.val()).length){
+      var i = 0;
+      async.forEach(tempBinRecords, function (childSnap, callback){
+        console.log(childSnap);
+     // snap.forEach(function (childSnap) {
+        updateBin = {};    //    console.log("bindetails.city_id==",bindetails.ward_id);
+
+           //    console.log("bindetails.city_id==",bindetails.ward_id);
+           var ref = db.ref("areas/" + childSnap.ward_id + "/" + childSnap.area_id);
+           ref.once("value", function (snapshot) {
+            var area = snapshot.val();
+        //  console.log("area==");
+       //   console.log(area);
+
+       var ref = db.ref("circlewards/" + childSnap.circle_id + "/" + childSnap.ward_id);
+       ref.once("value", function (snapshotWards) {
+        var ward = snapshotWards.val();
+//console.log("ward==");
+        //  console.log(ward);
+        bindetails = childSnap;
+
+          updateBin = bindetails;    //    console.log("bindetails.city_id==",bindetails.ward_id);
+
+          if(ward){
+            updateBin.ward_name = ward.name;
+          }
+
+          if(area){
+            updateBin.area_name = area.name;
+         //   console.log("updateBin.area_name==",updateBin.area_name);
+       }
+
+       // updateBin.area_name =  areas[bindetails.area_id].name;
+      //  updateBin.ward_name =  bindetails.ward_id != undefined ? wards[bindetails.ward_id].name: '';
+      
+      bins.push(updateBin);
+
+      i++;
+      console.log("i==",i);
+      console.log("snap.val()).length==",Object.keys(snap.val()).length);
+      callback();
+      if(i  == Object.keys(snap.val()).length){
+      //  console.log(i);
+        //return bins;
+        return res.json({'rows':bins});
+      }
     });
-  },
+});
+});
+
+}else{
+  console.log("else");
+  bins ={};
+  return bins;
+}
+
+      //return res.json({'rows':cityJson});
+    });
+},
 
   /*
      * Name: add
@@ -64,6 +157,8 @@
       var states = {};
       var cities = {};
       var wards = {};
+      var areas = {};
+      var circles = {};
       /* Checking validation if form post */
       if (req.method == "POST") {
         errors = ValidationService.validate(req);
@@ -114,10 +209,10 @@
 
                   /* ward listing*/
                   var ref = db.ref("wards");
-                  ref.once("value", function (wardSnapshot) {
+                /*  ref.once("value", function (wardSnapshot) {
                     var wards = wardSnapshot.val();
 
-                    return res.view('add-update-bin', {
+                    */  return res.view('add-update-bin', {
                       'title': sails.config.title.add_bin,
                       'bin': bin,
                       'countries': countries,
@@ -127,12 +222,12 @@
                       'errors': errors,
                       'req': req
                     });
-                  }, function (errorObject) {
+                 /* }, function (errorObject) {
                     return res.serverError(errorObject.code);
-                  });
-                }, function (errorObject) {
-                  return res.serverError(errorObject.code);
-                });
+                  });*/
+              }, function (errorObject) {
+                return res.serverError(errorObject.code);
+              });
               } else {
                 if (uploadedFiles.length === 0) {
                   errors['image'] = {message: Bin.message.bin_image_required}
@@ -140,10 +235,10 @@
                   var ref = db.ref("countries");
                   ref.once("value", function (snapshot) {
                     var countries = snapshot.val();
-                    var ref = db.ref("wards");
+/*                    var ref = db.ref("wards");
                     ref.once("value", function (wardSnapshot) {
                       var wards = wardSnapshot.val();
-
+                      */
                       return res.view('add-update-bin', {
                         'title': sails.config.title.add_supplier,
                         'bin': bin,
@@ -154,12 +249,12 @@
                         'errors': errors,
                         'req': req
                       });
-                    }, function (errorObject) {
+                  /*  }, function (errorObject) {
                       return res.serverError(errorObject.code);
-                    });
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
+                    });*/
+                }, function (errorObject) {
+                  return res.serverError(errorObject.code);
+                });
                 } else if (allowExts.indexOf(uploadedFiles[0].type) == -1) {
                   errors['image'] = {message: Bin.message.invalid_file}
                   /* country listing*/
@@ -167,10 +262,10 @@
                   ref.once("value", function (snapshot) {
                     var countries = snapshot.val();
 
-                    var ref = db.ref("wards");
+                  /*  var ref = db.ref("wards");
                     ref.once("value", function (wardSnapshot) {
                       var wards = wardSnapshot.val();
-
+                      */
                       return res.view('add-update-bin', {
                         'title': sails.config.title.add_bin,
                         'bin': bin,
@@ -181,12 +276,12 @@
                         'errors': errors,
                         'req': req
                       });
-                    }, function (errorObject) {
+                /*    }, function (errorObject) {
                       return res.serverError(errorObject.code);
-                    });
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
+                    });*/
+                }, function (errorObject) {
+                  return res.serverError(errorObject.code);
+                });
                 } else if (bindata) {
                   req.flash('flashMessage', '<div class="alert alert-danger">' + req.param('id') + sails.config.flash.bin_id_already_exist + '</div>');
                   return res.redirect(sails.config.base_url + 'bin/add');
@@ -205,6 +300,7 @@
                     location: req.param('location'),
                     longitude: req.param('longitude'),
                     modified_date: Date.now(),
+                    circle_id : req.param('circle'),
                     name: req.param('name'),
                     state_id: req.param('state'),
                   }
@@ -230,9 +326,9 @@
     var countries = snapshot.val();
 
     /* ward listing*/
-    var ref = db.ref("wards");
+  /*  var ref = db.ref("wards");
     ref.once("value", function (wardSnapshot) {
-      var wards = wardSnapshot.val();
+      var wards = wardSnapshot.val();*/
 
       return res.view('add-update-bin', {
         'title': sails.config.title.add_supplier,
@@ -241,15 +337,17 @@
         'states': states,
         'cities': cities,
         'wards' : wards,
+        'circles' : circles,
+        'areas': areas,
         'errors': errors,
         'req': req
       });
-    }, function (errorObject) {
+   /* }, function (errorObject) {
       return res.serverError(errorObject.code);
-    });
-  }, function (errorObject) {
-    return res.serverError(errorObject.code);
-  });
+    });*/
+}, function (errorObject) {
+  return res.serverError(errorObject.code);
+});
 }
 },
 
@@ -264,8 +362,12 @@
       var bin = {};
       var countries = {};
       var cities = {};
+      var states = {};
       var isFormError = false;
       var errors = {};
+      var wards = {};
+      var circles = {};
+      var areas = {};
       if (req.method == "POST") {
         errors = ValidationService.validate(req);
         if (Object.keys(errors).length) {
@@ -275,58 +377,53 @@
 
             var countries = snapshot.val();
 
-            /* ward listing*/
-            var ref = db.ref("wards");
-            ref.once("value", function (wardSnapshot) {
-              var wards = wardSnapshot.val();
-
-              /* bin detail */
-              var ref = db.ref("bins/" + req.params.id);
+            /* bin detail */
+            var ref = db.ref("bins/" + req.params.id);
+            ref.once("value", function (snapshot) {
+              var bin = snapshot.val();
+              /* city name */
               ref.once("value", function (snapshot) {
-                var bin = snapshot.val();
-                /* city name */
-                ref.once("value", function (snapshot) {
 
-                  /* Get States */
-                  var refstates = db.ref('states');
-                  refstates.orderByChild('country_id')
-                  .equalTo(bin.country_id)
-                  .once("value",function (snapshot) {
-                    var states = snapshot.val();
+                var refState = db.ref("states/" + bin.country_id);
+                refState.once("value", function (snapshotState) {
+                  var states = snapshotState.val();
 
-                    /* Get Cities */
-                    var refcities = db.ref('cities');
-                    refcities.orderByChild('state_id')
-                    .equalTo(bin.state_id)
-                    .once("value",function (snapshot) {
-                      var cities = snapshot.val();
+                  var refCity = db.ref("cities/" + bin.state_id);
+                  refCity.once("value", function (snapshotCity) {
+                    var cities = snapshotCity.val();
 
-                      /* Get Areas */
-                      var refareas = db.ref('areas');
-                      refareas.orderByChild('city_id')
-                      .equalTo(bin.city_id)
-                      .once("value",function (snapshot) {
-                        var areas = snapshot.val();
-                        return res.view('add-update-bin', {
-                          title: sails.config.title.edit_bin,
-                          'bin': bin,
-                          "countries": countries,
-                          "wards" : wards,
-                          "states": states,
-                          "cities": cities,
-                          "areas": areas,
-                          "errors": errors
+                    var refCircle = db.ref("circles/" + bin.city_id);
+                    refCircle.once("value", function (snapshotCircle) {
+                      var circles = snapshotCircle.val();
+
+                      var refWards = db.ref("circlewards/" + bin.circle_id);
+                      refWards.once("value", function (snapshotWards) {
+                        var wards = snapshotWards.val();
+
+                        var refAreas = db.ref("areas/" + bin.ward_id);
+                        refAreas.once("value", function (snapshotAreas) {
+                          var areas = snapshotAreas.val();
+
+                          return res.view('add-update-bin', {
+                            title: sails.config.title.edit_bin,
+                            'bin': bin,
+                            "countries": countries,
+                            "states": states,
+                            "cities": cities,
+                            'wards' : wards,
+                            'circles' : circles,
+                            'areas': areas,
+                            "errors": errors
+                          });
                         });
                       });
-                      /* Get Areas */
                     });
-                    /* Get Cities */
-                  });
+/* Get Areas */
+});
+/* Get Cities */
+});
 });
 /* Get States */
-}, function (errorObject) {
-  return res.serverError(errorObject.code);
-});
 }, function (errorObject) {
   return res.serverError(errorObject.code);
 });
@@ -347,127 +444,115 @@
 
               var countries = snapshot.val();
 
-              /* ward listing*/
-              var ref = db.ref("wards");
-              ref.once("value", function (wardSnapshot) {
-                var wards = wardSnapshot.val();
-
-                /* bin detail */
-                var ref = db.ref("bins/" + req.params.id);
+              /* bin detail */
+              var ref = db.ref("bins/" + req.params.id);
+              ref.once("value", function (snapshot) {
+                var bin = snapshot.val();
+                /* city name */
                 ref.once("value", function (snapshot) {
-                  var bin = snapshot.val();
-                  /* city name */
-                  ref.once("value", function (snapshot) {
 
-                    /* Get States */
-                    var refstates = db.ref('states');
-                    refstates.orderByChild('country_id')
-                    .equalTo(bin.country_id)
-                    .once("value",function (snapshot) {
-                      var states = snapshot.val();
+                  var refState = db.ref("states/" + bin.country_id);
+                  refState.once("value", function (snapshotState) {
+                    var states = snapshotState.val();
 
-                      /* Get Cities */
-                      var refcities = db.ref('cities');
-                      refcities.orderByChild('state_id')
-                      .equalTo(bin.state_id)
-                      .once("value",function (snapshot) {
-                        var cities = snapshot.val();
+                    var refCity = db.ref("cities/" + bin.state_id);
+                    refCity.once("value", function (snapshotCity) {
+                      var cities = snapshotCity.val();
 
-                        /* Get Areas */
-                        var refareas = db.ref('areas');
-                        refareas.orderByChild('city_id')
-                        .equalTo(bin.city_id)
-                        .once("value",function (snapshot) {
-                          var areas = snapshot.val();
-                          return res.view('add-update-bin', {
-                            title: sails.config.title.edit_bin,
-                            'bin': bin,
-                            "countries": countries,
-                            "wards" : wards,
-                            "states": states,
-                            "cities": cities,
-                            "areas": areas,
-                            "errors": errors
+                      var refCircle = db.ref("circles/" + bin.city_id);
+                      refCircle.once("value", function (snapshotCircle) {
+                        var circles = snapshotCircle.val();
+
+                        var refWards = db.ref("circlewards/" + bin.circle_id);
+                        refWards.once("value", function (snapshotWards) {
+                          var wards = snapshotWards.val();
+
+                          var refAreas = db.ref("areas/" + bin.ward_id);
+                          refAreas.once("value", function (snapshotAreas) {
+                            var areas = snapshotAreas.val();
+
+                            return res.view('add-update-bin', {
+                              title: sails.config.title.edit_bin,
+                              'bin': bin,
+                              "countries": countries,
+                              "states": states,
+                              "cities": cities,
+                              'wards' : wards,
+                              'circles' : circles,
+                              'areas': areas,
+                              "errors": errors
+                            });
                           });
                         });
-                        /* Get Areas */
-
                       });
-                    });
+/* Get Areas */
+});
 /* Get Cities */
+});
 });
 /* Get States */
 }, function (errorObject) {
   return res.serverError(errorObject.code);
 });
-}, function (errorObject) {
-  return res.serverError(errorObject.code);
-});
-
 }, function (errorObject) {
   return res.serverError(errorObject.code);
 });
 } else {
   if ((Object.keys(uploadedFiles).length) && (allowExts.indexOf(uploadedFiles[0].type) == -1)) {
     errors['image'] = {message: Bin.message.invalid_file}
-    /* country listing*/
+
     var ref = db.ref("countries");
     ref.once("value", function (snapshot) {
+
       var countries = snapshot.val();
+
       /* bin detail */
-      /* ward listing*/
-      var ref = db.ref("wards");
-      ref.once("value", function (wardSnapshot) {
-        var wards = wardSnapshot.val();
-
-        var ref = db.ref("bins/" + req.params.id);
+      var ref = db.ref("bins/" + req.params.id);
+      ref.once("value", function (snapshot) {
+        var bin = snapshot.val();
+        /* city name */
         ref.once("value", function (snapshot) {
-          var bin = snapshot.val();
-          /* city name */
-          ref.once("value", function (snapshot) {
 
-            /* Get States */
-            var refstates = db.ref('states');
-            refstates.orderByChild('country_id')
-            .equalTo(bin.country_id)
-            .once("value",function (snapshot) {
-              var states = snapshot.val();
+          var refState = db.ref("states/" + bin.country_id);
+          refState.once("value", function (snapshotState) {
+            var states = snapshotState.val();
 
-              /* Get Cities */
-              var refcities = db.ref('cities');
-              refcities.orderByChild('state_id')
-              .equalTo(bin.state_id)
-              .once("value",function (snapshot) {
-                var cities = snapshot.val();
+            var refCity = db.ref("cities/" + bin.state_id);
+            refCity.once("value", function (snapshotCity) {
+              var cities = snapshotCity.val();
 
-                /* Get Areas */
-                var refareas = db.ref('areas');
-                refareas.orderByChild('city_id')
-                .equalTo(bin.city_id)
-                .once("value",function (snapshot) {
-                  var areas = snapshot.val();
-                  return res.view('add-update-bin', {
-                    title: sails.config.title.edit_bin,
-                    'bin': bin,
-                    "countries": countries,
-                    "wards" : wards,
-                    "states": states,
-                    "cities": cities,
-                    "areas": areas,
-                    "errors": errors
+              var refCircle = db.ref("circles/" + bin.city_id);
+              refCircle.once("value", function (snapshotCircle) {
+                var circles = snapshotCircle.val();
+
+                var refWards = db.ref("circlewards/" + bin.circle_id);
+                refWards.once("value", function (snapshotWards) {
+                  var wards = snapshotWards.val();
+
+                  var refAreas = db.ref("areas/" + bin.ward_id);
+                  refAreas.once("value", function (snapshotAreas) {
+                    var areas = snapshotAreas.val();
+
+                    return res.view('add-update-bin', {
+                      title: sails.config.title.edit_bin,
+                      'bin': bin,
+                      "countries": countries,
+                      "states": states,
+                      "cities": cities,
+                      'wards' : wards,
+                      'circles' : circles,
+                      'areas': areas,
+                      "errors": errors
+                    });
                   });
                 });
-                /* Get Areas */
               });
-              /* Get Cities */
+              /* Get Areas */
             });
+/* Get Cities */
+});
+});
 /* Get States */
-}, function (errorObject) {
-  return res.serverError(errorObject.code);
-});
-}, function (errorObject) {
-  return res.serverError(errorObject.code);
-});
 }, function (errorObject) {
   return res.serverError(errorObject.code);
 });
@@ -489,6 +574,7 @@
     location: req.param('location'),
     longitude: req.param('longitude'),
     modified_date: Date.now(),
+    circle_id : req.param('circle'),
     name: req.param('name'),
     state_id: req.param('state'),
   })
@@ -508,12 +594,8 @@
   /* country listing*/
   var ref = db.ref("countries");
   ref.once("value", function (snapshot) {
-    var countries = snapshot.val();
 
-      /* ward listing*/
-      var ref = db.ref("wards");
-      ref.once("value", function (wardSnapshot) {
-        var wards = wardSnapshot.val();
+    var countries = snapshot.val();
 
     /* bin detail */
     var ref = db.ref("bins/" + req.params.id);
@@ -522,50 +604,48 @@
       /* city name */
       ref.once("value", function (snapshot) {
 
-        /* Get States */
-        var refstates = db.ref('states');
-        refstates.orderByChild('country_id')
-        .equalTo(bin.country_id)
-        .once("value",function (snapshot) {
-          var states = snapshot.val();
+        var refState = db.ref("states/" + bin.country_id);
+        refState.once("value", function (snapshotState) {
+          var states = snapshotState.val();
 
-          /* Get Cities */
-          var refcities = db.ref('cities');
-          refcities.orderByChild('state_id')
-          .equalTo(bin.state_id)
-          .once("value",function (snapshot) {
-            var cities = snapshot.val();
+          var refCity = db.ref("cities/" + bin.state_id);
+          refCity.once("value", function (snapshotCity) {
+            var cities = snapshotCity.val();
 
-            /* Get Areas */
-            var refareas = db.ref('areas');
-            refareas.orderByChild('city_id')
-            .equalTo(bin.city_id)
-            .once("value",function (snapshot) {
-              var areas = snapshot.val();
-              return res.view('add-update-bin', {
-                title: sails.config.title.edit_bin,
-                'bin': bin,
-                "countries": countries,
-                "wards" : wards,
-                "states": states,
-                "cities": cities,
-                "areas": areas,
-                "errors": errors
+            var refCircle = db.ref("circles/" + bin.city_id);
+            refCircle.once("value", function (snapshotCircle) {
+              var circles = snapshotCircle.val();
+
+              var refWards = db.ref("circlewards/" + bin.circle_id);
+              refWards.once("value", function (snapshotWards) {
+                var wards = snapshotWards.val();
+                console.log("circle id == ",bin.circle_id);
+                console.log("ward===");
+                console.log(wards);
+                var refAreas = db.ref("areas/" + bin.ward_id);
+                refAreas.once("value", function (snapshotAreas) {
+                  var areas = snapshotAreas.val();
+
+                  return res.view('add-update-bin', {
+                    title: sails.config.title.edit_bin,
+                    'bin': bin,
+                    "countries": countries,
+                    "states": states,
+                    "cities": cities,
+                    'wards' : wards,
+                    'circles' : circles,
+                    'areas': areas,
+                    "errors": errors
+                  });
+                });
               });
             });
-            /* Get Areas */
-
-          });
-          /* Get Cities */
-
-        });
-        /* Get States */
-      }, function (errorObject) {
-        return res.serverError(errorObject.code);
-      });
-}, function (errorObject) {
-  return res.serverError(errorObject.code);
+/* Get Areas */
 });
+/* Get Cities */
+});
+});
+/* Get States */
 }, function (errorObject) {
   return res.serverError(errorObject.code);
 });
@@ -687,17 +767,23 @@
    * Purpose: sget the user grid dat
    * @param  req
    */
-   function getBinsList(snap , areas , wards){
+   function getBinsList(snap){
+    console.log(Object.keys(snap.val()).length);
+
     if(Object.keys(snap).length){
+      var i = 0;
       snap.forEach(function (childSnap) {
         bindetails = childSnap.val();
-        updateBin = bindetails;
-        updateBin.area_name =  areas[bindetails.area_id].name;
-        updateBin.ward_name =  bindetails.ward_id != undefined ? wards[bindetails.ward_id].name: '';
+        updateBin = {};    //    console.log("bindetails.city_id==",bindetails.ward_id);
+
         updateBin.bin_key =  childSnap.key;
+        updateBin = bindetails;    //    console.log("bindetails.city_id==",bindetails.ward_id);
+
         bins.push(updateBin);
+       
+
       });
-      return bins;
+       return bins;
     }else{
       bins ={};
       return bins;
