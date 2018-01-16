@@ -12,7 +12,8 @@ module.exports = {
     "name_required": "Name is required",
     "name_maxlength": "Name can not be max 65 characters long",
     "type_required": "Type is required",
-    "assign_to_required": "Assign To is reoquired"
+    "assign_to_required": "Assign To is reoquired",
+    "number_required" : "Vehicle number is reoquired"
    },
 
   attributes: {

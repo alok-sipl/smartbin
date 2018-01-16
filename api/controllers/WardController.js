@@ -39,12 +39,12 @@
       var ref = db.ref();
 
       var _newWard = {
-        name: "19",
+        name: "32",
         is_deleted: false
       };
 
      var ref = db.ref();
-     var circlewards = ref.child("circlewards/-L2e7fEvmHHh7Pj4R30f ");
+     var circlewards = ref.child("circlewards/-L2e7fEvmHHh7Pj4R30f");
 
      circlewards.push(_newWard).then(function (_circlewards) {
        console.log("State created: " + JSON.stringify(_circlewards));

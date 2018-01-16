@@ -85,6 +85,8 @@
       var errors = {};
       var vehicle = {};
       var types = {};
+      var drivers = {};
+
       /* Checking validation if form post */
       if (req.method == "POST") {
        // return false;

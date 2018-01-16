@@ -60,11 +60,8 @@
       <input type="text" name="number" class="form-control" id="number"
       value="<%= (vehicle.number) ? (vehicle.number) : (req.param('number')) ? req.param('number') : '' %>"
       required
-      data-parsley-length="[<%= sails.config.length.min_number %>, <%= sails.config.length.max_number %>]"
       data-parsley-required-message="<%= Vehicle.message.number_required %>"
-      data-parsley-length-message="<%= Vehicle.message.number_length %>"
-      data-parsley-pattern-message="<%= Vehicle.message.number_pattern %>"
-      placeholder="Mobile Number"/>
+  placeholder="Mobile Number"/>
       <span class="help-block">
       <strong><%= (errors.number != undefined) ? errors.number.message : '' %>
       </strong>
@@ -99,14 +96,14 @@
         </div>
 
         <div class="form-group <%= (errors.assign_to != undefined) ? " has-error" : "" %>">
-        <label for="is_active" class="col-md-4 control-label">Type</label>
+        <label for="is_active" class="col-md-4 control-label">Driver</label>
         <div class="col-md-6">
         <div class="assign_to">
         <select name="assign_to"  id="assign_to" class="form-control" required
         data-parsley-required-message="<%= Vehicle.message.assign_to_required %>">
         <option value="">Select Driver</option>
         <%
-        if(Object.keys(drivers).length){
+        if(drivers && drivers != null && Object.keys(drivers).length){
           for(var key in drivers) { %>
             <option <%= (vehicle.assign_to && vehicle.assign_to == key) ? "selected" : (req.param('assign_to') && req.param('assign_to') == key) ? "selected" : '' %>
             value="<%= key %>"><%= drivers[key].name %></option>

@@ -4,16 +4,18 @@ height: 500px;
 width: 900px;
 }
 </style>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= sails.config.google_key %>&libraries=places&sensor=false"></script>
 
 <div>
-<select onchange="resetbins()" name="select_area" onchange="getState(this.value)" id="select_ward" class="form-control">
-<option value="">Search Bin</option>
-<% if(Object.keys(areas).length){
+<select onchange="resetbins(this.value)" name="select_area" id="select_ward" class="form-control">
+<option value="">Search Bin </option>
+<%
+if(wards.length){
 for(var key in wards) { %>
-<option value="<%= key %>"><%= wards[key].name %>
+<option value="<%= wards[key].id %>"><%= wards[key].name %>
 </option>
-<% } } %>
+ <% }
+        } %>
+
 </select>
 </div>
 
@@ -51,7 +53,9 @@ var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions)
 
 
 function filterbins() {
+console.log("filter bin");
 var select_ward = $('#select_ward').val();
+console.log("select_ward===",select_ward);
 var thisvalue = $("select#select_ward option:selected").text();
 
  $('#gs_ward_name').val(thisvalue);
@@ -88,6 +92,7 @@ complete: function(jqXHR, textStatus) {
 
 // Removes the markers from the map, but keeps them in the array.
 function resetbins() {
+console.log("call resetbins");
 setMapOnAll(null);
 filterbins();
 }

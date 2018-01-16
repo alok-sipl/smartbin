@@ -3,7 +3,7 @@
  */
 
  var BASE_URL = 'https://smart-bin.herokuapp.com';
- // var BASE_URL = 'http://localhost:1337';
+ //var BASE_URL = 'http://localhost:1337';
  /* All message will be declared here */
  var CONST = {
   MSGTIMEOUT: 4000,
@@ -96,9 +96,9 @@ function getCity(stateId) {
       success: function (result) {
         console.log('Response', result);
         $('#city').empty();
-        $('#city').append('<option value="">Select City</option>');
+        $('#city').html('<option value="">Select City</option>');
         $('#area').empty();
-        $('#area').append('<option value="">Select Area</option>');
+        $('#area').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
           $('#city').append('<option value="' + i + '">' + obj.name + '</option>');
         });
@@ -124,7 +124,7 @@ function getArea(cityId) {
       success: function (result) {
         console.log('Response', result);
         $('#area').empty();
-        $('#area').append('<option value="">Select Area</option>');
+        $('#area').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
           $('#area').append('<option value="' + i + '">' + obj.name + '</option>');
         });
@@ -150,7 +150,7 @@ function getWardByCircle(circleId) {
       type: 'POST',
       success: function (result) {
         console.log('Response getWardByCircle', result);
-        $('#ward').append('<option value="">Select Ward</option>');
+        $('#ward').html('<option value="">Select Ward</option>');
         $.each(result, function (i, obj) {
           $('#ward').append('<option value="' + i + '">' + obj.name + '</option>');
         });
@@ -172,7 +172,7 @@ function getAreaByWard(wardId) {
       type: 'POST',
       success: function (result) {
         console.log('Response', result);
-        $('#area').append('<option value="">Select Area</option>');
+        $('#area').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
           $('#area').append('<option value="' + i + '">' + obj.name + '</option>');
         });
@@ -195,7 +195,7 @@ function getCircle(cityId) {
       type: 'POST',
       success: function (result) {
         console.log('Response', result);
-        $('#circle').append('<option value="">Select Area</option>');
+        $('#circle').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
           $('#circle').append('<option value="' + i + '">' + obj.name + '</option>');
         });
@@ -218,11 +218,11 @@ function getState(coutryId) {
       success: function (result) {
         console.log('Response', result);
         $('#state').empty();
-        $('#state').append('<option value="">Select State</option>');
+        $('#state').html('<option value="">Select State</option>');
         $('#city').empty();
-        $('#city').append('<option value="">Select City</option>');
+        $('#city').html('<option value="">Select City</option>');
         $('#area').empty();
-        $('#area').append('<option value="">Select Area</option>');
+        $('#area').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
           $('#state').append('<option value="' + i + '">' + obj.name + '</option>');
         });
