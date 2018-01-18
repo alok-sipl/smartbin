@@ -22,6 +22,9 @@
         </div>
     </div>
 </div>
+<% if (req.session.flash) { %>
+<%- req.flash('flashMessage') %>
+<% } %>
 <div class="hpanel">
   <div class="panel-body">
     <table  id="vehicle-grid"></table>

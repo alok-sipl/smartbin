@@ -71,9 +71,17 @@
   */
   getWardByCircle: function (req, res) {
     if(req.body.id) {
+      console.log("circlewards/" + req.body.id);
               var ref = db.ref("circlewards/" + req.body.id);
               ref.once("value", function (snapshot) {
-        return res.json(snapshot.val());
+                console.log('response', snapshot.val());
+                var wards = CountryService.snapshotToArray(snapshot);
+                wards = wards.sort(function(a, b) {
+                  var textA = parseInt(a.name);
+                  var textB = parseInt(b.name);
+                  return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                });
+        return res.json(wards);
       });
     }else{
       return res.json({});

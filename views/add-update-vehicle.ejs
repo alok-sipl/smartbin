@@ -61,7 +61,7 @@
       value="<%= (vehicle.number) ? (vehicle.number) : (req.param('number')) ? req.param('number') : '' %>"
       required
       data-parsley-required-message="<%= Vehicle.message.number_required %>"
-  placeholder="Mobile Number"/>
+  placeholder="Vehicle Number"/>
       <span class="help-block">
       <strong><%= (errors.number != undefined) ? errors.number.message : '' %>
       </strong>

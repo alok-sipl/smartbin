@@ -417,7 +417,14 @@ count: function (req, res) {
     if(req.body.id) {
       var ref = db.ref("cities/" + req.body.id);
       ref.once("value", function (snapshot) {
-        return res.json(snapshot.val());
+        var cities = CountryService.snapshotToArray(snapshot);
+        cities = cities.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+
+        return res.json(cities);
       });
     }else{
       return res.json({});

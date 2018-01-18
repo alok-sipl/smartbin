@@ -14,28 +14,43 @@
      */
      // circle 1 and ward 18
      create: function (req, res) {
-      var ref = db.ref();
-      var circle = ref.child("areas/-L2sgNgUAhpYrq_4r1Ki");
+    //   var ref = db.ref();
+    //   var circle = ref.child("areas/-L2ub8xoecEPjg-nDxNr");
+    //   var _newArea = {
+    //     city_id : "-L0xcM9R_zgmOhLsyOiJ",
+    //     country_id : "-L1pigYbq_ZQl009gBoU",
+    //     created_date : 1515232076118,
+    //     modified_date : 1515232076118,
+    //     name : "Radha Vallabh Market",
+    //     state_id : "-L0xcM9R_zgmOhLsyOiX",
+    //     ward_id : "-L2ub8xoecEPjg-nDxNr",
+    //     circle_id: "-L2e81tPlcPPuyxGpNdP"
+    //   }
+    //   circle.push(_newArea).then(function (_area) {
 
-      var _newArea = {
-        city_id : "-L0xcM9R_zgmOhLsyOiJ",
-        country_id : "-L1pigYbq_ZQl009gBoU",
-        created_date : 1515232076118,
-        modified_date : 1515232076118,
-        name : "ISKCON ,KHARGONE Area",
-        state_id : "-L0xcM9R_zgmOhLsyOiX",
-        ward_id : "-L2dn3COK_BYy8VkWB4Q",
-        circle_id: "-L2e7fEvmHHh7Pj4R30f"
-      }
+    //     var ref = db.ref();
+    //     var circle = ref.child("areas/-L2ub8xoecEPjg-nDxNr");
+    //     var _newArea = {
+    //       city_id : "-L0xcM9R_zgmOhLsyOiJ",
+    //       country_id : "-L1pigYbq_ZQl009gBoU",
+    //       created_date : 1515232076118,
+    //       modified_date : 1515232076118,
+    //       name : "New Radha Vallabh Market",
+    //       state_id : "-L0xcM9R_zgmOhLsyOiX",
+    //       ward_id : "-L2ub8xoecEPjg-nDxNr",
+    //       circle_id: "-L2e81tPlcPPuyxGpNdP"
+    //     }
+    //     circle.push(_newArea).then(function (_area) {
 
-      
-      circle.push(_newArea).then(function (_area) {
-       console.log("Area created: " + JSON.stringify(_area));
-      // return res.redirect("area");
-    }, function (error) {
-      console.error("Error on createArea");
-      console.error(JSON.stringify(err));
-    });
+    //   // return res.redirect("area");
+    // }, function (error) {
+    //   console.error("Error on createArea");
+    //   console.error(JSON.stringify(err));
+    // });
+    //   }, function (error) {
+    //     console.error("Error on createArea");
+    //     console.error(JSON.stringify(err));
+    //   });
     },
 
 
@@ -50,7 +65,13 @@
     if(req.body.id) {
       var ref = db.ref("areas/" + req.body.id);
       ref.once("value", function (snapshot) {
-        return res.json(snapshot.val());
+        var wards = CountryService.snapshotToArray(snapshot);
+        wards = wards.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        return res.json(wards);
       });
     }else{
       return res.json({});

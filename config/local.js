@@ -82,7 +82,7 @@
 
    // environment: process.env.NODE_ENV || 'development'
 
-   app_name: 'Smart Bin',
+   app_name: 'Nagar Palika Khargone',
   /* base_url: 'https://smart-bin.herokuapp.com/',
    admin_url: 'https://smart-bin.herokuapp.com/admin',
    */  

@@ -139,7 +139,8 @@
 
           /* country listing*/
           var ref = db.ref("countries");
-          ref.once("value", function (snapshot) {
+          ref.orderByChild("name")
+          once("value", function (snapshot) {
             var countries = snapshot.val();
 
             /* ward listing*/
@@ -177,7 +178,8 @@
                 errors['image'] = {message: err}
                 /* country listing*/
                 var ref = db.ref("countries");
-                ref.once("value", function (snapshot) {
+                ref.orderByChild("name")
+                .once("value", function (snapshot) {
                   var countries = snapshot.val();
 
                   /* ward listing*/
@@ -206,7 +208,8 @@
                   errors['image'] = {message: Bin.message.bin_image_required}
                   /* country listing*/
                   var ref = db.ref("countries");
-                  ref.once("value", function (snapshot) {
+                  ref.orderByChild("name")
+                  .once("value", function (snapshot) {
                     var countries = snapshot.val();
 /*                    var ref = db.ref("wards");
                     ref.once("value", function (wardSnapshot) {
@@ -232,7 +235,8 @@
                   errors['image'] = {message: Bin.message.invalid_file}
                   /* country listing*/
                   var ref = db.ref("countries");
-                  ref.once("value", function (snapshot) {
+                  ref.orderByChild("name")
+                  .once("value", function (snapshot) {
                     var countries = snapshot.val();
 
                   /*  var ref = db.ref("wards");
@@ -295,8 +299,14 @@
 } else {
   /* country listing*/
   var ref = db.ref("countries");
-  ref.once("value", function (snapshot) {
-    var countries = snapshot.val();
+  ref.orderByChild("name")
+  .once("value", function (snapshot) {
+    var countries = CountryService.snapshotToArray(snapshot);
+    countries = countries.sort(function(a, b) {
+      var textA = a.name.toUpperCase();
+      var textB = b.name.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
 
     /* ward listing*/
   /*  var ref = db.ref("wards");
@@ -768,4 +778,3 @@ if(!selected_ward)
     return bins;
   }
 }
-

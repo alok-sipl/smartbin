@@ -74,8 +74,8 @@ data-parsley-required-message="<%= Bin.message.country_required %>">
 <%
 if(Object.keys(countries).length){
 for(var key in countries) { %>
-<option <%= (bin.country_id && bin.country_id == key) ? "selected" : (req.param('country') && req.param('country') == key) ? "selected" : '' %>
-value="<%= key %>"><%= countries[key].name %></option>
+<option <%= (bin.country_id && bin.country_id == countries[key].key) ? "selected" : (req.param('country') && req.param('country') == countries[key].key) ? "selected" : '' %>
+value="<%= countries[key].key %>"><%= countries[key].name %></option>
 <% }
 } %>
 </select>

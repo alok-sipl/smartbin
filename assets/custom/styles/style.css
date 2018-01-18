@@ -2030,7 +2030,7 @@ body.fullscreen-panel-mode {
 #logo.light-version span {
   font-weight: 600;
   color: #34495e;
-  font-size: 14px;
+  font-size: 13px;
 }
 .profile-picture {
   padding: 20px 20px;
@@ -3526,6 +3526,6 @@ table.dataTable.no-footer{border-bottom: 0}
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {color: #777 ;cursor: not-allowed;background-color: #fff ;border-color: #ddd ;}
 .dataTables_wrapper .dataTables_paginate .paginate_button {position: relative;float: left;padding: 6px 12px;margin-left: -1px;line-height: 1.42857143;color: #337ab7;text-decoration: none;background-color: #fff;border: 1px solid #ddd;}
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {background: #3498db !important;border-color: #258cd1 !important;color: #fff !important;cursor: default;z-index: 2;}
-.site-logo img{width: 70px;}
+.site-logo img{width: 350px;}
 span.badge{background-color:white;}
 .notification-section .list-group-item{padding: 30px 15px}

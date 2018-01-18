@@ -101,7 +101,13 @@
     if(req.body.id) {
               var ref = db.ref("states/" + req.body.id);
               ref.once("value", function (snapshot) {
-        return res.json(snapshot.val());
+                var states = CountryService.snapshotToArray(snapshot);
+                states = states.sort(function(a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+              });
+                return res.json(states);
       });
     }else{
       return res.json({});
