@@ -279,6 +279,14 @@ $(document).ready(function () {
       }
     }
 
+    /* On change country get city list */
+    function getArea(areaid) {
+      if (areaid !== "" || areaid !== undefined) {
+        $('#area_name').val($("#area option:selected").text());
+      }
+    }
+
+
     /* Admin notification setting on off activity */
     $('.change-notification').click(function () {
       $(".alert-danger").css("display", "none");
@@ -709,7 +717,7 @@ $(document).ready(function () {
     datatype: "json",
     colModel: [
     {label: 'Name', name: 'name', width: 200, search: true},
-    {label: 'ward', name: 'ward_name', width: 320, search: true},
+    {label: 'Area', name: 'area_name', width: 320, search: true},
     {label: 'Contact Number', name: 'mobile_number', width: 150},
     {label: 'Address', name: 'address', width: 250},
     {
