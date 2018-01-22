@@ -49,7 +49,7 @@
    	});
    },
 
-  /*
+     /*
      * Name: add
      * Created By: A-SIPL
      * Created Date: 8-dec-2017
@@ -57,92 +57,128 @@
      * @param  req
      */
      add: function (req, res) {
-     	var isFormError = false;
-     	var errors = {};
-     	var driver = {};
-     	var wards = {};
-     	/* Checking validation if form post */
-     	if (req.method == "POST") {
-     		errors = ValidationService.validate(req);
-     		if (Object.keys(errors).length) {
+         var isFormError = false;
+         var errors = {};
+         var driver = {};
+         var wards = {};
+         /* Checking validation if form post */
+         if (req.method == "POST") {
+             errors = ValidationService.validate(req);
+             if (Object.keys(errors).length) {
 
-     			/* wards listing*/
-     			var ref = db.ref("areas");
-     			ref.once("value", function (snapshot) {
-     				var areas = snapshot.val();
-     				return res.view('add-update-driver', {
-     					'title': sails.config.title.add_driver,
-     					'driver': driver,
-     					'areas': areas,
-     					'errors': errors,
-     					'req': req
-     				});
-     			}, function (errorObject) {
-     				return res.serverError(errorObject.code);
-     			});
-     		} else {
-     			var ref = db.ref("/drivers");
-     			ref.orderByChild("mobile_number").equalTo(req.param('mobile_number')).once('value')
-     			.then(function (snapshot) {
-     				requestData = snapshot.val();
-     				if (requestData) {
-     					req.flash('flashMessage', '<div class="alert alert-danger">' + req.param('mobile_number') + sails.config.flash.mobile_number_already_exist + '</div>');
-     					return res.redirect(sails.config.base_url + 'driver/add');
-     				} else {
-     					var ref = db.ref("drivers");
-     					var data = {
-     						name: req.param('name'),
-     						mobile_number: req.param('mobile_number'),
-     						address: req.param('address'),
-     						area_id: req.param('area'),
-     						area_name: req.param('area_name'),
-     						is_deleted: false,
-     						created_date: Date.now(),
-     						modified_date: Date.now()
-     					}
-     					ref.push(data).then(function (ref) {
-     						req.flash('flashMessage', '<div class="alert alert-success">Driver Added Successfully.</div>');
-     						return res.redirect(sails.config.base_url + 'driver');
-     					}, function (error) {
-     						req.flash('flashMessage', '<div class="alert alert-danger">Error In Adding Driver.</div>');
-     						return res.redirect(sails.config.base_url + 'driver');
-     					});
-     				}              
-     			}).catch(function (err) {
-     				req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
-     				return res.redirect(sails.config.base_url + 'driver');
-     			});
-     		}
-     	} else {
-     		/* wards listing*/
-     		var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
-     		ref.once("value", function (snapshot) {
-     			var areas = CountryService.snapshotToArray(snapshot);
-     			areas = areas.sort(function(a, b) {
-     				var textA = a.name.toUpperCase();
-     				var textB = b.name.toUpperCase();
-     				return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-     			});
-     			return res.view('add-update-driver', {
-     				'title': sails.config.title.add_driver,
-     				'driver': driver,
-     				'areas': areas,
-     				'errors': errors,
-     				'req': req
-     			});
-     		}, function (errorObject) {
-     			return res.serverError(errorObject.code);
-     		});
-     	}
+                 /* wards listing*/
+                 var ref = db.ref("areas");
+                 ref.once("value", function (snapshot) {
+                     var areas = snapshot.val();
+                     return res.view('add-update-driver', {
+                         'title': sails.config.title.add_driver,
+                         'driver': driver,
+                         'areas': areas,
+                         'errors': errors,
+                         'req': req
+                     });
+                 }, function (errorObject) {
+                     return res.serverError(errorObject.code);
+                 });
+             } else {
+                 var ref = db.ref("/drivers");
+                 ref.orderByChild("mobile_number").equalTo(req.param('mobile_number')).once('value')
+                     .then(function (snapshot) {
+                         requestData = snapshot.val();
+                         if (requestData) {
+                             req.flash('flashMessage', '<div class="alert alert-danger">' + req.param('mobile_number') + sails.config.flash.mobile_number_already_exist + '</div>');
+                             return res.redirect(sails.config.base_url + 'driver/add');
+                         } else {
+                             var ref = db.ref("drivers");
+                             var data = {
+                                 name: req.param('name'),
+                                 mobile_number: req.param('mobile_number'),
+                                 address: req.param('address'),
+                                 area_id: req.param('area'),
+                                 area_name: req.param('area_name'),
+                                 is_deleted: false,
+                                 created_date: Date.now(),
+                                 modified_date: Date.now()
+                             }
+                             ref.push(data).then(function (snapshotData) {
+                                 var driverId = snapshotData.getKey();
+                                 var refBin = db.ref("bins");
+                                 refBin.orderByChild("area_id").equalTo(req.param('area')).once('value')
+                                     .then(function (snapshot) {
+                                         var binDataTemp = [];
+                                         if(snapshot.val() == null || snapshot.val() == "null")
+                                         {
+                                             req.flash('flashMessage', '<div class="alert alert-success">Driver Added Successfully.</div>');
+                                             return res.redirect(sails.config.base_url + 'driver');
+
+                                         }
+                                         else
+                                         {
+                                             _.map(snapshot.val(),function (val,uid) {
+                                                 val.uid = uid;
+                                                 binDataTemp.push(val);
+                                             })
+
+                                             _.map(binDataTemp,function (val,index) {
+                                                 //console.log(uid);
+                                                 var refTemp = db.ref("bins/"+val.uid)
+                                                     .update({'driver_id': driverId,
+                                                         modified_date: Date.now()
+                                                     })
+                                                     .then(function () {
+                                                         if(parseInt(index) == (binDataTemp.length -1))
+                                                         {
+                                                             req.flash('flashMessage', '<div class="alert alert-success">Driver Added Successfully.</div>');
+                                                             return res.redirect(sails.config.base_url + 'driver');
+                                                         }
+                                                     })
+                                                     .catch(function (err) {
+                                                         req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+                                                         return res.redirect(sails.config.base_url + 'driver');
+
+                                                     });
+                                             });
+                                         }
+                                     })
+                             }, function (error) {
+                                 req.flash('flashMessage', '<div class="alert alert-danger">Error In Adding Driver.</div>');
+                                 return res.redirect(sails.config.base_url + 'driver');
+                             });
+                         }
+                     }).catch(function (err) {
+                     req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+                     return res.redirect(sails.config.base_url + 'driver');
+                 });
+             }
+         } else {
+             /* wards listing*/
+             var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
+             ref.once("value", function (snapshot) {
+                 var areas = CountryService.snapshotToArray(snapshot);
+                 areas = areas.sort(function(a, b) {
+                     var textA = a.name.toUpperCase();
+                     var textB = b.name.toUpperCase();
+                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                 });
+                 return res.view('add-update-driver', {
+                     'title': sails.config.title.add_driver,
+                     'driver': driver,
+                     'areas': areas,
+                     'errors': errors,
+                     'req': req
+                 });
+             }, function (errorObject) {
+                 return res.serverError(errorObject.code);
+             });
+         }
      },
-
-  /*
-     * Name: edit
-     * Created By: A-SIPL
-     * Created Date: 8-dec-2017
-     * Purpose: add new driver
-     * @param  req
-     */
+     /*
+        * Name: edit
+        * Created By: A-SIPL
+        * Created Date: 8-dec-2017
+        * Purpose: add new driver
+        * @param  req
+        */
      edit: function (req, res) {
      	var driver = {};
      	var countries = {};
@@ -190,8 +226,45 @@
      			})
 
      			.then(function () {
-     				req.flash('flashMessage', '<div class="alert alert-success">' + sails.config.flash.supplier_updated_success + '</div>');
-     				return res.redirect(sails.config.base_url + 'driver');
+                    var driverId =  req.params.id;
+                    var refBin = db.ref("bins");
+                    refBin.orderByChild("area_id").equalTo(req.param('area')).once('value')
+                        .then(function (snapshot) {
+                            var binDataTemp = [];
+                            if(snapshot.val() == null || snapshot.val() == "null")
+                            {
+                                req.flash('flashMessage', '<div class="alert alert-success">' + sails.config.flash.supplier_updated_success + '</div>');
+                                return res.redirect(sails.config.base_url + 'driver');
+
+                            }
+                            else
+                            {
+                                _.map(snapshot.val(),function (val,uid) {
+                                    val.uid = uid;
+                                    binDataTemp.push(val);
+                                })
+
+                                _.map(binDataTemp,function (val,index) {
+                                    //console.log(uid);
+                                    var refTemp = db.ref("bins/"+val.uid)
+                                        .update({'driver_id': driverId,
+                                            modified_date: Date.now()
+                                        })
+                                        .then(function () {
+                                            if(parseInt(index) == (binDataTemp.length -1))
+                                            {
+                                                req.flash('flashMessage', '<div class="alert alert-success">' + sails.config.flash.supplier_updated_success + '</div>');
+                                                return res.redirect(sails.config.base_url + 'driver');
+                                            }
+                                        })
+                                        .catch(function (err) {
+                                            req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+                                            return res.redirect(sails.config.base_url + 'driver');
+
+                                        });
+                                });
+                            }
+                        })
      			})
      			.catch(function (err) {
      				req.flash('flashMessage', '<div class="alert alert-error">' + sails.config.flash.supplier_add_error + '</div>');
