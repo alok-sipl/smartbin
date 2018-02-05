@@ -21,7 +21,7 @@
 </div>
 </div>
 <div class="row">
-<div class="col-md-8">
+<div class="col-md-12">
 <div class="hpanel">
 <div class="panel-body">
 <% if(!(Object.keys(vehicle).length)){ %>
@@ -36,9 +36,9 @@
     <% if (req.session.flash) { %>
       <%- req.flash('flashMessage') %>
       <% } %>
-      <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
-      <label for="last_name" class="col-md-4 control-label">Name*</label>
-      <div class="col-md-6">
+      <div class="row">
+      <div class="col-md-3">
+      <label for="last_name">Name<span class="star-icon">*</span></label>
       <input type="text" name="name" class="form-control" id="name" required
       value="<%= (vehicle.name) ? (vehicle.name) : (req.param('name')) ? req.param('name') : '' %>"
       maxlength="<%= sails.config.length.name %>"
@@ -52,11 +52,9 @@
       </strong>
       </span>
       </div>
-      </div>
 
-      <div class="form-group <%= (errors.number != undefined) ? " has-error" : "" %>">
-      <label for="contact_no" class="col-md-4 control-label">Vehicle Number*</label>
-      <div class="col-md-6">
+      <div  class="col-md-3">
+      <label for="contact_no">Vehicle Number<span class="star-icon">*</span></label>
       <input type="text" name="number" class="form-control" id="number"
       value="<%= (vehicle.number) ? (vehicle.number) : (req.param('number')) ? req.param('number') : '' %>"
       required
@@ -66,15 +64,11 @@
       <strong><%= (errors.number != undefined) ? errors.number.message : '' %>
       </strong>
       </span>
-      </div>
       </div>          
 
-      <div class="form-group <%= (errors.type != undefined) ? " has-error" : "" %>">
-      <label for="is_active" class="col-md-4 control-label">Type</label>
-      <div class="col-md-6">
+      <div class="col-md-3">
+      <label for="is_active">Type</label>
       <div class="type">
-
-
       <select name="type"  id="type" class="form-control" required
       data-parsley-required-message="<%= Vehicle.message.type_required %>">
       <option value="">Select Type</option>
@@ -93,11 +87,9 @@
         </strong>
         </span>
         </div>
-        </div>
 
-        <div class="form-group <%= (errors.assign_to != undefined) ? " has-error" : "" %>">
-        <label for="is_active" class="col-md-4 control-label">Driver</label>
-        <div class="col-md-6">
+        <div class="col-md-3">
+        <label for="is_active">Driver</label>
         <div class="assign_to">
         <select name="assign_to"  id="assign_to" class="form-control" required
         data-parsley-required-message="<%= Vehicle.message.assign_to_required %>">
@@ -110,17 +102,14 @@
             <% }
           } %>
           </select>
-
           </div>
           <span class="help-block">
           <strong><%= (errors.assign_to != undefined) ? errors.assign_to.message : '' %>
           </strong>
           </span>
           </div>
-          </div>
 
-          <div class="form-group <%= (errors.account_number != undefined) ? " has-error" : "" %>">
-          <div class="col-md-8 col-md-offset-4">
+          <div class="col-md-12 text-right">
           <button type="submit" class="btn btn-primary">
           <%= (Object.keys(vehicle).length) ? 'Update' : 'Add' %> Vehicle
           </button>

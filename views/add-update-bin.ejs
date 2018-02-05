@@ -21,7 +21,7 @@
 </div>
 </div>
 <div class="row">
-<div class="col-md-8">
+<div class="col-md-12">
 <div class="hpanel">
 <div class="panel-body">
 <% if(!(Object.keys(bin).length)){ %>
@@ -36,9 +36,9 @@ id="add-bin" class='form-horizontal' data-parsley-validate='true'>
 <% if (req.session.flash) { %>
 <%- req.flash('flashMessage') %>
 <% } %>
-<div class="form-group <%= (errors.id != undefined) ? " has-error" : "" %>">
-<label for="id" class="col-md-4 control-label">Bin ID*</label>
-<div class="col-md-6">
+<div class="row">
+<div class="col-md-3">
+<label for="id">Bin ID<span class="star-icon">*</span></label>
 <input type="text" name="id" class="form-control" id="id"
 value="<%= (bin.id) ? (bin.id) : (req.param('id')) ? req.param('id') : '' %>"
 required 
@@ -50,10 +50,8 @@ placeholder="Bin ID"/>
 </strong>
 </span>
 </div>
-</div>
-<div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
-<label for="last_name" class="col-md-4 control-label">Name*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="last_name">Name<span class="star-icon">*</span></label>
 <input type="text" name="name" class="form-control" id="name" required
 value="<%= (bin.name) ? (bin.name) : (req.param('name')) ? req.param('name') : '' %>"
 data-parsley-required-message="<%= Bin.message.name_required %>"
@@ -63,11 +61,9 @@ placeholder="Name"/>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.country != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Country*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Country<span class="star-icon">*</span></label>
 <select name="country" onchange="getState(this.value)" id="country" class="form-control" required
 data-parsley-required-message="<%= Bin.message.country_required %>">
 <option value="">Select Country</option>
@@ -85,12 +81,8 @@ value="<%= countries[key].key %>"><%= countries[key].name %></option>
 </strong>
 </span>
 </div>
-</div>
-
-
-<div class="form-group <%= (errors.state != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">State*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">State<span class="star-icon">*</span></label>
 <select name="state" onchange="getCity(this.value)" id="state" class="form-control" required
 data-parsley-required-message="<%= Bin.message.state_required %>">
 <option value="">Select State</option>
@@ -108,11 +100,9 @@ value="<%= key %>"><%= states[key].name %></option>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.city != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">City*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">City<span class="star-icon">*</span></label>
 <select name="city" onchange="getCircle(this.value)" id="city" class="form-control" required
 data-parsley-required-message="<%= Bin.message.city_required %>">
 <option value="">Select City</option>
@@ -130,11 +120,9 @@ value="<%= key %>"><%= cities[key].name %></option>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.circle != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Circle*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Circle<span class="star-icon">*</span></label>
 <select name="circle" onchange="getWardByCircle(this.value)" id="circle" class="form-control" required
 data-parsley-required-message="<%= Bin.message.circle_required %>">
 <option value="">Select Circle</option>
@@ -152,11 +140,9 @@ value="<%= key %>"><%= circles[key].name %></option>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.ward != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Ward*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Ward<span class="star-icon">*</span></label>
 <select name="ward" id="ward" onchange="getAreaByWard(this.value)" class="form-control" required
 data-parsley-required-message="<%= Bin.message.ward_required %>">
 <option value="">Select Ward</option>
@@ -174,11 +160,8 @@ value="<%= key %>"><%= wards[key].name %></option>
 </strong>
 </span>
 </div>
-</div>
-
-<div class="form-group <%= (errors.area != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Area*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Area<span class="star-icon">*</span></label>
 <select name="area" id="area" class="form-control" required
 data-parsley-required-message="<%= Bin.message.area_required %>">
 <option value="">Select Area</option>
@@ -195,12 +178,10 @@ value="<%= key %>"><%= areas[key].name %></option>
 <strong><%= (errors.area != undefined) ? errors.areaId.message : '' %>
 </strong>
 </span>
-</div>
 </div> 
-
-<div class="form-group <%= (errors.location != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Location*</label>
-<div class="col-md-6">
+<div class="clearfix"></div>
+<div class="col-md-3">
+<label for="is_active">Location<span class="star-icon">*</span></label>
 <input type="text" name="location" class="form-control" required id="location"
 value="<%= (bin.location) ? (bin.location) : (req.param('location')) ? req.param('location') : '' %>"
 data-parsley-required-message="<%= Bin.message.location_required %>"
@@ -210,11 +191,9 @@ placeholder="Location"/>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.latitude != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Latitude*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Latitude<span class="star-icon">*</span></label>
 <input type="text" name="latitude" class="form-control" required id="latitude"
 value="<%= (bin.latitude) ? (bin.latitude) : (req.param('latitude')) ? req.param('latitude') : '' %>"
 data-parsley-required-message="<%= Bin.message.latitude_required %>"
@@ -224,11 +203,9 @@ placeholder="Latitude"/>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.longitude != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Longitude*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Longitude<span class="star-icon">*</span></label>
 <input type="text" name="longitude" class="form-control" required id="longitude"
 value="<%= (bin.longitude) ? (bin.longitude) : (req.param('longitude')) ? req.param('longitude') : '' %>"
 data-parsley-required-message="<%= Bin.message.longitude_required %>"
@@ -238,11 +215,9 @@ placeholder="Longitude"/>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.alert_level != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Alert Level*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Alert Level<span class="star-icon">*</span></label>
 <input type="text" name="alert_level" class="form-control" required id="alert_level"
 value="<%= (bin.alert_level) ? (bin.alert_level) : (req.param('alert_level')) ? req.param('alert_level') : '' %>"
 data-parsley-required-message="<%= Bin.message.alert_level_required %>"
@@ -252,11 +227,9 @@ placeholder="Alert Level"/>
 </strong>
 </span>
 </div>
-</div>
 
-<div class="form-group <%= (errors.image != undefined) ? " has-error" : "" %>">
-<label for="is_active" class="col-md-4 control-label">Bin Image*</label>
-<div class="col-md-6">
+<div class="col-md-3">
+<label for="is_active">Bin Image<span class="star-icon">*</span></label>
 <% if(Object.keys(bin).length){ %>
 <img width="100"
 src="<%= (bin.image) ? bin.image : sails.config.base_url + 'images/default_bin.jpg' %>"
@@ -274,9 +247,7 @@ data-parsley-max-file-size="<%= sails.config.length.max_file_upload_kb %>"/>
 </strong>
 </span>
 </div>
-</div>
-<div class="form-group <%= (errors.id != undefined) ? " has-error" : "" %>">
-<div class="col-md-8 col-md-offset-4">
+<div class="col-md-12 text-right">
 <button type="submit" class="btn btn-primary">
 <%= (Object.keys(bin).length) ? 'Update' : 'Add' %> Bin
 </button>
@@ -287,5 +258,6 @@ data-parsley-max-file-size="<%= sails.config.length.max_file_upload_kb %>"/>
 </form>
 </div>
 </div>
+
 </div>
 </div>

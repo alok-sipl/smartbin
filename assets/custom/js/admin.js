@@ -2,8 +2,8 @@
  * Main set common settings of the application
  */
 
- var BASE_URL = 'https://smart-bin.herokuapp.com';
- //var BASE_URL = 'http://localhost:1337';
+ // var BASE_URL = 'https://smart-bin.herokuapp.com';
+ var BASE_URL = 'http://localhost:1337';
  /* All message will be declared here */
  var CONST = {
   MSGTIMEOUT: 4000,
@@ -518,7 +518,7 @@ $(document).ready(function () {
     }
     ],
     viewrecords: true,
-    width: 945,
+    //width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,
@@ -547,7 +547,7 @@ $(document).ready(function () {
     }
     ],
     viewrecords: true,
-    width: 945,
+    //width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,
@@ -614,7 +614,7 @@ $(document).ready(function () {
     }
     ],
     viewrecords: true,
-    width: 945,
+    //width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,
@@ -655,7 +655,7 @@ $(document).ready(function () {
     }
     ],
     viewrecords: true,
-    width: 945,
+    //width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,
@@ -699,7 +699,7 @@ $(document).ready(function () {
     }
     ],
     viewrecords: true,
-    width: 945,
+    //width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,
@@ -716,12 +716,12 @@ $(document).ready(function () {
     mtype: "GET",
     datatype: "json",
     colModel: [
-    {label: 'Name', name: 'name', width: 200, search: true},
+    {label: 'Name', name: 'name', width: 250, search: true},
     {label: 'Area', name: 'area_name', width: 320, search: true},
-    {label: 'Contact Number', name: 'mobile_number', width: 150},
-    {label: 'Address', name: 'address', width: 250},
+    {label: 'Contact Number', name: 'mobile_number', width: 250},
+    {label: 'Address', name: 'address', width: 300},
     {
-      label: 'Status', name: 'is_deleted', width: 100, search: false,
+      label: 'Status', name: 'is_deleted', width: 200, search: false,
       formatter: function (cellvalue) {
         status = cellvalue;
         console.log(cellvalue);
@@ -743,7 +743,7 @@ $(document).ready(function () {
     }
     ],
     viewrecords: true,
-    width: 945,
+    ////width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,
@@ -756,6 +756,7 @@ $(document).ready(function () {
 
 
   /* Bin listing grid */
+  var bin_id = '';
   $("#bin-grid").jqGrid({
     url: BASE_URL + '/bin/binlist',
     mtype: "GET",
@@ -765,35 +766,44 @@ $(document).ready(function () {
     {label: 'Name', name: 'name', width: 200, search: true},
     {label: 'Ward', name: 'ward_name', width: 200, search: true},
     {label: 'Area', name: 'area_name', width: 200, search: true},
-    {label: 'Location', name: 'location', width: 200, search: true},
+    {label: 'Location', name: 'location', width: 440, search: true},
     {
-      label: 'Status', name: 'is_deleted', width: 100, search: false,
+        name: 'bin_key', hidden: true,
+        formatter: function (cellvalue) {
+          bin_id = cellvalue;
+        }
+      },
+    {
+      label: 'Status', name: 'is_deleted', width: 100, search: false, align:  "center",
       formatter: function (cellvalue) {
-        status = cellvalue;
-        return (cellvalue == false) ? "Active" : "In active";
+        statusAction = ''
+          if (cellvalue == 'true' || cellvalue == true) {
+            statusAction += '<a data-tooltip="" title="Make Active" data-status="true" data-url="' + BASE_URL + '/bin/updateStatus" class="button status-action active" data-id="' + bin_id + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-circle in-active"></i></a>';
+          } else {
+            statusAction += '<a data-tooltip="" title="Make In Active" data-status="false" data-url="' + BASE_URL + '/bin/updateStatus" class="button status-action active" data-id="' + bin_id + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-circle active"></i></a>';
+          }
+          return statusAction;
       }
     },
     {
       label: 'Action', name: 'bin_key', search: false, width: 150, align: "center",
       formatter: function (cellvalue) {
-        var action = '';
-        action += '<a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-        if (status) {
-          action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-        } else {
-          action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/bin/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-        }
-        return action;
+        var action = '<div class="td-action">';
+          action += '<span><a title="View Bin Detail" href="' + BASE_URL + '/bin/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a></span>';
+          action += '<span><a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a></span>';
+          action += '</div>';
+          return action;
       }
     }
     ],
     viewrecords: true,
-    width: 945,
-    height: 250,
+    //width: 1110,
+    height: 480,
     rowNum: 10,
+    rowList: [10, 20, 50, 100],
     loadonce: true,
     gridview: true,
-    pager: "#bin-grid-pager",
+    pager: "#user-grid-pager",
     /*guiStyle: "bootstrap",*/
   });
   jQuery("#bin-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
@@ -856,7 +866,7 @@ $(document).ready(function () {
 }
 ],
 viewrecords: true,
-width: 945,
+//width: null,
 height: 250,
 rowNum: 10,
 loadonce: true,
@@ -903,7 +913,7 @@ pager: "#bin-grid-pager-searchpage",
     }
     ],
     viewrecords: true,
-    width: 945,
+    //width: null,
     height: 250,
     rowNum: 10,
     loadonce: true,

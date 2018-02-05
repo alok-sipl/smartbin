@@ -1,3 +1,4 @@
+ <h1 class="sb-logo"><i class="fa fa-trash-o" aria-hidden="true"></i> Smartbin</h1>
 <div class="login-container">
   <div class="row">
     <div class="col-md-12">
@@ -5,16 +6,17 @@
         <div class="site-logo">
           <img src="<%= sails.config.base_url %>images/logo.png" title="<%= sails.config.app_name %>" alt="<%= sails.config.app_name %>">
         </div>
-        <h3>Administrator Login</h3>
+        
       </div>
       <div class="hpanel">
         <div class="panel-body">
+          <h3>Administrator Login</h3> 
           <form method="post" action="<%= sails.config.base_url %>login" data-parsley-validate novalidate="" name="loginForm" id="loginForm">
             <% if (req.session.flash) { console.log(req.session.flash) %>
               <%- req.flash('flashMessage') %>
             <% } %>
             <div class="form-group <%= (errors.email != undefined) ? " has-error" : "" %>">
-              <label class="control-label" for="email">Email*</label>
+              <label class="control-label" for="email">Email<span>*</span></label>
               <input type="email" name="email" class="form-control" id="email"
                      required
                      maxlength="<%= sails.config.length.email %>"
@@ -29,7 +31,7 @@
               </span>
             </div>
             <div class="form-group <%= (errors.password != undefined) ? " has-error" : "" %>">
-              <label class="control-label" for="password">Password*</label>
+              <label class="control-label" for="password">Password<span>*</span></label>
               <input type="password" name="password" class="form-control" id="password"
                      required
                      data-parsley-length="[<%= sails.config.length.min_password %>, <%= sails.config.length.max_password %>]"
