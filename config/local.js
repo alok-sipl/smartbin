@@ -81,15 +81,12 @@
    ***************************************************************************/
 
    // environment: process.env.NODE_ENV || 'development'
-
+    app_provider: 'Smartbin',
    app_name: 'Nagar Palika Khargone',
-  /* base_url: 'https://smart-bin.herokuapp.com/',
-   admin_url: 'https://smart-bin.herokuapp.com/admin',
-   */  
    base_url: 'https://smart-bin.herokuapp.com/',
-   admin_url: 'https://smart-bin.herokuapp.com/admin',
+   base_url_js: 'https://smart-bin.herokuapp.com',
    //base_url: 'http://localhost:1337/',
-   //admin_url: 'http://localhost:1337/admin',
+   //base_url_js: 'http://localhost:1337',
    google_key: "AIzaSyDKqiSzlWOyPDonL16HF3xHeFXRtgwKOKU" ,
    admin_email : 'ravi_sipl@systematixindia.com',
    authentication_email : 'ravi_sipl@systematixindia.com',
@@ -99,24 +96,23 @@
    /* Validation message setting */
    length:{
     name: 65,
-    company_name: 125,
-    account_number: 10,
     min_mobile_number: 10,
     max_mobile_number: 13,
     address: 125,
     email: 125,
     min_password: 6,
     max_password: 16,
-    device_id: 32,
     max_file_upload: 4000000,
-    max_file_upload_kb: 40
+    max_file_upload_kb: 40,
+     bin_id: 15
   },
 
   regex:{
     name: /^([ \\'-.A-Za-z\u0600-\u06FF]{1,50})$/,
     alpha_numeric: "^[a-zA-Z0-9]*$",
     mobile_number: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-    device_id: /^[a-zA-Z0-9_]*$/
+    bin_id: /^[a-zA-Z0-9]*$/,
+    lat_long: /^([-+]?\d{1,2}[.]\d+)$/
   },
 
   title:{
@@ -132,10 +128,6 @@
     user_list: 'User List',
     edit_user: 'Edit User',
     view_user: 'View User',
-    device_list: 'Device List',
-    add_device: 'Add Device',
-    edit_device: 'Edit Device',
-    view_device: 'View Device',
     add_country: 'Add Country',
     edit_country: 'Edit Country',
     city_list: 'City List',
@@ -144,9 +136,6 @@
     location_list: 'Location List',
     add_location: 'Add Location',
     edit_location: 'Edit Location',
-    enquiry_list: 'Contact Enqiry List',
-    view_enquiry: 'View Enquiry',
-    notification_setting: 'Notification Setting'
   },
 
   flash:{
@@ -160,20 +149,11 @@
     old_password_unmatch: "Incorrect current password",
     something_went_wronge: "Something went wronge",
     update_successfully: "Status updated successfully",
-    supplier_updated_success: "Driver updated successfully",
     bin_updated_success: "Bin updated successfully",
-    supplier_add_error: "Error in adding supplier",
     bin_edit_error: "Error in updating bin",
     profile_update_success: "Profile update successfully",
     profile_update_error: "Error in updating profile",
     mobile_number_already_exist: " Mobile number already registered",
     vehicle_number_already_exist: "Vehicle number already added",
   },
-
-  email_message:{
-    user_activated : "Your account has been activated by admin",
-    user_deactivated : "Your account has been deactivated by admin",
-    device_activated : "Your device has been activated by admin",
-    device_deactivated : "Your device has been deactivated by admin",
-  }
 };

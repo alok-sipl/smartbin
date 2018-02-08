@@ -2,11 +2,6 @@
  * Main set common settings of the application
  */
 
-var BASE_URL = 'http://10.10.100.19:1337';
-/*
- *  For manage all actions for the admin
- */
-
 $(document).ready(function () {
 
   /* Hide server side header messages */

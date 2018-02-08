@@ -13,6 +13,7 @@ module.exports = {
     "city_maxlength": "City can not be max 125 characters long",
     "area_required": "Area is required",
     "area_maxlength": "Area can not be max 125 characters long",
+    "ward_required" : "Ward is required"
   },
 
   attributes: {

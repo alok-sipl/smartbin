@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= typeof title == 'undefined' ? 'New Sails App' : sails.config.app_name + ' | ' + title %></title>
+  <title><%= typeof title == 'undefined' ? sails.config.app_provider +' | '+   sails.config.app_name: sails.config.app_name + ' | ' + title %></title>
   <!-- Viewport mobile tag for sensible mobile support -->
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <link rel="icon" type="image/x-icon" href="<%= sails.config.base_url %>images/favicon.ico" />
   <!--STYLES-->
   
   <!--STYLES END-->
-  <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/bootstrap-datetimepicker.min.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/fontawesome/css/font-awesome.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/metisMenu/dist/metisMenu.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/summernote.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/style.css">
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" ></script>
 </head>

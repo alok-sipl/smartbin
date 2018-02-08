@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= typeof title == 'undefined' ? 'Smartbin | Nagar Palika Parishad khargone' : sails.config.app_name + ' | ' + title %></title>
+  <title><%= typeof title == 'undefined' ? sails.config.app_provider + ' | ' + sails.config.app_name : sails.config.app_name + ' | ' + title %></title>
   <!-- Viewport mobile tag for sensible mobile support -->
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <link rel="icon" type="image/x-icon" href="<%= sails.config.base_url %>images/favicon.ico"/>
   <!--STYLES-->
   
   <!--STYLES END-->
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/sweet-alert.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/fontawesome/css/font-awesome.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/metisMenu/dist/metisMenu.css">
-  <link rel="stylesheet" type="text/css" media="screen" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css"/>
+  <link rel="stylesheet" type="text/css" media="screen"
+        href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css"/>
   <!-- The link to the CSS that the grid needs -->
-  <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.12.0/css/ui.jqgrid.min.css"/>
+  <link rel="stylesheet" type="text/css" media="screen"
+        href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.12.0/css/ui.jqgrid.min.css"/>
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/style.css">
 
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js" ></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script>var BASE_URL = "<%= sails.config.base_url_js %>"</script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=<%= sails.config.google_key %>&libraries=places"
+    async defer></script>
+
 </head>
 <body class="admin-layout hide-sidebar">
 <!-- Simple splash screen-->
 <div class="splash">
   <div class="splash-title">
-    <h1>Homer - Responsive Admin Theme</h1>
-    <p>Special AngularJS Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p>
     <div class="spinner">
       <div class="rect1"></div>
       <div class="rect2"></div>
@@ -33,7 +39,6 @@
       <div class="rect4"></div>
       <div class="rect5"></div>
     </div>
-
   </div>
 </div>
 <div class="splash">
@@ -67,7 +72,9 @@
 <!-- Header -->
 <div id="header">
   <div id="logo" class="light-version header-logo">
-      <a href="<%= sails.config.base_url %>" ><h1><i class="fa fa-trash-o" aria-hidden="true"></i> Smartbin</h1> <img src="<%= sails.config.base_url %>images/logo.png" title="<%= sails.config.app_name %>" alt="<%= sails.config.app_name %>" class="client-logo"></a>
+    <a href="<%= sails.config.base_url %>"><h1><i class="fa fa-trash-o" aria-hidden="true"></i> Smartbin</h1> <img
+        src="<%= sails.config.base_url %>images/logo.png" title="<%= sails.config.app_name %>"
+        alt="<%= sails.config.app_name %>" class="client-logo"></a>
   </div>
   <nav role="navigation">
     <!--<div class="header-link hide-menu"><i class="fa fa-bars"></i></div>-->
@@ -76,28 +83,28 @@
     </div>
     <div class="navbar-right">
       <ul class="nav navbar-nav no-borders col-md-12">
-          <li>
-<a href="<%= sails.config.base_url %>bin" title="Manage Bin"><i class="fa fa-tasks" aria-hidden="true"></i> <span
-class="nav-label">Manage Bin</span></a>
-<!-- </li>
-<li>
-<a href="<%= sails.config.base_url %>city" title="Manage Area"><span class="nav-label">Manage Area</span></a>
-</li> -->
-<li>
-<a href="<%= sails.config.base_url %>bin/search" title="Search Bin"><i class="fa fa-search" aria-hidden="true"></i> <span class="nav-label">Search Bin</span></a>
-</li>
-<!-- <li>
-<a href="<%= sails.config.base_url %>country" title="Country"><span class="nav-label">Country</span></a>
-</li> -->
-<li>
-<a href="<%= sails.config.base_url %>driver" title="Driver"><i class="fa fa-empire" aria-hidden="true"></i> <span class="nav-label">Driver</span></a>
-</li>
-<li>
-<a href="<%= sails.config.base_url %>vehicle" title="Driver"><i class="fa fa-car" aria-hidden="true"></i> <span class="nav-label">Vehicle</span></a>
-</li>
-<li>
-<a href="<%= sails.config.base_url %>dashboard/profile" title="Profile"><i class="fa fa-user" aria-hidden="true"></i> <span class="nav-label">Profile</span></a>
-</li>
+        <li>
+          <a href="<%= sails.config.base_url %>bin" title="Manage Bin"><i class="fa fa-tasks" aria-hidden="true"></i>
+            <span
+              class="nav-label">Manage Bin</span></a>
+        <li>
+          <a href="<%= sails.config.base_url %>bin/search" title="Search Bin"><i class="fa fa-search"
+                                                                                 aria-hidden="true"></i> <span
+              class="nav-label">Search Bin</span></a>
+        </li>
+        <li>
+          <a href="<%= sails.config.base_url %>driver" title="Driver"><i class="fa fa-empire" aria-hidden="true"></i>
+            <span class="nav-label">Driver</span></a>
+        </li>
+        <li>
+          <a href="<%= sails.config.base_url %>vehicle" title="Driver"><i class="fa fa-car" aria-hidden="true"></i>
+            <span class="nav-label">Vehicle</span></a>
+        </li>
+        <li>
+          <a href="<%= sails.config.base_url %>dashboard/profile" title="Profile"><i class="fa fa-user"
+                                                                                     aria-hidden="true"></i> <span
+              class="nav-label">Profile</span></a>
+        </li>
         <li>
           <a title="Logout" href="<%= sails.config.base_url %>dashboard/logout" logout class="logout">
             <i class="pe-7s-upload pe-rotate-90"></i>
@@ -115,7 +122,8 @@ class="nav-label">Manage Bin</span></a>
         <%- body %>
       </div>
       <p class="footer text-center m-b-none">
-        © <%= (new Date()).getFullYear() %> <span class="m-b-none"><%= sails.config.app_name %></span> All Rights Reserved.
+        © <%= (new Date()).getFullYear() %> <span class="m-b-none"><%= sails.config.app_name %></span> All Rights
+        Reserved.
       </p>
 
     </div>
@@ -149,12 +157,9 @@ class="nav-label">Manage Bin</span></a>
 <script src="<%= sails.config.base_url %>custom/js/vendor/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="<%= sails.config.base_url %>custom/js/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="<%= sails.config.base_url %>custom/js/vendor/metisMenu/dist/metisMenu.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-<script src="<%= sails.config.base_url %>custom/js/vendor/sweet-alert.min.js"></script>
 <script src="<%= sails.config.base_url %>custom/js/vendor/parsley.js"></script>
 <script src="<%= sails.config.base_url %>custom/js/homer.js"></script>
 <script src="<%= sails.config.base_url %>custom/js/admin.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= sails.config.google_key %>&libraries=places&callback=initAutocomplete" async defer></script>
 <script type="text/ecmascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/jqgrid/4.6.0/js/i18n/grid.locale-en.js"></script>
 <!-- This is the Javascript file of jqGrid -->
