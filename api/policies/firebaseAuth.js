@@ -36,7 +36,7 @@ module.exports = function(req, res,next) {
     return next();
   }else{
     req.session.flash = {
-      flashMessage:"You Must signed id."
+      flashMessage:'<div class="alert alert-danger">Please login.</div>'
     }
     res.redirect(sails.config.base_url);
   }

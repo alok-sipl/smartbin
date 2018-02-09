@@ -95,24 +95,25 @@
 
    /* Validation message setting */
    length:{
-    name: 65,
+    name: 35,
     min_mobile_number: 10,
     max_mobile_number: 13,
-    address: 125,
-    email: 125,
+    address: 100,
+    email: 75,
     min_password: 6,
     max_password: 16,
     max_file_upload: 4000000,
     max_file_upload_kb: 40,
-     bin_id: 15
+    bin_id: 15
   },
 
   regex:{
-    name: /^([ \\'-.A-Za-z\u0600-\u06FF]{1,50})$/,
+    name: /^[a-zA-Z '.-]*$/,
     alpha_numeric: "^[a-zA-Z0-9]*$",
-    mobile_number: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+    mobile_number: /^(\+\d{1,3}[-]?)?\d{10,13}$/,
     bin_id: /^[a-zA-Z0-9]*$/,
-    lat_long: /^([-+]?\d{1,2}[.]\d+)$/
+    lat_long: /^([-+]?\d{1,2}[.]\d+)$/,
+    vehicle_number: /^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/
   },
 
   title:{
@@ -125,7 +126,15 @@
     add_driver: 'Add Driver',
     edit_driver: 'Edit Driver',
     view_driver: 'View Driver',
+    vehicle_list: 'Vehicle List',
+    add_vehicle: 'Add Vehicle',
+    edit_vehicle: 'Edit Vehicle',
+    view_vehicle: 'View Vehicle',
     user_list: 'User List',
+    bin_list: 'Bin List',
+    add_bin: 'Add Bin',
+    edit_bin: 'Edit Bin',
+    view_bin: 'View Bin',
     edit_user: 'Edit User',
     view_user: 'View User',
     add_country: 'Add Country',
@@ -139,21 +148,29 @@
   },
 
   flash:{
-    invalid_email_password:"Invalid email or/and password",
-    image_not_upload : "No file was uploaded",
-    incorrect_file_format : "File type is not supported!",
     email_already_exist: " email already registered",
-    bin_id_already_exist: " Bin ID already exists",
+    invalid_email_password:"Invalid email or/and password",
     password_change_success: "Password changed successfully",
     password_change_error: "Error in changed password",
     old_password_unmatch: "Incorrect current password",
-    something_went_wronge: "Something went wronge",
-    update_successfully: "Status updated successfully",
-    bin_updated_success: "Bin updated successfully",
-    bin_edit_error: "Error in updating bin",
     profile_update_success: "Profile update successfully",
     profile_update_error: "Error in updating profile",
     mobile_number_already_exist: " Mobile number already registered",
+    something_went_wronge: "Something went wronge",
+    update_successfully: "Status updated successfully",
+    image_not_upload : "No file was uploaded",
+    incorrect_file_format : "File type is not supported!",
+    bin_id_already_exist: " Bin ID already exists",
+    bin_updated_success: "Bin updated successfully",
+    bin_edit_error: "Error in updating bin",
     vehicle_number_already_exist: "Vehicle number already added",
+    vehicle_add_success: "Vehicle added successfully",
+    vehicle_add_error: "Error in adding vehicle",
+    vehicle_updated_success: "Vehicle updated successfully",
+    vehicle_updated_error: "Error in updating vehicle",
+    driver_add_success: "Driver added successfully",
+    driver_add_error: "Error in adding driver",
+    driver_updated_success: "Driver updated successfully",
+    driver_updated_error: "Error in updating driver",
   },
 };

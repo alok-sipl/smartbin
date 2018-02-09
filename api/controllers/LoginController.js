@@ -64,7 +64,7 @@ module.exports = {
         return res.view('login', {title: sails.config.title.login, errors: errors});
       }
     } else {
-      res.redirect('supplier');
+      res.redirect('bin');
     }
   },
 

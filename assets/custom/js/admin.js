@@ -330,7 +330,6 @@ $("body").on("click", ".status-action", function () {
   $(".alert-success").css("display", "none");
   helper.showLoader();
   var id = $(this).attr('data-id');
-  var isSupplier = $(this).attr('data-supplier');
   if ($(this).attr('data-status') == 'true') {
     var status = false;
   } else if ($(this).attr('data-status') == 'false') {
@@ -347,16 +346,12 @@ $("body").on("click", ".status-action", function () {
       url: url,
       data: formData,
       success: function (result) {
-        if (isSupplier == 'true') {
-          location.reload();
-        } else {
           jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').jqGrid('clearGridData');
           jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').jqGrid('setGridParam', {datatype: 'json'});
           jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').trigger('reloadGrid');
           helper.hideLoader();
           $(".alert-success").css("display", "block");
           $(".alert-success").html(result.message);
-        }
       },
       error: function (textStatus, errorThrown) {
         helper.hideLoader();
@@ -373,39 +368,46 @@ $("body").on("click", ".status-action", function () {
 /* Show grid */
 $(document).ready(function () {
   /* Driver listing grid */
+  var driver_id = '';
   $("#driver-grid").jqGrid({
     url: BASE_URL + '/driver/driverlist',
     mtype: "GET",
     datatype: "json",
     colModel: [
-      {label: 'Name', name: 'name', width: 250, search: true},
-      {label: 'Area', name: 'area_name', width: 320, search: true},
-      {label: 'Contact Number', name: 'mobile_number', width: 250},
+      {label: 'Name', name: 'name', width: 220, search: true},
+      {label: 'Area', name: 'area_name', width: 220, search: true},
+      {label: 'Contact Number', name: 'mobile_number', width: 150},
       {label: 'Address', name: 'address', width: 300},
       {
-        label: 'Status', name: 'is_deleted', width: 200, search: false,
+        name: 'user_id', hidden: true,
         formatter: function (cellvalue) {
-          status = cellvalue;
-          console.log(cellvalue);
-          return (cellvalue == false || cellvalue == 'false') ? "Active" : "In active";
+          driver_id = cellvalue;
         }
       },
       {
-        label: 'Action', name: 'user_id', search: false, width: 150, align: "center",
+        label: 'Status', name: 'is_deleted', width: 90, search: false, align: "center",
         formatter: function (cellvalue) {
-          var action = '';
-          action += '<a title="Edit Driver Detail" href="' + BASE_URL + '/driver/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/driver/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
+          statusAction = ''
+          if (cellvalue == 'true' || cellvalue == true) {
+            statusAction += '<a data-tooltip="" title="Make Active" data-status="true" data-url="' + BASE_URL + '/driver/updateStatus" class="button status-action active" data-id="' + driver_id + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-circle in-active"></i></a>';
           } else {
-            action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/driver/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
+            statusAction += '<a data-tooltip="" title="Make In Active" data-status="false" data-url="' + BASE_URL + '/driver/updateStatus" class="button status-action active" data-id="' + driver_id + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-circle active"></i></a>';
           }
+          return statusAction;
+        }
+      },
+      {
+        label: 'Action', name: 'user_id', search: false, width: 100, align: "center",
+        formatter: function (cellvalue) {
+          var action = '<div class="td-action">';
+          action += '<span><a title="View Vehicle Detail" href="' + BASE_URL + '/driver/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a></span>';
+          action += '<span><a title="Edit Vehicle Detail" href="' + BASE_URL + '/driver/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a></span>';
+          action += '</div>';
           return action;
         }
       }
     ],
     viewrecords: true,
-    ////width: null,
     height: 480,
     rowNum: 10,
     loadonce: true,
@@ -554,34 +556,41 @@ $(document).ready(function () {
 
 
   /* Vehicle listing grid */
+  var vehicle_id = '';
   $("#vehicle-grid").jqGrid({
     url: BASE_URL + '/vehicle/vehiclelist',
     mtype: "GET",
     datatype: "json",
     colModel: [
-      {label: 'Name', name: 'name', width: 200, search: true},
-      {label: 'Number', name: 'number', width: 200, search: true},
-
-      {label: 'Assign To', name: 'assign_to_name', width: 200, search: true},
+      {label: 'Name', name: 'name', width: 200, search: true, classes: 'text-break'},
+      {label: 'Number', name: 'number', width: 180, search: true},
+      {
+        name: 'vehicle_key', hidden: true,
+        formatter: function (cellvalue) {
+          vehicle_id = cellvalue;
+        }
+      },
+      {label: 'Assign To', name: 'assign_to_name', width: 200, search: true, classes: 'text-break'},
       {label: 'Type', name: 'type_name', width: 200, search: true},
       {
-        label: 'Status', name: 'is_deleted', width: 100, search: false,
+        label: 'Status', name: 'is_deleted', width: 90, search: false, align: "center",
         formatter: function (cellvalue) {
-          console.log(cellvalue);
-          status = cellvalue;
-          return (cellvalue == false) ? "Active" : "In active";
+          statusAction = ''
+          if (cellvalue == 'true' || cellvalue == true) {
+            statusAction += '<a data-tooltip="" title="Make Active" data-status="true" data-url="' + BASE_URL + '/vehicle/updateStatus" class="button status-action active" data-id="' + vehicle_id + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-circle in-active"></i></a>';
+          } else {
+            statusAction += '<a data-tooltip="" title="Make In Active" data-status="false" data-url="' + BASE_URL + '/vehicle/updateStatus" class="button status-action active" data-id="' + vehicle_id + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-circle active"></i></a>';
+          }
+          return statusAction;
         }
       },
       {
         label: 'Action', name: 'vehicle_key', search: false, width: 150, align: "center",
         formatter: function (cellvalue) {
-          var action = '';
-          action += '<a title="Edit Bin Detail" href="' + BASE_URL + '/vehicle/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a>';
-          if (status) {
-            action += '<a data-tooltip="" title="Active" data-status="true" data-url="' + BASE_URL + '/vehicle/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="Active"><i class="fa fa-check-square-o"></i></a>';
-          } else {
-            action += '<a data-tooltip="" title="In Active" data-status="false" data-url="' + BASE_URL + '/vehicle/updateStatus/' + cellvalue + '" class="button status-action active" data-id="' + cellvalue + '" href="javascript:void(0);" data-original-title="In Active"><i class="fa fa-square-o"></i></a>';
-          }
+          var action = '<div class="td-action">';
+          action += '<span><a title="View Vehicle Detail" href="' + BASE_URL + '/vehicle/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a></span>';
+          action += '<span><a title="Edit Vehicle Detail" href="' + BASE_URL + '/vehicle/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a></span>';
+          action += '</div>';
           return action;
         }
       }

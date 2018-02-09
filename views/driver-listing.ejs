@@ -8,7 +8,7 @@
                     </h2>
                     <div id="hbreadcrumb">
                         <ol class="hbreadcrumb breadcrumb">
-                            <li><a title="Dashboard" href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+                            <li><a title="Dashboard" href="<%= sails.config.base_url %>bin">Dashboard</a></li>
                             <li class="active">
                                 <span>Driver List</span>
                             </li>
@@ -17,7 +17,7 @@
                 </div>
 
                  <div class="col-md-6 text-right m-t-sm">
-                  <a class="btn btn-primary" href="<%= sails.config.base_url %>driver/add"><i class="icon icon-user"></i>Add Driver</a>
+                  <a title="Add Driver" class="btn btn-primary" href="<%= sails.config.base_url %>driver/add"><i class="icon icon-user"></i>Add Driver</a>
                 </div>
 
             </div>
@@ -31,6 +31,5 @@
   <div class="panel-body">
     <table  id="driver-grid"></table>
     <div id="driver-grid-pager"></div>
-
   </div>
 </div>

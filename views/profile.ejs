@@ -8,7 +8,7 @@
           </h2>
           <div id="hbreadcrumb">
             <ol class="hbreadcrumb breadcrumb">
-              <li><a href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
+              <li><a title="Dashboard" href="<%= sails.config.base_url %>bin">Dashboard</a></li>
               <li class="active">Update Proflie
               </li>
             </ol>
@@ -29,7 +29,7 @@
           <% } %>
           <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
             <div class="col-md-3">
-               <label for="name">Name<span class="star-icon">*</span></label>
+              <label for="name">Name<span class="star-icon">*</span></label>
               <input type="text" name="name" class="form-control" id="name"
                      value="<%= (user.name != undefined) ? user.name : "" %>"
                      required
@@ -44,105 +44,39 @@
                 </strong>
               </span>
             </div>
-          <div class="col-md-3">
-            <label for="email">Email<span class="star-icon">*</span></label>
+            <div class="col-md-3">
+              <label for="email">Email<span class="star-icon">*</span></label>
               <input type="email" name="email" class="form-control" id="email"
                      value="<%= user.email %>"
                      disabled
                      placeholder="Email"/>
-          </div>
-          <div class="col-md-3">
-            <label for="mobile_number">Mobile Number</label>
+            </div>
+            <div class="col-md-3">
+              <label for="mobile_number">Mobile Number</label>
               <input type="text" name="mobile_number" class="form-control" id="mobile_number"
                      value="<%= user.phone %>"
                      disabled
                      placeholder="Mobile Number"/>
-          </div>
-              <div class="col-md-3">
-            <label for="account_number">Account Number</label>
-              <input type="text" name="account_number" class="form-control" id="account_number"
-                     value="<%= user.account_number %>"
-                     data-parsley-type="alphanum"
-                     data-parsley-length="[<%= sails.config.length.account_number %>, <%= sails.config.length.account_number %>]"
-                     data-parsley-length-message="<%= User.message.account_number_length %>"
-                     data-parsley-type-message="<%= User.message.account_number_alphanumeric %>"
-                     placeholder="Account Number"/>
-              <span class="help-block">
-                <strong><%= (errors.account_number != undefined) ? errors.account_number.message : '' %>
-                </strong>
-              </span>
-            </div>    
-           </div>
-           <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
-          <div class="col-md-3">
-            <label for="country">Country<span class="star-icon">*</span></label>
-              <select name="country" onchange="getCity(this.value)" id="country" class="form-control" required
-                      data-parsley-required-message="<%= User.message.country_required %>">
-                <option value="">Select Country</option>
-                <%
-                if(Object.keys(countries).length){
-                  for(var key in countries) { %>
-                <option <%= (key == user.country_id) ? "selected" : "" %>
-                  value="<%= key %>"><%= countries[key].name %></option>
-                <% }
-                } %>
-              </select>
-              <span class="help-block">
-                <strong><%= (errors.country != undefined) ? errors.country.message : '' %>
-                </strong>
-              </span>
-          <input type="hidden" name="country_name" id="country_name" value="<%= (user.city_name) ? (user.city_name) : '' %>"/>
-          </div>
-          <div class="col-md-3">
-            <label for="city">City<span class="star-icon">*</span></label>
-              <select name="city" id="city" onchange="getSubCity(this.value)" class="form-control" required
-                      data-parsley-required-message="<%= User.message.city_required %>">
-                <option value="">Select City</option>
-                <%
-                if(Object.keys(cities).length){
-                  for(var key in cities) { %>
-                <option <%= (key == user.city_id) ? "selected" : "" %>
-                  value="<%= key %>"><%= cities[key].name %></option>
-                <% }
-                } %>
-              </select>
-              <span class="help-block">
-                <strong><%= (errors.city != undefined) ? errors.city.message : '' %>
-                </strong>
-              </span>
             </div>
-          <input type="hidden" name="city_name" id="city_name" value="<%= (user.city_name) ? (user.city_name) : '' %>"/>
-         <div class="col-md-3">
-            <label for="area">Area<span class="star-icon">*</span></label>
-              <input type="text" name="area" class="form-control" required id="area"
-                     value="<%= user.area %>"
-                     data-parsley-required-message="<%= User.message.area_required %>"
-                     data-parsley-maxlength-message="<%= User.message.area_maxlength %>"
-                     placeholder="Area"/>
-              <span class="help-block">
-                <strong><%= (errors.area != undefined) ? errors.area.message : '' %>
-                </strong>
-              </span>
-            <input type="hidden" name="latitude" id="latitude" value="<%= (user.latitude) ? (user.latitude) : (req.param('latitude')) ? req.param('latitude') : '' %>"/>
-            <input type="hidden" name="longitude" id="longitude" value="<%= (user.longitude) ? (user.longitude) : (req.param('longitude')) ? req.param('longitude') : '' %>"/>
           </div>
-          </div>
-          <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>"> 
-           <div class="col-md-3">
-            <label for="image">Profile Picture</label>
+          <% /*  %>
+          <div class="form-group <%=  (errors.name != undefined) ? " has-error" : ""  %>">
+            <div class="col-md-3">
+              <label for="image">Profile Picture</label>
               <input type="file" class="form-control" name="image" id="image"/>
               <span class="help-block">
-                <strong><%= (errors.image != undefined) ? errors.image.message : '' %>
+                <strong><%=  (errors.image != undefined) ? errors.image.message : ''  %>
                 </strong>
               </span>
             </div>
           </div>
-          <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>"> 
+          <%  */ %>
+          <div class="form-group <%= (errors.name != undefined) ? " has-error" : "" %>">
             <div class="col-md-12 text-right">
-              <button type="submit" class="btn btn-primary">
+              <button title="Update Profile" type="submit" class="btn btn-primary">
                 Update Profile
               </button>
-              <a class="btn btn-primary" href="<%= sails.config.base_url %>dashboard">Cancel</a>
+              <a title="Cancel" class="btn btn-primary" href="<%= sails.config.base_url %>bin">Cancel</a>
             </div>
           </div>
         </form>
