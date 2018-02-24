@@ -19,6 +19,27 @@ module.exports = {
     });
    },
 
+
+
+  create: function (req, res) {
+    var ref = db.ref("bins");
+    var _newBin = {
+      email: '',
+
+      created_at: Date.now(),
+      modified_at: Date.now(),
+    }
+    ref.push(_newBin).then(function (_bin) {
+      console.log('Created');
+      return res.redirect(sails.config.base_url + 'bin');
+    }, function (error) {
+      console.error("Error on createBin");
+      console.error(JSON.stringify(err));
+    });
+  },
+
+
+
   /*
    * Name: userlist
    * Created By: A-SIPL

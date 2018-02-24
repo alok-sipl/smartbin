@@ -112,21 +112,20 @@ module.exports = {
      * @param  req
      */
   signUp: function (req, res) {
-    firebase.auth().createUserWithEmailAndPassword('admin@gmail.com', '123456')
+    firebase.auth().createUserWithEmailAndPassword('prakash.Chitte@gmail.com', '123456')
       .then(function () {
         user = firebase.auth().currentUser;
       }).then(function () {
       user.updateProfile({
-        displayName: "Durgesh",
-        photoURL: 'http://localhost:1337/images/profile.png'
+        displayName: 'Prakash Chitte',
       });
     }).then(function () {
       var ref = db.ref().child("users");
       var data = {
-        email: 'admin@gmail.com',
+        email: 'prakash.Chitte@gmail.com',
         password: '123456',
-        name: "Admin",
-        phone: "9713997998",
+        name: "Prakash Chitte",
+        phone: "9826311884",
         id: user.uid,
         is_deleted: false,
         is_admin: true,

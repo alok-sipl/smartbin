@@ -14,43 +14,43 @@
      */
      // circle 1 and ward 18
      create: function (req, res) {
-    //   var ref = db.ref();
-    //   var circle = ref.child("areas/-L2ub8xoecEPjg-nDxNr");
-    //   var _newArea = {
-    //     city_id : "-L0xcM9R_zgmOhLsyOiJ",
-    //     country_id : "-L1pigYbq_ZQl009gBoU",
-    //     created_date : 1515232076118,
-    //     modified_date : 1515232076118,
-    //     name : "Radha Vallabh Market",
-    //     state_id : "-L0xcM9R_zgmOhLsyOiX",
-    //     ward_id : "-L2ub8xoecEPjg-nDxNr",
-    //     circle_id: "-L2e81tPlcPPuyxGpNdP"
-    //   }
-    //   circle.push(_newArea).then(function (_area) {
+      var ref = db.ref();
+      var circle = ref.child("areas/-L2sgNgUAhpYrq_4r1Ki");
+      var _newArea = {
+        city_id : "-L0xcM9R_zgmOhLsyOiJ",
+        country_id : "-L1pigYbq_ZQl009gBoU",
+        created_date : Date.now(),
+        modified_date : Date.now(),
+        name : "",
+        state_id : "-L0xcM9R_zgmOhLsyOiX",
+        ward_id : "-L2sgNgUAhpYrq_4r1Ki",
+        circle_id: "-L2e7fEvmHHh7Pj4R30f"
+      }
+      circle.push(_newArea).then(function (_area) {
 
-    //     var ref = db.ref();
-    //     var circle = ref.child("areas/-L2ub8xoecEPjg-nDxNr");
-    //     var _newArea = {
-    //       city_id : "-L0xcM9R_zgmOhLsyOiJ",
-    //       country_id : "-L1pigYbq_ZQl009gBoU",
-    //       created_date : 1515232076118,
-    //       modified_date : 1515232076118,
-    //       name : "New Radha Vallabh Market",
-    //       state_id : "-L0xcM9R_zgmOhLsyOiX",
-    //       ward_id : "-L2ub8xoecEPjg-nDxNr",
-    //       circle_id: "-L2e81tPlcPPuyxGpNdP"
-    //     }
-    //     circle.push(_newArea).then(function (_area) {
+        var ref = db.ref();
+        var circle = ref.child("areas/-L2ub8xoecEPjg-nDxNr");
+        var _newArea = {
+          city_id : "-L0xcM9R_zgmOhLsyOiJ",
+          country_id : "-L1pigYbq_ZQl009gBoU",
+          created_date : 1515232076118,
+          modified_date : 1515232076118,
+          name : "New Radha Vallabh Market",
+          state_id : "-L0xcM9R_zgmOhLsyOiX",
+          ward_id : "-L2ub8xoecEPjg-nDxNr",
+          circle_id: "-L2e81tPlcPPuyxGpNdP"
+        }
+        circle.push(_newArea).then(function (_area) {
 
-    //   // return res.redirect("area");
-    // }, function (error) {
-    //   console.error("Error on createArea");
-    //   console.error(JSON.stringify(err));
-    // });
-    //   }, function (error) {
-    //     console.error("Error on createArea");
-    //     console.error(JSON.stringify(err));
-    //   });
+      // return res.redirect("area");
+    }, function (error) {
+      console.error("Error on createArea");
+      console.error(JSON.stringify(err));
+    });
+      }, function (error) {
+        console.error("Error on createArea");
+        console.error(JSON.stringify(err));
+      });
     },
 
 

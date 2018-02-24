@@ -30,26 +30,28 @@ module.exports = {
   create: function (req, res) {
     var ref = db.ref("bins");
     var _newBin = {
-      alert_level: "85",
-      area_id: "-L0xcM9R_zgmOhLsyTUP",
-      city_id: "-L0xcM9R_zgmOhLsyOiJ",
+      alert_level: "60",
+      area_id: "-L37kL3zWrrM9VofDsaG",
+      city_id: "-L2TxNe8boIvuTly8hdd",
       country_id: "-L1pigYbq_ZQl009gBoU",
       created_date: 1515232076118,
       current_level: 44,
-      device_id: 865691034146928,
-      id: "865691034146928",
+      device_id: 865691034278747,
+      id: "865691033521329",
       is_deleted: false,
       latitude: 21.8116593,
-      location: "ISKCON ,KHARGONE",
+      location: "BIT road, Khargone",
       longitude: 75.5834045,
       modified_date: 1515232076118,
-      circle_id: "-L2e7fEvmHHh7Pj4R30f",
+      circle_id: "-L2e81GjIXZD2FWOGkP9",
       name: "ISKCON ,KHARGONE",
       smoke: 0,
-      state_id: "-L0xcM9R_zgmOhLsyOiX",
-      ward_id: "-L2KJ0fCuEMiUkKcRCmv"
+      state_id: "-L2TwVAW-_j7JJ8nDMEI",
+      ward_id: "-L2ub7qhBoywYYRXquI5"
     }
     ref.push(_newBin).then(function (_bin) {
+      console.log('Created');
+      return res.redirect(sails.config.base_url + 'bin');
     }, function (error) {
       console.error("Error on createBin");
       console.error(JSON.stringify(err));

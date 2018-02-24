@@ -83,24 +83,24 @@
     </div>
     <div class="navbar-right">
       <ul class="nav navbar-nav no-borders col-md-12">
-        <li>
+        <li class="<%= (req.options.controller == 'bin' && (req.options.action == 'index')) ? 'active' : '' %>">
           <a href="<%= sails.config.base_url %>bin" title="Manage Bin"><i class="fa fa-tasks" aria-hidden="true"></i>
             <span
               class="nav-label">Manage Bin</span></a>
-        <li>
+        <li class="<%= (req.options.controller == 'bin' && (req.options.action == 'search')) ? 'active' : '' %>">
           <a href="<%= sails.config.base_url %>bin/search" title="Search Bin"><i class="fa fa-search"
                                                                                  aria-hidden="true"></i> <span
               class="nav-label">Search Bin</span></a>
         </li>
-        <li>
+        <li class="<%= (req.options.controller == 'driver') ? 'active' : '' %>">
           <a href="<%= sails.config.base_url %>driver" title="Driver"><i class="fa fa-empire" aria-hidden="true"></i>
             <span class="nav-label">Driver</span></a>
         </li>
-        <li>
+        <li class="<%= (req.options.controller == 'vehicle') ? 'active' : '' %>">
           <a href="<%= sails.config.base_url %>vehicle" title="Vehicle"><i class="fa fa-car" aria-hidden="true"></i>
             <span class="nav-label">Vehicle</span></a>
         </li>
-        <li>
+        <li class="<%= (req.options.controller == 'dashboard' && (req.options.action == 'profile')) ? 'active' : '' %>">
           <a href="<%= sails.config.base_url %>dashboard/profile" title="Profile"><i class="fa fa-user"
                                                                                      aria-hidden="true"></i> <span
               class="nav-label">Profile</span></a>
