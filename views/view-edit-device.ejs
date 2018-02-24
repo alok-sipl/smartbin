@@ -22,8 +22,8 @@
   <div class="col-md-8">
     <div class="hpanel">
       <div class="panel-body">
-        <form action="<%= sails.config.base_url %>dashboard/profile" method="post" enctype="multipart/form-data"
-              id="profile" class='form-horizontal' data-parsley-validate='true'>
+        <form action="<%= sails.config.base_url %>dashboard/profile" method="post"
+              id="profile" class='form-horizontal form-submit' data-parsley-validate='true' autocomplete="off">
           <% if (req.session.flash) { %>
           <%- req.flash('flashMessage') %>
           <% } %>

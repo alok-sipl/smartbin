@@ -88,9 +88,6 @@
    //base_url: 'http://localhost:1337/',
    //base_url_js: 'http://localhost:1337',
    google_key: "AIzaSyDKqiSzlWOyPDonL16HF3xHeFXRtgwKOKU" ,
-   admin_email : 'ravi_sipl@systematixindia.com',
-   authentication_email : 'ravi_sipl@systematixindia.com',
-   authentication_password : '*******',
    per_page_data : 9,
 
    /* Validation message setting */
@@ -122,6 +119,7 @@
     profile: 'Profile',
     edit_profile: 'Edit Profile',
     change_password: 'Change password',
+    forgot_password: "Forgot password",
     driver_list: 'Driver List',
     add_driver: 'Add Driver',
     edit_driver: 'Edit Driver',

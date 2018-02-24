@@ -23,7 +23,7 @@
     <div class="hpanel">
       <div class="panel-body">
         <form action="<%= sails.config.base_url %>dashboard/profile" method="post" enctype="multipart/form-data"
-              id="profile" class='form-horizontal' data-parsley-validate='true'>
+              id="profile" class='form-horizontal form-submit' data-parsley-validate='true' autocomplete="off">
           <% if (req.session.flash) { %>
           <%- req.flash('flashMessage') %>
           <% } %>
@@ -166,7 +166,7 @@
               <span class=""><img width="100"
                                   src="<%= (user.compnay_image) ? user.compnay_image : sails.config.base_url + 'images/profile.png' %>"
                                   title="<%= (user.name) ? user.name : '' %>" alt="<%= (user.name) ? user.name : '' %>"></span>
-              <input type="file" class="form-control" name="image" id="image"
+              <input type="file" class="form-control" name="image" id="image" accept="image/*"
                      data-parsley-max-file-size="<%= sails.config.length.max_file_upload_kb %>"/>/>
               <span class="help-block">
                 <strong><%= (errors.area != undefined) ? errors.image.message : '' %>

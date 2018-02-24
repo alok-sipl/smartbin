@@ -26,11 +26,11 @@
       <div class="panel-body">
         <% if(!(Object.keys(driver).length)){ %>
         <form action="<%= sails.config.base_url %>driver/add" method="post" enctype="multipart/form-data"
-              id="add-driver" class='form-horizontal' data-parsley-validate='true'>
+              id="add-driver" class='form-horizontal form-submit' data-parsley-validate='true' autocomplete="off">
           <% }else{ %>
           <form action="<%= sails.config.base_url %>driver/edit/<%= req.params.id %>" method="post"
                 enctype="multipart/form-data"
-                id="add-driver" class='form-horizontal' data-parsley-validate='true'>
+                id="add-driver" class='form-horizontal form-submit' data-parsley-validate='true' autocomplete="off">
             <% } %>
             <% if (req.session.flash) { %>
             <%- req.flash('flashMessage') %>

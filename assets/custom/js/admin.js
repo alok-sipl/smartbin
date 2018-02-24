@@ -11,7 +11,22 @@ $(document).ready(function () {
   setTimeout(function () {
     $('div').removeClass('has-error');
     $('.form-group').find('.help-block').hide();
-  }, 6000);
+  }, 8000);
+
+  setTimeout(function () {
+    $('.flash-message').remove();
+  }, 8000);
+
+  //Grid  Defaul Width Set
+  $.jgrid.defaults.width = $(window).width() - 95;
+
+  /* On submit form Disable submit button */
+  $(".form-submit").on('submit', function(e){
+    if ($(this).parsley().isValid()) {
+      $(':submit').prop("disabled", "disabled");
+    }
+  });
+
 
 })
 
@@ -596,16 +611,17 @@ $(document).ready(function () {
       }
     ],
     viewrecords: true,
-    //width: null,
     height: 480,
     rowNum: 10,
     loadonce: true,
     gridview: true,
     rowList: [10, 20, 50],
     pager: "#vehicle-grid-pager",
-    /*guiStyle: "bootstrap",*/
   });
   jQuery("#vehicle-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
+
+  /*Disable auto complete of on the input filed of the grid */
+  $(".ui-widget-content").attr("autocomplete", "off");
 });
 
 /* Search bin js */

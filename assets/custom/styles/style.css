@@ -3646,5 +3646,6 @@ label{font-weight: 600; color: #000;}
 .client-logo{float: left; max-width: 250px;
     margin-left: 20px; margin-top: 10px;
 }
+a:hover, a:focus {color: #d24012;text-decoration: none;}
 .text-break{white-space: inherit !important;text-align: left !important;}
 #map-canvas {height: 400px;}

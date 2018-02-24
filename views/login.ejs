@@ -14,8 +14,8 @@
         <% } %>
         <div class="panel-body">
           <h3>Administrator Login</h3>
-          <form method="post" action="<%= sails.config.base_url %>login" data-parsley-validate novalidate=""
-                name="loginForm" id="loginForm">
+          <form method="post" action="<%= sails.config.base_url %>login" data-parsley-validate novalidate="" class='form-horizontal form-submit'
+                name="loginForm" id="loginForm" autocomplete="off">
             <div class="form-group <%= (errors.email != undefined) ? " has-error" : "" %>">
               <label class="control-label" for="email">Email<span>*</span></label>
               <input type="email" name="email" class="form-control" id="email"
@@ -44,7 +44,7 @@
             </div>
             <button class="btn btn btn-primary btn-block admin-login-btn" title="Login"><span>Login</span></button>
           </form>
-          <span class="forgot"><a href="<%= sails.config.base_url %>login/forgotPassword" title="Forgot Password">Forgot Password?</a></span>
+          <div class="forgot text-center m-t-sm"><a href="<%= sails.config.base_url %>login/forgotPassword" title="Forgot Password">Forgot Password?</a></div>
         </div>
       </div>
     </div>

@@ -8,7 +8,11 @@ $(document).ready(function () {
   setTimeout(function(){
     $('div').removeClass('has-error');
     $('.form-group').find('.help-block').hide();
-  },6000);
+  },8000);
+
+  setTimeout(function () {
+    $('.flash-message').remove();
+  }, 8000);
 
   /* Show loader at login */
   form = $('#loginForm');
@@ -21,8 +25,15 @@ $(document).ready(function () {
       helper.showLoader();
     }
   });
-})
 
+  /* On submit form Disable submit button */
+  $(".form-submit").on('submit', function(e){
+    if ($(this).parsley().isValid()) {
+      $(':submit').prop("disabled", "disabled");
+    }
+  });
+
+})
 /* Declare all helper functions here */
 var helper = {
   /*

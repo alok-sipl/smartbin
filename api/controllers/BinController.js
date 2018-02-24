@@ -261,12 +261,7 @@ module.exports = {
       var ref = db.ref("countries");
       ref.orderByChild("name")
         .once("value", function (snapshot) {
-          var countries = CountryService.snapshotToArray(snapshot);
-          countries = countries.sort(function (a, b) {
-            var textA = a.name.toUpperCase();
-            var textB = b.name.toUpperCase();
-            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-          });
+          var countries = snapshot.val();
           return res.view('add-update-bin', {
             'title': sails.config.title.add_bin,
             'bin': bin,

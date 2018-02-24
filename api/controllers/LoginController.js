@@ -37,7 +37,7 @@ module.exports = {
                     req.session.authenticated = true;
                     req.session.user = user;
                     req.session.userid = (Object.keys(adminDetail)[0]) ? Object.keys(adminDetail)[0] : '';
-                    return res.redirect(sails.config.base_url + 'bin');
+                    return res.redirect(sails.config.base_url + 'bin/search');
                   } else {
                     req.flash('flashMessage', '<div class="flash-message alert alert-danger">' + User.message.email_valid + '</div>');
                     return res.redirect(sails.config.base_url);
@@ -64,7 +64,7 @@ module.exports = {
         return res.view('login', {title: sails.config.title.login, errors: errors});
       }
     } else {
-      res.redirect('bin');
+      res.redirect('bin/search');
     }
   },
 

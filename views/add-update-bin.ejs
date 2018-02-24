@@ -25,11 +25,11 @@
       <div class="panel-body">
         <% if(!(Object.keys(bin).length)){ %>
         <form action="<%= sails.config.base_url %>bin/add" method="post" enctype="multipart/form-data"
-              id="add-bin" class='form-horizontal' data-parsley-validate='true'>
+              id="add-bin" class='form-horizontal form-submit' autocomplete="off" data-parsley-validate='true'>
           <% }else{ %>
           <form action="<%= sails.config.base_url %>bin/edit/<%= req.params.id %>" method="post"
                 enctype="multipart/form-data"
-                id="add-bin" class='form-horizontal' data-parsley-validate='true'>
+                id="add-bin" class='form-horizontal form-submit' autocomplete="off" data-parsley-validate='true'>
             <% } %>
             <% if (req.session.flash) { %>
             <%- req.flash('flashMessage') %>
