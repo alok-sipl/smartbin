@@ -13,7 +13,7 @@ module.exports = {
     "bin_id_pattern": "Provide correct bin id",
     "name_pattern": "Provide correct name",
     "name_required": "Name is required",
-    "name_maxlength": "Name can not be max 65 characters long",
+    "name_maxlength": "Name can not be max 30 characters long",
     "country_required": "Please select country",
     "state_required": "Please select state",
     "city_required": "Please select city",
@@ -29,8 +29,9 @@ module.exports = {
     "alert_level_required": "Alert Level is required",
     "alert_level_pattern": "Provide digit only",
     "bin_image_required": "Bin Image is required",
-    "company_image_maxsize": "Company logo should not be larger than 4 Mb",
+    "bin_image_maxsize": "Bin image should not be larger than 4 Mb",
     "invalid_file": "Invalid file format",
+    "status_required": "Please select status"
   },
 
   attributes: {

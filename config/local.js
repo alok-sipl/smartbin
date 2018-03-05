@@ -92,11 +92,11 @@
 
    /* Validation message setting */
    length:{
-    name: 35,
+    name: 30,
     min_mobile_number: 10,
     max_mobile_number: 13,
-    address: 100,
-    email: 75,
+    address: 125,
+    email: 70,
     min_password: 6,
     max_password: 16,
     max_file_upload: 4000000,
@@ -105,9 +105,9 @@
   },
 
   regex:{
-    name: /^[a-zA-Z '.-]*$/,
+    name: /^(?!\s)([ \\'A-Za-z\u0600-\u06FF]{2,30})$/,
     alpha_numeric: "^[a-zA-Z0-9]*$",
-    mobile_number: /^(\+\d{1,3}[-]?)?\d{10,13}$/,
+    mobile_number: /^[-+]?(\+\d{1,3}[-]?)?\d{9,13}$/,
     bin_id: /^[a-zA-Z0-9]*$/,
     lat_long: /^([-+]?\d{1,2}[.]\d+)$/,
     vehicle_number: /^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$/
@@ -132,6 +132,7 @@
     bin_list: 'Bin List',
     add_bin: 'Add Bin',
     edit_bin: 'Edit Bin',
+    search_bin: 'Search Bin',
     view_bin: 'View Bin',
     edit_user: 'Edit User',
     view_user: 'View User',
@@ -147,11 +148,11 @@
 
   flash:{
     email_already_exist: " email already registered",
-    invalid_email_password:"Invalid email or/and password",
+    invalid_email_password:"Invalid email or password",
     password_change_success: "Password changed successfully",
     password_change_error: "Error in changed password",
     old_password_unmatch: "Incorrect current password",
-    profile_update_success: "Profile update successfully",
+    profile_update_success: "Profile updated successfully",
     profile_update_error: "Error in updating profile",
     mobile_number_already_exist: " Mobile number already registered",
     something_went_wronge: "Something went wronge",
@@ -170,5 +171,8 @@
     driver_add_error: "Error in adding driver",
     driver_updated_success: "Driver updated successfully",
     driver_updated_error: "Error in updating driver",
+    account_inactive: "Your account is inactived by admin",
+    forgot_mail_send_success: "We have sent mail please check email and follow the steps",
+    same_password_warning: "Current password and new password cannot be same",
   },
 };

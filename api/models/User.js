@@ -10,9 +10,9 @@ module.exports = {
   message: {
     "name_pattern": "Provide correct full name",
     "name_required": "Full name is required",
-    "name_maxlength": "Full name cannot be max 65 characters long",
+    "name_maxlength": "Full name cannot be max 30 characters long",
     "email_required": "Email is required",
-    "email_maxlength": "Email cannot be max 125 characters long",
+    "email_maxlength": "Email cannot be max 70 characters long",
     "email_valid": "Provide correct email address",
     "password_required": "Password is required",
     "password_length": "Password should be between 6 and 16 characters long.",

@@ -112,20 +112,20 @@ module.exports = {
      * @param  req
      */
   signUp: function (req, res) {
-    firebase.auth().createUserWithEmailAndPassword('prakash.Chitte@gmail.com', '123456')
+    firebase.auth().createUserWithEmailAndPassword('alok.bichhwe@systematixindia.com', '123456')
       .then(function () {
         user = firebase.auth().currentUser;
       }).then(function () {
       user.updateProfile({
-        displayName: 'Prakash Chitte',
+        displayName: 'Alok Bichhwe',
       });
     }).then(function () {
       var ref = db.ref().child("users");
       var data = {
-        email: 'prakash.Chitte@gmail.com',
+        email: 'alok.bichhwe@systematixindia.com',
         password: '123456',
-        name: "Prakash Chitte",
-        phone: "9826311884",
+        name: "Alok Bichhwe",
+        phone: "9713997998",
         id: user.uid,
         is_deleted: false,
         is_admin: true,

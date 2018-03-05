@@ -18,10 +18,10 @@ $(document).ready(function () {
   }, 8000);
 
   //Grid  Defaul Width Set
-  $.jgrid.defaults.width = $(window).width() - 95;
+  $.jgrid.defaults.width = $(window).width() - 135;
 
   /* On submit form Disable submit button */
-  $(".form-submit").on('submit', function(e){
+  $(".form-submit").on('submit', function (e) {
     if ($(this).parsley().isValid()) {
       $(':submit').prop("disabled", "disabled");
     }
@@ -228,7 +228,6 @@ function getArea(areaid) {
 }
 
 
-
 var autocomplete;
 
 /* For google address API */
@@ -243,7 +242,6 @@ function initAutocomplete() {
 function fillInAddress() {
   // Get the place details from the autocomplete object.
   var place = autocomplete.getPlace();
-  console.log("place", place.geometry.location.lat(), place.geometry.location.lng());
   $("#latitude").val(place.geometry.location.lat());
   $("#longitude").val(place.geometry.location.lng());
 }
@@ -279,7 +277,7 @@ window.Parsley.addValidator('maxFileSize', {
   },
   requirementType: 'integer',
   messages: {
-    en: 'Company logo should not be larger than 4 Mb',
+    en: 'Bin image should not be larger than 4 Mb',
   }
 });
 
@@ -314,28 +312,6 @@ var helper = {
   hideLoader: function () {
     $(".splash").hide();
   },
-  /*
-   * @method: deleteConfirmation
-   * @desc: Delete confirmation dialog
-   * @param fn: function execute after the cofirm
-   */
-  deleteConfirmation: function (fn) {
-    swal({
-        title: "Are you sure?",
-        text: "You will not be able to recover!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: '#DD6B55',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: "No, cancel please!",
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
-          fn();
-        }
-      });
-  }
 }
 
 
@@ -361,12 +337,12 @@ $("body").on("click", ".status-action", function () {
       url: url,
       data: formData,
       success: function (result) {
-          jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').jqGrid('clearGridData');
-          jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').jqGrid('setGridParam', {datatype: 'json'});
-          jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').trigger('reloadGrid');
-          helper.hideLoader();
-          $(".alert-success").css("display", "block");
-          $(".alert-success").html(result.message);
+        jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').jqGrid('clearGridData');
+        jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').jqGrid('setGridParam', {datatype: 'json'});
+        jQuery('#bin-grid, #bin-grid-searchpage, #vehicle-grid, #driver-grid').trigger('reloadGrid');
+        helper.hideLoader();
+        $(".alert-success").css("display", "block");
+        $(".alert-success").html(result.message);
       },
       error: function (textStatus, errorThrown) {
         helper.hideLoader();
@@ -496,15 +472,10 @@ $(document).ready(function () {
       {label: 'Name', name: 'name', width: 220, search: true, classes: 'text-break'},
       {label: 'Ward', name: 'ward_name', width: 80, search: true },
       {
-        label: 'Filling Status', name: 'latest_dust_level', width: 140, search: true,
+        label: 'Filling Status', name: 'filling_status', width: 140, search: true,formatter: "number",sorttype: "number",
         formatter: function (cellvalue) {
           status = cellvalue;
           var level = '';
-          if (cellvalue) {
-
-          } else {
-            cellvalue = '';
-          }
           if (cellvalue < 40) {
             level = '<span>' + cellvalue + '</span>';
           } else if (cellvalue >= 40 && cellvalue < 70) {
@@ -546,8 +517,8 @@ $(document).ready(function () {
         label: 'Action', name: 'bin_key', search: false, width: 80, align: "center",
         formatter: function (cellvalue) {
           var action = '<div class="td-action">';
-          action += '<span><a title="View Bin Detail" href="' + BASE_URL + '/bin/view/' + cellvalue + '" ><i class="fa fa-eye"></i></a></span>';
-          action += '<span><a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '" ><i class="fa fa-edit"></i></a></span>';
+          action += '<span><a title="View Bin Detail" href="' + BASE_URL + '/bin/view/' + cellvalue + '?search=true' +'" ><i class="fa fa-eye"></i></a></span>';
+          action += '<span><a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '?search=true' + '" ><i class="fa fa-edit"></i></a></span>';
           action += '</div>';
           return action;
         }
@@ -568,7 +539,6 @@ $(document).ready(function () {
     stringResult: true,
     searchOnEnter: false
   });
-
 
   /* Vehicle listing grid */
   var vehicle_id = '';
@@ -635,16 +605,14 @@ var bounds = new google.maps.LatLngBounds();
 var markers = [];
 var latlng = new google.maps.LatLng(21.823524, 75.514989);
 var mapOptions = {
-  zoom: 9,
+  zoom: 12,
   center: latlng,
   mapTypeId: google.maps.MapTypeId.ROADMAP
 }
 var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
 function filterbins() {
-  console.log("filter bin");
   var select_ward = $('#select_ward').val();
-  console.log("select_ward===", select_ward);
   var thisvalue = $("select#select_ward option:selected").text();
 
   $('#gs_ward_name').val(thisvalue);
@@ -662,8 +630,9 @@ function filterbins() {
     success: function (e) {
       $.each(e.bins, function (i, option) {
         if (option.latitude != null && option.latitude != "") {
-
-          if (!option.latest_dust_level) {
+          if(option.alert_level != undefined && option.alert_level != '' && option.latest_dust_level != undefined && option.latest_dust_level != undefined){
+            option.latest_dust_level = parseInt((((parseInt(option.alert_level) - parseInt(option.latest_dust_level)))* 100) / parseInt(option.alert_level));
+          }else{
             option.latest_dust_level = 0;
           }
           var search = option.location + ' (Dust Status: ' + option.latest_dust_level + ')';

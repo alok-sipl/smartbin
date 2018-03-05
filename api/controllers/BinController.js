@@ -30,28 +30,29 @@ module.exports = {
   create: function (req, res) {
     var ref = db.ref("bins");
     var _newBin = {
-      alert_level: "60",
-      area_id: "-L37kL3zWrrM9VofDsaG",
-      city_id: "-L2TxNe8boIvuTly8hdd",
-      country_id: "-L1pigYbq_ZQl009gBoU",
-      created_date: 1515232076118,
-      current_level: 44,
-      device_id: 865691034278747,
-      id: "865691033521329",
-      is_deleted: false,
-      latitude: 21.8116593,
-      location: "BIT road, Khargone",
-      longitude: 75.5834045,
-      modified_date: 1515232076118,
-      circle_id: "-L2e81GjIXZD2FWOGkP9",
-      name: "ISKCON ,KHARGONE",
-      smoke: 0,
-      state_id: "-L2TwVAW-_j7JJ8nDMEI",
-      ward_id: "-L2ub7qhBoywYYRXquI5"
+      "alert_level" : "80",
+      "area_id" : "-L37kL3lJmfpGE9tof9X",
+      "area_name" : "MG Road",
+      "circle_id" : "-L2e7fEvmHHh7Pj4R30f",
+      "city_id" : "-L2TxNe8boIvuTly8hdd",
+      "country_id" : "-L1pigYbq_ZQl009gBoU",
+      "created_date" : 1516030147156,
+      "current_level" : 80,
+      "device_id" : "181818181818181",
+      "id" : "181818181818181",
+      "is_deleted" : false,
+      "latest_dust_level" : 80,
+      "latitude" : "21.813122",
+      "location" : "Goal Building",
+      "longitude" : "75.617581",
+      "modified_date" : 1519636667296,
+      "name" : "Goal Building",
+      "smoke" : 0,
+      "state_id" : "-L2TwVAW-_j7JJ8nDMEI",
+      "ward_id" : "-L2sgNgUAhpYrq_4r1Ki"
     }
     ref.push(_newBin).then(function (_bin) {
-      console.log('Created');
-      return res.redirect(sails.config.base_url + 'bin');
+      //return res.redirect(sails.config.base_url + 'bin');
     }, function (error) {
       console.error("Error on createBin");
       console.error(JSON.stringify(err));
@@ -93,6 +94,11 @@ module.exports = {
               }
               if (area) {
                 updateBin.area_name = area.name;
+              }
+              if(childSnap.alert_level != undefined && childSnap.alert_level != '' && childSnap.latest_dust_level != undefined && childSnap.latest_dust_level != undefined){
+                updateBin.filling_status = parseInt((((parseInt(childSnap.alert_level) - parseInt(childSnap.latest_dust_level)))* 100) / parseInt(childSnap.alert_level));
+              }else{
+                updateBin.filling_status = 0;
               }
               bins.push(updateBin);
               i++;
@@ -756,7 +762,7 @@ module.exports = {
             return a.name - b.name;
           })
           return res.view('search-bin', {
-            title: sails.config.title.bin_list,
+            title: sails.config.title.search_bin,
             bins: bins,
             wards: wards,
           });

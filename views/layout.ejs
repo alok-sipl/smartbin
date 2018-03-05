@@ -8,7 +8,7 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <link rel="icon" type="image/x-icon" href="<%= sails.config.base_url %>images/favicon.ico"/>
   <!--STYLES-->
-
+  
   <!--STYLES END-->
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/sweet-alert.css">
   <link rel="stylesheet" href="<%= sails.config.base_url %>custom/styles/vendor/fontawesome/css/font-awesome.css">
@@ -83,7 +83,7 @@
     </div>
     <div class="navbar-right">
       <ul class="nav navbar-nav no-borders col-md-12">
-        <li class="<%= (req.options.controller == 'bin' && (req.options.action == 'index')) ? 'active' : '' %>">
+        <li class="<%= (req.options.controller == 'bin' && (req.options.action != 'search')) ? 'active' : '' %>">
           <a href="<%= sails.config.base_url %>bin" title="Manage Bin"><i class="fa fa-tasks" aria-hidden="true"></i>
             <span
               class="nav-label">Manage Bin</span></a>
@@ -100,15 +100,19 @@
           <a href="<%= sails.config.base_url %>vehicle" title="Vehicle"><i class="fa fa-car" aria-hidden="true"></i>
             <span class="nav-label">Vehicle</span></a>
         </li>
-        <li class="<%= (req.options.controller == 'dashboard' && (req.options.action == 'profile')) ? 'active' : '' %>">
-          <a href="<%= sails.config.base_url %>dashboard/profile" title="Profile"><i class="fa fa-user"
-                                                                                     aria-hidden="true"></i> <span
-              class="nav-label">Profile</span></a>
-        </li>
-        <li>
-          <a title="Logout" href="<%= sails.config.base_url %>dashboard/logout" logout class="logout">
-            <i class="pe-7s-upload pe-rotate-90"></i>
+        <li class="dropdown <%= ((req.options.controller == 'dashboard') && (req.options.action == 'profile' || req.options.action == 'changePassword')) ? 'active' : '' %>">
+          <a title="Setting" class="dropdown-toggle label-menu-corner logout" href="#" data-toggle="dropdown" aria-expanded="false">
+            <i class="pe-7s-config"></i>
           </a>
+          <ul class="dropdown-menu hdropdown animated flipInX">
+            <li>
+              <a href="<%= sails.config.base_url %>dashboard/profile" title="Profile">Profile</a>
+            </li>
+            <li>
+              <a href="<%= sails.config.base_url %>dashboard/changePassword" title="Profile">Change Password</a>
+            </li>
+            <li><a href="<%= sails.config.base_url %>dashboard/logout" title="Profile">Logout</a></li>
+          </ul>
         </li>
       </ul>
     </div>

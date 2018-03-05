@@ -8,7 +8,8 @@
           </h2>
           <div id="hbreadcrumb">
             <ol class="hbreadcrumb breadcrumb">
-              <li><a href="<%= sails.config.base_url %>bin">Dashboard</a></li>
+              <li><a title="Dashboard" href="<%= sails.config.base_url %>bin">Dashboard</a></li>
+              <li><a title="Bin List" href="<%= sails.config.base_url %>bin">Bin List</a></li>
               <li class="active">
                 <span>View Bin</span>
               </li>
@@ -53,7 +54,7 @@
                   <%
                   if(Object.keys(countries).length){
                     for(var key in countries) { %>
-                  <option <%= (bin.country_id && bin.country_id == countries[key].key) ? "selected" : '' %>
+                  <option <%= (bin.country_id && bin.country_id == key) ? "selected" : '' %>
                     value="<%= countries[key].key %>"><%= countries[key].name %></option>
                   <% }
                   } %>
@@ -194,7 +195,7 @@
               </div>
             </div>
             <div class="col-md-12 text-right">
-              <a title="Back" class="btn btn-primary" href="<%= sails.config.base_url %>bin">Back</a>
+              <a title="Back" class="btn btn-primary" href="<%= (req.query.search != undefined) ? sails.config.base_url + 'bin/search' : sails.config.base_url + 'bin' %>">Back</a>
             </div>
       </div>
     </div>
