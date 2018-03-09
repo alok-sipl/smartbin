@@ -33,7 +33,7 @@ module.exports = {
     /* country listing*/
     drivers = [];
     /* ward listing*/
-    var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
+    var ref = db.ref("areas/-L2sgNgUAhpYrq_4r1Ki");
     ref.once("value", function (areaSnapshot) {
       var areas = CountryService.snapshotToArray(areaSnapshot);
       areas = areas.sort(function (a, b) {
@@ -146,7 +146,7 @@ module.exports = {
       }
     } else {
       /* wards listing*/
-      var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
+      var ref = db.ref("areas/-L2sgNgUAhpYrq_4r1Ki");
       ref.once("value", function (snapshot) {
         var areas = CountryService.snapshotToArray(snapshot);
         areas = areas.sort(function (a, b) {
@@ -176,7 +176,7 @@ module.exports = {
      */
   view: function (req, res) {
     /* city listing*/
-    var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
+    var ref = db.ref("areas/-L2sgNgUAhpYrq_4r1Ki");
     ref.once("value", function (snapshot) {
       var areas = CountryService.snapshotToArray(snapshot);
       areas = areas.sort(function (a, b) {
@@ -221,7 +221,7 @@ module.exports = {
       errors = ValidationService.validate(req);
       if (Object.keys(errors).length) {
         /* city listing*/
-        var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
+        var ref = db.ref("areas/-L2sgNgUAhpYrq_4r1Ki");
         ref.once("value", function (snapshot) {
           var areas = CountryService.snapshotToArray(snapshot);
           areas = areas.sort(function (a, b) {
@@ -304,7 +304,7 @@ module.exports = {
       }
     } else {
       /* country listing*/
-      var ref = db.ref("areas/-L2ub7qhBoywYYRXquI5");
+      var ref = db.ref("areas/-L2sgNgUAhpYrq_4r1Ki");
       ref.once("value", function (snapshot) {
         var areas = CountryService.snapshotToArray(snapshot);
         areas = areas.sort(function (a, b) {

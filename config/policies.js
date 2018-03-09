@@ -52,20 +52,10 @@ module.exports.policies = {
   supplier: {
     '*': "firebaseAuth"
   },
-
   "*": "firebaseAuth",
   "LoginController": {
     '*': true
   },
-
-
-  // "*": "firebaseAuth",
-  // "LoginController": {
-  //   '*': true
-  // },
-  // "LoginController": {
-  //   "*": "firebaseNoAuth",
-  // }
 
 
 };

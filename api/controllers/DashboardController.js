@@ -18,7 +18,42 @@ module.exports = {
      * @param  int  $id
      */
   index: function (req, res) {
-    return res.view('dashboard', {});
+    var wards = [];
+    var drivers = [];
+    var ref = db.ref("circlewards");
+    ref.once("value", function (snapshotWards) {
+      _.map(snapshotWards.val(), function (val, bin_key) {
+        _.map(val, function (val2, ward_key) {
+          val2.id = ward_key;
+          wards.push(val2)
+        });
+      });
+      wards.sort(function (a, b) {
+        return a.name - b.name;
+      })
+      var ref = db.ref("drivers");
+      ref.orderByChild('name').once("value", function (snapshot) {
+        if (Object.keys(snapshot).length) {
+          snapshot.forEach(function (childSnap) {
+            bindetails = childSnap.val();
+            bindetails.id = childSnap.key;
+            drivers.push(bindetails);
+          });
+        }
+        return res.view('dashboard', {
+          title: sails.config.title.dashboard,
+          wards: wards,
+          drivers: drivers
+        });
+
+      }).catch(function (err) {
+        req.flash('flashMessage', '<div class="flash-message alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+        return res.redirect('dashboard');
+      });
+    }).catch(function (err) {
+      req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+      return res.redirect('dashboard');
+    });
   },
 
   /*
@@ -77,27 +112,27 @@ module.exports = {
             'area': req.param('area'),
             'latitude': req.param('latitude'),
             'longitude': req.param('longitude')
-            }).then(function () {
-              user = firebaseAuth.auth().currentUser;
-            }).then(function (){
-              user.updateProfile({
-                displayName: req.param('name'),
-                photoURL: sails.config.base_url+'images/profile.png'
-              });
-              req.session.user.displayName = req.param('name');
-              req.session.user.photoURL = sails.config.base_url+"images/profile.png";
-            })
+          }).then(function () {
+          user = firebaseAuth.auth().currentUser;
+        }).then(function () {
+          user.updateProfile({
+            displayName: req.param('name'),
+            photoURL: sails.config.base_url + 'images/profile.png'
+          });
+          req.session.user.displayName = req.param('name');
+          req.session.user.photoURL = sails.config.base_url + "images/profile.png";
+        })
           .then(function (res) {
             req.flash('flashMessage', '<div class="alert alert-success">' + sails.config.flash.profile_update_success + '</div>');
             return res.redirect(sails.config.base_url + 'dashboard/profile');
           })
           .catch(function (err) {
-            console.log("In error-->",err);
+            console.log("In error-->", err);
             req.flash('flashMessage', '<div class="alert alert-error">' + sails.config.flash.profile_update_error + '</div>');
             return res.redirect(sails.config.base_url + 'dashboard/profile');
           });
       }
-    }else{
+    } else {
       /* user detail */
       if (req.session.userid !== undefined && req.session.userid) {
         var ref = db.ref("users/" + req.session.userid);
@@ -126,7 +161,7 @@ module.exports = {
         }, function (errorObject) {
           return res.serverError(errorObject.code);
         });
-      }else {
+      } else {
         return res.redirect(sails.config.base_url + 'login');
       }
     }

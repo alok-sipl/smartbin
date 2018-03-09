@@ -8,7 +8,7 @@
           </h2>
           <div id="hbreadcrumb">
             <ol class="hbreadcrumb breadcrumb">
-              <li><a title="Dashboard" href="<%= sails.config.base_url %>bin">Dashboard</a></li>
+              <li><a title="Dashboard" href="<%= sails.config.base_url %>dashboard">Dashboard</a></li>
               <li><a title="Bin List" href="<%= sails.config.base_url %>bin">Bin List</a></li>
               <li class="active">
                 <%= (Object.keys(bin).length) ? 'Edit' : 'Add' %> Bin</span>
@@ -302,7 +302,7 @@
                 <button title="<%= (Object.keys(bin).length) ? 'Update' : 'Add' %> Bin" type="submit" class="btn btn-primary">
                   <%= (Object.keys(bin).length) ? 'Update' : 'Add' %> Bin
                 </button>
-                <a title="Cancel" class="btn btn-primary" href="<%= (req.query.search != undefined) ? sails.config.base_url + 'bin/search' : sails.config.base_url + 'bin' %>">Cancel</a>
+                <a title="Cancel" class="btn btn-primary" href="<%= (req.query.search != undefined) ? sails.config.base_url + 'dashboard' : sails.config.base_url + 'bin' %>">Cancel</a>
               </div>
             </div>
 

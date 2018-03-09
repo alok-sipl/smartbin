@@ -613,6 +613,7 @@ var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions)
 
 function filterbins() {
   var select_ward = $('#select_ward').val();
+  var select_driver = $('#select_driver').val();
   var thisvalue = $("select#select_ward option:selected").text();
 
   $('#gs_ward_name').val(thisvalue);
@@ -623,7 +624,7 @@ function filterbins() {
     dataType: "json",
     beforeSend: function () {
     },
-    data: {selected_ward: select_ward},
+    data: {selected_ward: select_ward, select_driver: select_driver},
     cache: true,
     error: function () {
     },
@@ -649,7 +650,6 @@ function filterbins() {
 
 // Removes the markers from the map, but keeps them in the array.
 function resetbins() {
-  console.log("call resetbins");
   setMapOnAll(null);
   filterbins();
 }
