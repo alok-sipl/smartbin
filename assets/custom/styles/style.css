@@ -3649,3 +3649,6 @@ label{font-weight: 600; color: #000;}
 a:hover, a:focus {color: #d24012;text-decoration: none;}
 .text-break{white-space: inherit !important;text-align: left !important;}
 #map-canvas {height: 400px;}
+.dashboard input[type="checkbox"] {
+  height: 30px;width: 30px;
+}

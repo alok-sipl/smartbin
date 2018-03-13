@@ -477,7 +477,7 @@ $(document).ready(function () {
           status = cellvalue;
           var level = '';
           if (cellvalue < 40) {
-            level = '<span>' + cellvalue + '</span>';
+            level = '<span style="color:darkgreen">' + cellvalue + '</span>';
           } else if (cellvalue >= 40 && cellvalue < 70) {
             level = '<span style="color:orange">' + cellvalue + '</span>';
           } else {
@@ -614,6 +614,7 @@ var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions)
 function filterbins() {
   var select_ward = $('#select_ward').val();
   var select_driver = $('#select_driver').val();
+  var bin_type = ($("#bin_type").is(':checked')) ? true : false;
   var thisvalue = $("select#select_ward option:selected").text();
 
   $('#gs_ward_name').val(thisvalue);
@@ -624,7 +625,7 @@ function filterbins() {
     dataType: "json",
     beforeSend: function () {
     },
-    data: {selected_ward: select_ward, select_driver: select_driver},
+    data: {selected_ward: select_ward, select_driver: select_driver, bin_type: bin_type},
     cache: true,
     error: function () {
     },

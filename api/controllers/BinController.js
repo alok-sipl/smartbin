@@ -748,6 +748,7 @@ module.exports = {
     bins = [];
     var selected_ward = req.body.selected_ward;
     var select_driver = req.body.select_driver;
+    var bin_type = req.body.bin_type;
     if (selected_ward || (select_driver && select_driver != 'all')) {
       if (selected_ward && select_driver && select_driver != 'all') {
         var ref = db.ref("drivers/" + select_driver);
@@ -759,11 +760,19 @@ module.exports = {
                 var binsList = snapshot.val();
                 if(binsList !=  null){
                   for(var i in binsList){
-                    if(binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined && binsList[i]['is_deleted'] == true){
-                      delete binsList[i];
+                    if(bin_type == 'true'){
+                      if(binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true || binsList[i]['alert_level'] == undefined || binsList[i]['alert_level'] == '' || binsList[i]['latest_dust_level'] == undefined || binsList[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                        delete binsList[i];
+                      }
+                    }else{
+                      if(binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true){
+                        delete binsList[i];
+                      }
                     }
+
                   }
                 }
+                console.log(Object.keys(binsList).length);
                 return res.json({'bins': binsList});
               }).catch(function (err) {
               req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
@@ -775,11 +784,18 @@ module.exports = {
                 var bins = snapshot.val();
                 if(bins != null){
                   for(var i in bins){
-                    if(bins[i]['is_deleted'] == undefined && bins[i]['is_deleted'] == true){
-                      delete bins[i];
+                    if(bin_type == 'true'){
+                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                        delete bins[i];
+                      }
+                    }else{
+                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                        delete bins[i];
+                      }
                     }
                   }
                 }
+                console.log(Object.keys(bins).length);
                 return res.json({'bins': bins});
               }).catch(function (err) {
               req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
@@ -799,8 +815,14 @@ module.exports = {
               var bins = snapshot.val();
               if(bins != null){
                 for(var i in bins){
-                  if(bins[i]['is_deleted'] == undefined && bins[i]['is_deleted'] == true){
-                    delete bins[i];
+                  if(bin_type == 'true'){
+                    if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                      delete bins[i];
+                    }
+                  }else{
+                    if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                      delete bins[i];
+                    }
                   }
                 }
               }
@@ -814,11 +836,18 @@ module.exports = {
                 var bins = snapshot.val();
                 if(bins != null){
                   for(var i in bins){
-                    if(bins[i]['is_deleted'] == undefined && bins[i]['is_deleted'] == true){
-                      delete bins[i];
+                    if(bin_type == 'true'){
+                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                        delete bins[i];
+                      }
+                    }else{
+                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                        delete bins[i];
+                      }
                     }
                   }
                 }
+                console.log(Object.keys(bins).length);
                 return res.json({'bins': bins});
               }).catch(function (err) {
               req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
@@ -835,11 +864,18 @@ module.exports = {
             var bins = snapshot.val();
             if(bins != null){
               for(var i in bins){
-                if(bins[i]['is_deleted'] == undefined && bins[i]['is_deleted'] == true){
-                  delete bins[i];
+                if(bin_type == 'true'){
+                  if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                    delete bins[i];
+                  }
+                }else{
+                  if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                    delete bins[i];
+                  }
                 }
               }
             }
+            console.log(Object.keys(bins).length);
             return res.json({'bins': bins});
           }).catch(function (err) {
           req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
@@ -850,6 +886,16 @@ module.exports = {
       db.ref('bins').orderByChild("is_deleted").equalTo(false).once('value')
         .then(function (snapshot) {
           var bins = snapshot.val();
+          if(bin_type == 'true'){
+            if(bins != null){
+              for(var i in bins){
+                if(bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                  delete bins[i];
+                }
+              }
+            }
+          }
+          console.log(Object.keys(bins).length);
           return res.json({'bins': bins});
         }).catch(function (err) {
         req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
