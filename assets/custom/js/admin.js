@@ -18,7 +18,7 @@ $(document).ready(function () {
   }, 8000);
 
   //Grid  Defaul Width Set
-  $.jgrid.defaults.width = $(window).width() - 135;
+  $.jgrid.defaults.width = $(window).width() - 105;
 
   /* On submit form Disable submit button */
   $(".form-submit").on('submit', function (e) {

@@ -18,53 +18,54 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="hpanel dashboard">
-      <div class="panel-body">
-        <div class="form-group ">
-          <div class="col-md-3">
-            <label for="select_area">Select Ward</label>
-            <select onchange="resetbins(this.value)" name="select_area" id="select_ward" class="form-control">
-              <option value="">Select Ward</option>
-              <%
-              if(wards.length){
-                for(var key in wards) { %>
-              <option value="<%= wards[key].id %>"><%= wards[key].name %>
-              </option>
-              <% }
-              } %>
+<div class="hpanel dashboard">
+  <div class="panel-body">
+    <div class="form-group ">
+      <div class="col-md-3">
+        <label for="select_area">Select Ward</label>
+        <select onchange="resetbins(this.value)" name="select_area" id="select_ward" class="form-control">
+          <option value="">Select Ward</option>
+          <%
+          if(wards.length){
+            for(var key in wards) { %>
+          <option value="<%= wards[key].id %>"><%= wards[key].name %>
+          </option>
+          <% }
+          } %>
 
-            </select>
-          </div>
-        <div class="col-lg-3">
-          <label for="id">Select Driver</label>
-            <select onchange="resetbins(this.value)" name="select_driver" id="select_driver" class="form-control">
-              <option value="all">All Driver</option>
-              <%
-              if(drivers.length){
-                for(var key in drivers) { %>
-              <option value="<%= drivers[key].id %>"><%= drivers[key].name %>
-              </option>
-              <% }
-              } %>
-
-            </select>
-          </div>
-        <div class="col-lg-3">
-          <label for="id">Show Filled Bins</label>
-            <input onclick="resetbins(this.value)" class="form-control" type="checkbox" name="bin_type"
-                                   id="bin_type" value="1">
-          </div>
-        </div>
+        </select>
       </div>
-      <div class="col-lg-12">
-        <div id="map-canvas"></div>
-        <div class="hpanel">
-          <div class="panel-body">
-            <table id="bin-grid-searchpage"></table>
-            <div id="bin-grid-pager-searchpage"></div>
-          </div>
-        </div>
+      <div class="col-lg-3">
+        <label for="id">Select Driver</label>
+        <select onchange="resetbins(this.value)" name="select_driver" id="select_driver" class="form-control">
+          <option value="all">All Driver</option>
+          <%
+          if(drivers.length){
+            for(var key in drivers) { %>
+          <option value="<%= drivers[key].id %>"><%= drivers[key].name %>
+          </option>
+          <% }
+          } %>
+
+        </select>
+      </div>
+      <div class="col-lg-3">
+        <label for="id">Show Filled Bins</label>
+        <input onclick="resetbins(this.value)" class="form-control" type="checkbox" name="bin_type"
+               id="bin_type" value="1">
       </div>
     </div>
+  </div>
+</div>
+<div class="hpanel">
+  <div class="panel-body">
+    <div id="map-canvas"></div>
+  </div>
+</div>
+
+<div class="hpanel">
+  <div class="panel-body">
+    <table id="bin-grid-searchpage"></table>
+    <div id="bin-grid-pager-searchpage"></div>
+  </div>
+</div>
