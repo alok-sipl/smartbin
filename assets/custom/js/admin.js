@@ -26,8 +26,6 @@ $(document).ready(function () {
       $(':submit').prop("disabled", "disabled");
     }
   });
-
-
 })
 
 
@@ -209,6 +207,14 @@ function getState(coutryId) {
         location.reload();
       }
     });
+  }
+}
+
+/* On change area name */
+function changeArea(cityId) {
+  if (cityId !== "") {
+
+    $('#area_name').val($("#area option:selected").text());
   }
 }
 
@@ -464,25 +470,23 @@ $(document).ready(function () {
   jQuery("#bin-grid").jqGrid('filterToolbar', {searchOperators: true, stringResult: true, searchOnEnter: false});
 
   /* Bin listing grid */
+  var rowsToColor = [];
   $("#bin-grid-searchpage").jqGrid({
     url: BASE_URL + '/bin/binlist',
     mtype: "GET",
     datatype: "json",
     colModel: [
       {label: 'Name', name: 'name', width: 220, search: true, classes: 'text-break'},
-      {label: 'Ward', name: 'ward_name', width: 80, search: true },
       {
-        label: 'Filling Status', name: 'filling_status', width: 140, search: true,formatter: "number",sorttype: "number",
+        label: 'Filling Status',
+        name: 'filling_status',
+        width: 140,
+        search: true,
+        formatter: "number",
+        sorttype: "number",
         formatter: function (cellvalue) {
           status = cellvalue;
-          var level = '';
-          if (cellvalue < 40) {
-            level = '<span style="color:darkgreen">' + cellvalue + '</span>';
-          } else if (cellvalue >= 40 && cellvalue < 70) {
-            level = '<span style="color:orange">' + cellvalue + '</span>';
-          } else {
-            level = '<span style="color:red">' + cellvalue + '</span>';
-          }
+          level = '' + cellvalue + '';
           return level;
         }
       },
@@ -493,16 +497,23 @@ $(document).ready(function () {
         }
       },
       {
-        label: 'Updated Time', name: 'modified_date', width: 140, search: false,
+        label: 'Updated Time', name: 'modified_date', width: 130, search: false,
         formatter: function (cellvalue) {
           return timeSince(cellvalue);
 
         }
       },
-      {label: 'Area', name: 'area_name', width: 220, search: true, classes: 'text-break'},
-      {label: 'Location', name: 'location', width: 220, search: true, classes: 'text-break'},
+      {label: 'Area', name: 'area_name', width: 200, search: true, classes: 'text-break'},
       {
-        label: 'Status', name: 'is_deleted', width: 70, search: false, align: "center",
+        label: 'Location',
+        name: 'location',
+        width: 200,
+        search: true,
+        classes: 'text-break',
+        formatter: rowColorFormatter
+      },
+      {
+        label: 'Status', name: 'is_deleted', width: 80, search: false, align: "center",
         formatter: function (cellvalue) {
           statusAction = ''
           if (cellvalue == 'true' || cellvalue == true) {
@@ -514,10 +525,10 @@ $(document).ready(function () {
         }
       },
       {
-        label: 'Action', name: 'bin_key', search: false, width: 80, align: "center",
+        label: 'Action', name: 'bin_key', search: false, width: 100, align: "center",
         formatter: function (cellvalue) {
           var action = '<div class="td-action">';
-          action += '<span><a title="View Bin Detail" href="' + BASE_URL + '/bin/view/' + cellvalue + '?search=true' +'" ><i class="fa fa-eye"></i></a></span>';
+          action += '<span><a title="View Bin Detail" href="' + BASE_URL + '/bin/view/' + cellvalue + '?search=true' + '" ><i class="fa fa-eye"></i></a></span>';
           action += '<span><a title="Edit Bin Detail" href="' + BASE_URL + '/bin/edit/' + cellvalue + '?search=true' + '" ><i class="fa fa-edit"></i></a></span>';
           action += '</div>';
           return action;
@@ -527,13 +538,37 @@ $(document).ready(function () {
     viewrecords: true,
 //width: null,
     height: 480,
-    rowNum: 10,
+    rowNum: 50,
     loadonce: true,
     gridview: true,
-    rowList: [10, 20, 50],
+    rowList: [10, 20, 50, 100, 200],
     pager: "#bin-grid-pager-searchpage",
+    gridComplete: function () {
+      for (var i = 0; i < rowsToColor.length; i++) {
+        var status = $("#" + rowsToColor[i]).find("td").eq(1).html();
+        if (status < 40) {
+          $("#" + rowsToColor[i]).find("td").css("background-color", "green");
+          $("#" + rowsToColor[i]).find("td").css("color", "white");
+        } else if (status >= 40 && status < 70) {
+          $("#" + rowsToColor[i]).find("td").css("background-color", "orange");
+          $("#" + rowsToColor[i]).find("td").css("color", "white");
+        } else {
+          $("#" + rowsToColor[i]).find("td").css("background-color", "red");
+          $("#" + rowsToColor[i]).find("td").css("color", "white");
+        }
+      }
+    }
     /*guiStyle: "bootstrap",*/
   });
+
+  function rowColorFormatter(cellValue, options, rowObject) {
+    //if (cellValue == "Complete")
+    rowsToColor[rowsToColor.length] = options.rowId;
+
+    status_name = cellValue;
+    return cellValue;
+  }
+
   jQuery("#bin-grid-searchpage").jqGrid('filterToolbar', {
     searchOperators: true,
     stringResult: true,
@@ -632,9 +667,9 @@ function filterbins() {
     success: function (e) {
       $.each(e.bins, function (i, option) {
         if (option.latitude != null && option.latitude != "") {
-          if(option.alert_level != undefined && option.alert_level != '' && option.latest_dust_level != undefined && option.latest_dust_level != undefined){
-            option.latest_dust_level = parseInt((((parseInt(option.alert_level) - parseInt(option.latest_dust_level)))* 100) / parseInt(option.alert_level));
-          }else{
+          if (option.alert_level != undefined && option.alert_level != '' && option.latest_dust_level != undefined && option.latest_dust_level != undefined) {
+            option.latest_dust_level = parseInt((((parseInt(option.alert_level) - parseInt(option.latest_dust_level))) * 100) / parseInt(option.alert_level));
+          } else {
             option.latest_dust_level = 0;
           }
           var search = option.location + ' (Dust Status: ' + option.latest_dust_level + ')';

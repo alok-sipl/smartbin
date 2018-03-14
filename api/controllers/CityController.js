@@ -270,92 +270,6 @@ addLikes: function (req, res) {
   });
 },
 
-
-  /*
-* Name: deviceReading
-* Created By: A-SIPL
-* Created Date: 28-dec-2017
-* Purpose: add reading data
-* @param  type
-*/
-deviceReading: function (req, res) {
-  var ref = db.ref();
-  var likes = ref.child("device_reading");
-  var newSubCities = likes.push();
-  newSubCities.set({
-    device_id: "-L0oJuC3wNmUAnuic-or",
-    reading: "20",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "12",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "13",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "13",
-    created_date: Date.now()
-  });
-
-  newSubCities.set({
-    device_id: "-L0oJuC3wNmUAnuic-or",
-    reading: "40",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "42",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "42",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "13",
-    created_date: Date.now()
-  });
-
-  newSubCities.set({
-    device_id: "-L0oJuC3wNmUAnuic-or",
-    reading: "20",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "12",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "13",
-    created_date: Date.now()
-  });
-  var newSubCities = likes.push();
-  newSubCities.set({
-    user_id: "-L0oJuC3wNmUAnuic-or",
-    supplier_id: "90",
-    created_date: Date.now()
-  });
-},
-
-
 like: function (req, res) {
   db.ref('/users').orderByChild('name')
   .startAt('Alok')
@@ -734,7 +648,7 @@ count: function (req, res) {
       console.log(city);
       console.log("country_id == ");
       console.log(country_id);
-    
+
       updateCity.country_name =  countries[country_id]['name'];
       cities.push(updateCity);
     });

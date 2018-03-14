@@ -179,7 +179,7 @@
               </div>
               <div class="col-md-3">
                 <label for="is_active">Area<span class="star-icon">*</span></label>
-                <select name="area" id="area" class="form-control" required
+                <select name="area" id="area" class="form-control" required onchange="changeArea(this.value)"
                         data-parsley-required-message="<%= Bin.message.area_required %>">
                   <option value="">Select Area</option>
                   <%

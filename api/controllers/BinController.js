@@ -37,8 +37,6 @@ module.exports = {
       "city_id": "-L2TxNe8boIvuTly8hdd",
       "country_id": "-L1pigYbq_ZQl009gBoU",
       "created_date": 1516030147156,
-      "current_level": 80,
-      "device_id": "181818181818181",
       "id": "181818181818181",
       "is_deleted": false,
       "latest_dust_level": 80,
@@ -104,6 +102,9 @@ module.exports = {
               i++;
               callback();
               if (i == Object.keys(snap.val()).length) {
+                bins.sort(function (a, b) {
+                  return b.filling_status - a.filling_status;
+                })
                 return res.json({'rows': bins});
               }
             });
@@ -235,6 +236,7 @@ module.exports = {
                   var data = {
                     alert_level: req.param('alert_level'),
                     area_id: req.param('area'),
+                    area_name: req.param('area_name'),
                     ward_id: req.param('ward'),
                     city_id: req.param('city'),
                     country_id: req.param('country'),
@@ -610,6 +612,7 @@ module.exports = {
                 .update({
                   alert_level: req.param('alert_level'),
                   area_id: req.param('area'),
+                  area_name: req.param('area_name'),
                   ward_id: req.param('ward'),
                   city_id: req.param('city'),
                   country_id: req.param('country'),
