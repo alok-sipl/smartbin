@@ -132,31 +132,7 @@ module.exports = {
     if (req.method == "POST") {
       errors = ValidationService.validate(req);
       if (Object.keys(errors).length) {
-        /* country listing*/
-        var ref = db.ref("countries");
-        ref.orderByChild("name")
-        once("value", function (snapshot) {
-          var countries = snapshot.val();
-          /* ward listing*/
-          var ref = db.ref("wards");
-          ref.once("value", function (wardSnapshot) {
-            var wards = wardSnapshot.val();
-            return res.view('add-update-bin', {
-              'title': sails.config.title.add_bin,
-              'bin': bin,
-              'countries': countries,
-              'states': states,
-              'cities': cities,
-              'wards': wards,
-              'errors': errors,
-              'req': req
-            });
-          }, function (errorObject) {
-            return res.serverError(errorObject.code);
-          });
-        }, function (errorObject) {
-          return res.serverError(errorObject.code);
-        });
+        addBinCollection(req, res, errors);
       } else {
         var allowExts = ['image/png', 'image/jpg', 'image/jpeg'];
         var ref = db.ref("/bins");
@@ -169,65 +145,14 @@ module.exports = {
             }, function whenDone(err, uploadedFiles) {
               if (err) {
                 errors['image'] = {message: err}
-                /* country listing*/
-                var ref = db.ref("countries");
-                ref.orderByChild("name")
-                  .once("value", function (snapshot) {
-                    var countries = snapshot.val();
-                    return res.view('add-update-bin', {
-                      'title': sails.config.title.add_bin,
-                      'bin': bin,
-                      'countries': countries,
-                      'states': states,
-                      'cities': cities,
-                      'wards': wards,
-                      'errors': errors,
-                      'req': req
-                    });
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
+                addBinCollection(req, res, errors);
               } else {
                 if (uploadedFiles.length === 0) {
                   errors['image'] = {message: Bin.message.bin_image_required}
-                  /* country listing*/
-                  var ref = db.ref("countries");
-                  ref.orderByChild("name")
-                    .once("value", function (snapshot) {
-                      var countries = snapshot.val();
-                      return res.view('add-update-bin', {
-                        'title': sails.config.title.add_bin,
-                        'bin': bin,
-                        'countries': countries,
-                        'states': states,
-                        'cities': cities,
-                        'wards': wards,
-                        'errors': errors,
-                        'req': req
-                      });
-                    }, function (errorObject) {
-                      return res.serverError(errorObject.code);
-                    });
+                  addBinCollection(req, res, errors);
                 } else if (allowExts.indexOf(uploadedFiles[0].type) == -1) {
                   errors['image'] = {message: Bin.message.invalid_file}
-                  /* country listing*/
-                  var ref = db.ref("countries");
-                  ref.orderByChild("name")
-                    .once("value", function (snapshot) {
-                      var countries = snapshot.val();
-                      return res.view('add-update-bin', {
-                        'title': sails.config.title.add_bin,
-                        'bin': bin,
-                        'countries': countries,
-                        'states': states,
-                        'cities': cities,
-                        'wards': wards,
-                        'errors': errors,
-                        'req': req
-                      });
-                    }, function (errorObject) {
-                      return res.serverError(errorObject.code);
-                    });
+                  addBinCollection(req, res, errors);
                 } else if (bindata) {
                   req.flash('flashMessage', '<div class="alert alert-danger">' + req.param('id') + sails.config.flash.bin_id_already_exist + '</div>');
                   return res.redirect(sails.config.base_url + 'bin/add');
@@ -267,26 +192,7 @@ module.exports = {
         });
       }
     } else {
-      /* country listing*/
-      var ref = db.ref("countries");
-      ref.orderByChild("name")
-        .once("value", function (snapshot) {
-          var countries = snapshot.val();
-          return res.view('add-update-bin', {
-            'title': sails.config.title.add_bin,
-            'bin': bin,
-            'countries': countries,
-            'states': states,
-            'cities': cities,
-            'wards': wards,
-            'circles': circles,
-            'areas': areas,
-            'errors': errors,
-            'req': req
-          });
-        }, function (errorObject) {
-          return res.serverError(errorObject.code);
-        });
+      addBinCollection(req, res, errors);
     }
   },
 
@@ -391,75 +297,7 @@ module.exports = {
     if (req.method == "POST") {
       errors = ValidationService.validate(req);
       if (Object.keys(errors).length) {
-        /* bin detail */
-        var ref = db.ref("bins/" + req.params.id);
-        ref.once("value", function (snapshot) {
-          var bin = snapshot.val();
-          if (bin != null) {
-            /* country listing*/
-            var ref = db.ref("countries");
-            ref.once("value", function (snapshot) {
-              var countries = snapshot.val();
-
-              /* city name */
-              ref.once("value", function (snapshot) {
-                var refState = db.ref("states/" + bin.country_id);
-                refState.once("value", function (snapshotState) {
-                  var states = snapshotState.val();
-                  var refCity = db.ref("cities/" + bin.state_id);
-                  refCity.once("value", function (snapshotCity) {
-                    var cities = snapshotCity.val();
-                    var refCircle = db.ref("circles/" + bin.city_id);
-                    refCircle.once("value", function (snapshotCircle) {
-                      var circles = snapshotCircle.val();
-                      var refWards = db.ref("circlewards/" + bin.circle_id);
-                      refWards.once("value", function (snapshotWards) {
-                        var wards = snapshotWards.val();
-                        var refAreas = db.ref("areas/" + bin.ward_id);
-                        refAreas.once("value", function (snapshotAreas) {
-                          var areas = snapshotAreas.val();
-                          return res.view('add-update-bin', {
-                            title: sails.config.title.edit_bin,
-                            'bin': bin,
-                            "countries": countries,
-                            "states": states,
-                            "cities": cities,
-                            'wards': wards,
-                            'circles': circles,
-                            'areas': areas,
-                            "errors": errors
-                          });
-                        }, function (errorObject) {
-                          return res.serverError(errorObject.code);
-                        });
-                      }, function (errorObject) {
-                        return res.serverError(errorObject.code);
-                      });
-                    }, function (errorObject) {
-                      return res.serverError(errorObject.code);
-                    });
-                    /* Get Areas */
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
-                  /* Get Cities */
-                }, function (errorObject) {
-                  return res.serverError(errorObject.code);
-                });
-              }, function (errorObject) {
-                return res.serverError(errorObject.code);
-              });
-              /* Get States */
-            }, function (errorObject) {
-              return res.serverError(errorObject.code);
-            });
-          } else {
-            req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
-            return res.redirect(sails.config.base_url + 'bin');
-          }
-        }, function (errorObject) {
-          return res.serverError(errorObject.code);
-        });
+        editBinCollection(req, res, errors)
       } else {
         var allowExts = ['image/png', 'image/jpg', 'image/jpeg'];
         req.file('image').upload({
@@ -468,144 +306,11 @@ module.exports = {
         }, function whenDone(err, uploadedFiles) {
           if (err) {
             errors['image'] = {message: err}
-            /* bin detail */
-            var ref = db.ref("bins/" + req.params.id);
-            ref.once("value", function (snapshot) {
-              var bin = snapshot.val();
-              if (bin != null) {
-                /* country listing*/
-                var ref = db.ref("countries");
-                ref.once("value", function (snapshot) {
-                  var countries = snapshot.val();
-                  /* city name */
-                  ref.once("value", function (snapshot) {
-                    var refState = db.ref("states/" + bin.country_id);
-                    refState.once("value", function (snapshotState) {
-                      var states = snapshotState.val();
-                      var refCity = db.ref("cities/" + bin.state_id);
-                      refCity.once("value", function (snapshotCity) {
-                        var cities = snapshotCity.val();
-                        var refCircle = db.ref("circles/" + bin.city_id);
-                        refCircle.once("value", function (snapshotCircle) {
-                          var circles = snapshotCircle.val();
-                          var refWards = db.ref("circlewards/" + bin.circle_id);
-                          refWards.once("value", function (snapshotWards) {
-                            var wards = snapshotWards.val();
-                            var refAreas = db.ref("areas/" + bin.ward_id);
-                            refAreas.once("value", function (snapshotAreas) {
-                              var areas = snapshotAreas.val();
-                              return res.view('add-update-bin', {
-                                title: sails.config.title.edit_bin,
-                                'bin': bin,
-                                "countries": countries,
-                                "states": states,
-                                "cities": cities,
-                                'wards': wards,
-                                'circles': circles,
-                                'areas': areas,
-                                "errors": errors
-                              });
-                            }, function (errorObject) {
-                              return res.serverError(errorObject.code);
-                            });
-                          }, function (errorObject) {
-                            return res.serverError(errorObject.code);
-                          });
-                        }, function (errorObject) {
-                          return res.serverError(errorObject.code);
-                        });
-                        /* Get Areas */
-                      }, function (errorObject) {
-                        return res.serverError(errorObject.code);
-                      });
-                      /* Get Cities */
-                    }, function (errorObject) {
-                      return res.serverError(errorObject.code);
-                    });
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
-                  /* Get States */
-                }, function (errorObject) {
-                  return res.serverError(errorObject.code);
-                });
-              } else {
-                req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
-                return res.redirect(sails.config.base_url + 'bin');
-              }
-            }, function (errorObject) {
-              return res.serverError(errorObject.code);
-            });
+            editBinCollection(req, res, errors)
           } else {
             if ((Object.keys(uploadedFiles).length) && (allowExts.indexOf(uploadedFiles[0].type) == -1)) {
               errors['image'] = {message: Bin.message.invalid_file}
-              /* bin detail */
-              var ref = db.ref("bins/" + req.params.id);
-              ref.once("value", function (snapshot) {
-                var bin = snapshot.val();
-                if (bin != null) {
-                  var ref = db.ref("countries");
-                  ref.once("value", function (snapshot) {
-                    var countries = snapshot.val();
-                    /* city name */
-                    ref.once("value", function (snapshot) {
-                      var refState = db.ref("states/" + bin.country_id);
-                      refState.once("value", function (snapshotState) {
-                        var states = snapshotState.val();
-                        var refCity = db.ref("cities/" + bin.state_id);
-                        refCity.once("value", function (snapshotCity) {
-                          var cities = snapshotCity.val();
-                          var refCircle = db.ref("circles/" + bin.city_id);
-                          refCircle.once("value", function (snapshotCircle) {
-                            var circles = snapshotCircle.val();
-                            var refWards = db.ref("circlewards/" + bin.circle_id);
-                            refWards.once("value", function (snapshotWards) {
-                              var wards = snapshotWards.val();
-                              var refAreas = db.ref("areas/" + bin.ward_id);
-                              refAreas.once("value", function (snapshotAreas) {
-                                var areas = snapshotAreas.val();
-                                return res.view('add-update-bin', {
-                                  title: sails.config.title.edit_bin,
-                                  'bin': bin,
-                                  "countries": countries,
-                                  "states": states,
-                                  "cities": cities,
-                                  'wards': wards,
-                                  'circles': circles,
-                                  'areas': areas,
-                                  "errors": errors
-                                });
-                              }, function (errorObject) {
-                                return res.serverError(errorObject.code);
-                              });
-                            }, function (errorObject) {
-                              return res.serverError(errorObject.code);
-                            });
-                          }, function (errorObject) {
-                            return res.serverError(errorObject.code);
-                          });
-                          /* Get Areas */
-                        }, function (errorObject) {
-                          return res.serverError(errorObject.code);
-                        });
-                        /* Get Cities */
-                      }, function (errorObject) {
-                        return res.serverError(errorObject.code);
-                      });
-                    }, function (errorObject) {
-                      return res.serverError(errorObject.code);
-                    });
-                    /* Get States */
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
-                } else {
-                  req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
-                  return res.redirect(sails.config.base_url + 'bin');
-                }
-              }, function (errorObject) {
-                return res.serverError(errorObject.code);
-              });
+              editBinCollection(req, res, errors)
             } else {
               var ref = db.ref();
               db.ref('bins/' + req.params.id)
@@ -638,73 +343,7 @@ module.exports = {
         });
       }
     } else {
-      /* country listing*/
-      var ref = db.ref("countries");
-      ref.once("value", function (snapshot) {
-        var countries = snapshot.val();
-        /* bin detail */
-        var ref = db.ref("bins/" + req.params.id);
-        ref.once("value", function (snapshot) {
-          var bin = snapshot.val();
-          if (bin != null) {
-            /* city name */
-            ref.once("value", function (snapshot) {
-              var refState = db.ref("states/" + bin.country_id);
-              refState.once("value", function (snapshotState) {
-                var states = snapshotState.val();
-                var refCity = db.ref("cities/" + bin.state_id);
-                refCity.once("value", function (snapshotCity) {
-                  var cities = snapshotCity.val();
-                  var refCircle = db.ref("circles/" + bin.city_id);
-                  refCircle.once("value", function (snapshotCircle) {
-                    var circles = snapshotCircle.val();
-                    var refWards = db.ref("circlewards/" + bin.circle_id);
-                    refWards.once("value", function (snapshotWards) {
-                      var wards = snapshotWards.val();
-                      var refAreas = db.ref("areas/" + bin.ward_id);
-                      refAreas.once("value", function (snapshotAreas) {
-                        var areas = snapshotAreas.val();
-                        return res.view('add-update-bin', {
-                          title: sails.config.title.edit_bin,
-                          'bin': bin,
-                          "countries": countries,
-                          "states": states,
-                          "cities": cities,
-                          'wards': wards,
-                          'circles': circles,
-                          'areas': areas,
-                          "errors": errors
-                        });
-                      }, function (errorObject) {
-                        return res.serverError(errorObject.code);
-                      });
-                    }, function (errorObject) {
-                      return res.serverError(errorObject.code);
-                    });
-                  }, function (errorObject) {
-                    return res.serverError(errorObject.code);
-                  });
-                  /* Get Areas */
-                }, function (errorObject) {
-                  return res.serverError(errorObject.code);
-                });
-                /* Get Cities */
-              });
-            }, function (errorObject) {
-              return res.serverError(errorObject.code);
-            });
-          } else {
-            req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
-            return res.redirect(sails.config.base_url + 'bin');
-          }
-          /* Get States */
-        }, function (errorObject) {
-          return res.serverError(errorObject.code);
-        });
-      }, function (errorObject) {
-        return res.serverError(errorObject.code);
-      });
-
+      editBinCollection(req, res, errors)
     }
   },
 
@@ -761,14 +400,14 @@ module.exports = {
             db.ref('/bins').orderByChild("ward_id").equalTo(selected_ward).once('value')
               .then(function (snapshot) {
                 var binsList = snapshot.val();
-                if(binsList !=  null){
-                  for(var i in binsList){
-                    if(bin_type == 'true'){
-                      if(binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true || binsList[i]['alert_level'] == undefined || binsList[i]['alert_level'] == '' || binsList[i]['latest_dust_level'] == undefined || binsList[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                if (binsList != null) {
+                  for (var i in binsList) {
+                    if (bin_type == 'true') {
+                      if (binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true || binsList[i]['alert_level'] == undefined || binsList[i]['alert_level'] == '' || binsList[i]['latest_dust_level'] == undefined || binsList[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
                         delete binsList[i];
                       }
-                    }else{
-                      if(binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true){
+                    } else {
+                      if (binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true) {
                         delete binsList[i];
                       }
                     }
@@ -785,14 +424,14 @@ module.exports = {
             db.ref('/bins').orderByChild("ward_id").equalTo(selected_ward).once('value')
               .then(function (snapshot) {
                 var bins = snapshot.val();
-                if(bins != null){
-                  for(var i in bins){
-                    if(bin_type == 'true'){
-                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                if (bins != null) {
+                  for (var i in bins) {
+                    if (bin_type == 'true') {
+                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
                         delete bins[i];
                       }
-                    }else{
-                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                    } else {
+                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true) {
                         delete bins[i];
                       }
                     }
@@ -816,14 +455,14 @@ module.exports = {
             var ref = db.ref("bins").orderByChild('area_id').equalTo(driverDetail.area_id);
             ref.once("value", function (snapshot) {
               var bins = snapshot.val();
-              if(bins != null){
-                for(var i in bins){
-                  if(bin_type == 'true'){
-                    if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+              if (bins != null) {
+                for (var i in bins) {
+                  if (bin_type == 'true') {
+                    if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
                       delete bins[i];
                     }
-                  }else{
-                    if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                  } else {
+                    if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true) {
                       delete bins[i];
                     }
                   }
@@ -837,14 +476,14 @@ module.exports = {
             db.ref('/bins').once('value')
               .then(function (snapshot) {
                 var bins = snapshot.val();
-                if(bins != null){
-                  for(var i in bins){
-                    if(bin_type == 'true'){
-                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+                if (bins != null) {
+                  for (var i in bins) {
+                    if (bin_type == 'true') {
+                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
                         delete bins[i];
                       }
-                    }else{
-                      if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                    } else {
+                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true) {
                         delete bins[i];
                       }
                     }
@@ -865,14 +504,14 @@ module.exports = {
           .once('value')
           .then(function (snapshot) {
             var bins = snapshot.val();
-            if(bins != null){
-              for(var i in bins){
-                if(bin_type == 'true'){
-                  if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+            if (bins != null) {
+              for (var i in bins) {
+                if (bin_type == 'true') {
+                  if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
                     delete bins[i];
                   }
-                }else{
-                  if(bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true){
+                } else {
+                  if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true) {
                     delete bins[i];
                   }
                 }
@@ -889,10 +528,10 @@ module.exports = {
       db.ref('bins').orderByChild("is_deleted").equalTo(false).once('value')
         .then(function (snapshot) {
           var bins = snapshot.val();
-          if(bin_type == 'true'){
-            if(bins != null){
-              for(var i in bins){
-                if(bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])){
+          if (bin_type == 'true') {
+            if (bins != null) {
+              for (var i in bins) {
+                if (bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
                   delete bins[i];
                 }
               }
@@ -930,4 +569,141 @@ function getBinsList(snap) {
     bins = {};
     return bins;
   }
+}
+
+
+function addBinCollection(req, res, errors) {
+  /* country listing*/
+  var ref = db.ref("countries");
+  ref.orderByChild("name")
+    .once("value", function (snapshot) {
+      var countries = CountryService.snapshotToArray(snapshot);
+      countries = countries.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+      /* ward listing*/
+      var ref = db.ref("wards");
+      ref.once("value", function (wardSnapshot) {
+        var wards = wardSnapshot.val();
+        return res.view('add-update-bin', {
+          'title': sails.config.title.add_bin,
+          'bin': bin,
+          'countries': countries,
+          'states': states,
+          'cities': cities,
+          'wards': wards,
+          'errors': errors,
+          'req': req
+        });
+      }, function (errorObject) {
+        return res.serverError(errorObject.code);
+      });
+    }, function (errorObject) {
+      return res.serverError(errorObject.code);
+    });
+}
+
+
+function editBinCollection(req, res, errors) {
+  areas = {}
+  /* bin detail */
+  var ref = db.ref("bins/" + req.params.id);
+  ref.once("value", function (snapshot) {
+    var bin = snapshot.val();
+    if (bin != null) {
+      /* country listing*/
+      var ref = db.ref("countries");
+      ref.once("value", function (snapshot) {
+        var countries = CountryService.snapshotToArray(snapshot);
+        countries = countries.sort(function(a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
+        /* city name */
+        ref.once("value", function (snapshot) {
+          var refState = db.ref("states/" + bin.country_id);
+          refState.once("value", function (snapshotState) {
+            var states = CountryService.snapshotToArray(snapshotState);
+            states = states.sort(function(a, b) {
+              var textA = a.name.toUpperCase();
+              var textB = b.name.toUpperCase();
+              return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
+            var refCity = db.ref("cities/" + bin.state_id);
+            refCity.once("value", function (snapshotCity) {
+              var cities = CountryService.snapshotToArray(snapshotCity);
+              cities = cities.sort(function(a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+              });
+              var refCircle = db.ref("circles/" + bin.city_id);
+              refCircle.once("value", function (snapshotCircle) {
+                var circles = CountryService.snapshotToArray(snapshotCircle);
+                circles = circles.sort(function(a, b) {
+                  var textA = parseInt(a.name);
+                  var textB = parseInt(b.name);
+                  return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                });
+                var refWards = db.ref("circlewards/" + bin.circle_id);
+                refWards.once("value", function (snapshotWards) {
+                  var wards = CountryService.snapshotToArray(snapshotWards);
+                  wards = wards.sort(function(a, b) {
+                    var textA = a.name.toUpperCase();
+                    var textB = b.name.toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                  })
+                  var refAreas = db.ref("areas/" + bin.ward_id);
+                  refAreas.once("value", function (snapshotAreas) {
+                    var areas = CountryService.snapshotToArray(snapshotAreas);
+                    areas = areas.sort(function(a, b) {
+                      var textA = a.name.toUpperCase();
+                      var textB = b.name.toUpperCase();
+                      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    });
+                    return res.view('add-update-bin', {
+                      title: sails.config.title.edit_bin,
+                      'bin': bin,
+                      "countries": countries,
+                      "states": states,
+                      "cities": cities,
+                      'wards': wards,
+                      'circles': circles,
+                      'areas': areas,
+                      "errors": errors
+                    });
+                  }, function (errorObject) {
+                    return res.serverError(errorObject.code);
+                  });
+                }, function (errorObject) {
+                  return res.serverError(errorObject.code);
+                });
+              }, function (errorObject) {
+                return res.serverError(errorObject.code);
+              });
+              /* Get Areas */
+            }, function (errorObject) {
+              return res.serverError(errorObject.code);
+            });
+            /* Get Cities */
+          }, function (errorObject) {
+            return res.serverError(errorObject.code);
+          });
+        }, function (errorObject) {
+          return res.serverError(errorObject.code);
+        });
+        /* Get States */
+      }, function (errorObject) {
+        return res.serverError(errorObject.code);
+      });
+    } else {
+      req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+      return res.redirect(sails.config.base_url + 'bin');
+    }
+  }, function (errorObject) {
+    return res.serverError(errorObject.code);
+  });
 }

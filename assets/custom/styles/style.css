@@ -255,6 +255,10 @@ body.blank {
   width: 100%;
   margin: 10px;
 }
+.custom-inline-form .form-group{margin-right: 25px;}
+.custom-inline-form .form-group label{padding-right: 4px; font-size: 14px;}
+.custom-inline-form .form-group input[type="radio"], .custom-inline-form .form-group input[type="checkbox"]{margin-top: 0; width: 22px;}
+.gm-style .gm-style-iw{color: #000; font-size: 15px;}
 @media (max-width: 420px) {
   .login-container,
   .lock-container {
@@ -3648,7 +3652,8 @@ label{font-weight: 600; color: #000;}
 }
 a:hover, a:focus {color: #d24012;text-decoration: none;}
 .text-break{white-space: inherit !important;text-align: left !important;}
-#map-canvas {height: 400px;}
+#map-canvas {height: 400px;clear: both; margin-top: 30px;}
 .dashboard input[type="checkbox"] {
   height: 30px;width: 30px;
 }
+.form-group strong {color: #e74c3c;font-weight: normal;}

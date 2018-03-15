@@ -71,7 +71,6 @@ function getCity(stateId) {
       data: {id: stateId},
       type: 'POST',
       success: function (result) {
-        console.log('Response', result);
         $('#city').empty();
         $('#city').html('<option value="">Select City</option>');
         $('#area').empty();
@@ -98,7 +97,6 @@ function getArea(cityId) {
       data: {id: cityId},
       type: 'POST',
       success: function (result) {
-        console.log('Response', result);
         $('#area').empty();
         $('#area').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
@@ -123,7 +121,6 @@ function getWardByCircle(circleId) {
       data: {id: circleId},
       type: 'POST',
       success: function (result) {
-        console.log('Response getWardByCircle', result);
         $('#ward').html('<option value="">Select Ward</option>');
         $.each(result, function (i, obj) {
           $('#ward').append('<option value="' + obj.key + '">' + obj.name + '</option>');
@@ -145,7 +142,6 @@ function getAreaByWard(wardId) {
       data: {id: wardId},
       type: 'POST',
       success: function (result) {
-        console.log('Response', result);
         $('#area').html('<option value="">Select Area</option>');
         $.each(result, function (i, obj) {
           $('#area').append('<option value="' + obj.key + '">' + obj.name + '</option>');
@@ -168,7 +164,6 @@ function getCircle(cityId) {
       data: {id: cityId},
       type: 'POST',
       success: function (result) {
-        console.log('Response', result);
         $('#circle').html('<option value="">Select Circle</option>');
         $.each(result, function (i, obj) {
           $('#circle').append('<option value="' + obj.key + '">' + obj.name + '</option>');
@@ -190,7 +185,6 @@ function getState(coutryId) {
       data: {id: coutryId},
       type: 'POST',
       success: function (result) {
-        console.log('Response', result);
         $('#state').empty();
         $('#state').html('<option value="">Select State</option>');
         $('#city').empty();
@@ -257,7 +251,6 @@ as supplied by the browser's 'navigator.geolocation' object. */
 function geolocate() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
-      console.log(position);
       var geolocation = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
@@ -628,106 +621,3 @@ $(document).ready(function () {
   /*Disable auto complete of on the input filed of the grid */
   $(".ui-widget-content").attr("autocomplete", "off");
 });
-
-/* Search bin js */
-var addresses = '';
-var message = '';
-var delay = 100;
-var nextAddress = 0;
-var infowindow = new google.maps.InfoWindow();
-var geo = new google.maps.Geocoder();
-var bounds = new google.maps.LatLngBounds();
-var markers = [];
-var latlng = new google.maps.LatLng(21.823524, 75.514989);
-var mapOptions = {
-  zoom: 12,
-  center: latlng,
-  mapTypeId: google.maps.MapTypeId.ROADMAP
-}
-var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-function filterbins() {
-  var select_ward = $('#select_ward').val();
-  var select_driver = $('#select_driver').val();
-  var bin_type = ($("#bin_type").is(':checked')) ? true : false;
-  var thisvalue = $("select#select_ward option:selected").text();
-
-  $('#gs_ward_name').val(thisvalue);
-  $('#gs_ward_name').keyup();
-  $.ajax({
-    url: '/bin/filterbins',
-    type: "post",
-    dataType: "json",
-    beforeSend: function () {
-    },
-    data: {selected_ward: select_ward, select_driver: select_driver, bin_type: bin_type},
-    cache: true,
-    error: function () {
-    },
-    success: function (e) {
-      $.each(e.bins, function (i, option) {
-        if (option.latitude != null && option.latitude != "") {
-          if (option.alert_level != undefined && option.alert_level != '' && option.latest_dust_level != undefined && option.latest_dust_level != undefined) {
-            option.latest_dust_level = parseInt((((parseInt(option.alert_level) - parseInt(option.latest_dust_level))) * 100) / parseInt(option.alert_level));
-          } else {
-            option.latest_dust_level = 0;
-          }
-          var search = option.location + ' (Dust Status: ' + option.latest_dust_level + ')';
-          createmarkers(search, option.latitude, option.longitude, option.latest_dust_level, option.alert_level);
-        } else {
-        }
-      });
-    },
-    complete: function (jqXHR, textStatus) {
-
-    }
-  });
-}
-
-// Removes the markers from the map, but keeps them in the array.
-function resetbins() {
-  setMapOnAll(null);
-  filterbins();
-}
-
-function setMapOnAll(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-  }
-}
-
-function createmarkers(add, lat, lng, latest_dust_level, alert_level) {
-  if (latest_dust_level > alert_level) {
-    var pinColor = "FE7569";
-  } else {
-    var pinColor = "34BA46";
-  }
-  var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-    new google.maps.Size(21, 34),
-    new google.maps.Point(0, 0),
-    new google.maps.Point(10, 34));
-
-  var contentString = add;
-
-  var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(lat, lng),
-    map: map,
-    icon: pinImage,
-  });
-  map.setCenter(new google.maps.LatLng(lat, lng));
-  markers.push(marker);
-
-  google.maps.event.addListener(marker, 'click', function () {
-    infowindow.setContent(contentString);
-    infowindow.open(map, marker);
-  });
-
-  google.maps.event.addListener(marker, 'mouseover', function () {
-    infowindow.setContent(contentString);
-    infowindow.open(map, marker);
-  });
-
-  bounds.extend(marker.position);
-}
-
-filterbins();

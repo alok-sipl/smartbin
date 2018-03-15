@@ -86,10 +86,10 @@
                   } %>
                 </select>
                 <input type="hidden" name="area_name" id="area_name"
-                       value="<% (driver.area_name != undefined) ?  driver.area_name : '' %>"/>
+                       value="<%= (driver.area_name != undefined) ?  driver.area_name : '' %>"/>
               </div>
               <span class="help-block">
-                <strong><%= (errors.ward != undefined) ? errors.ward.message : '' %>
+                <strong><%= (errors.area != undefined) ? errors.area.message : '' %>
                 </strong>
               </span>
             </div>

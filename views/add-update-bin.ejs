@@ -77,8 +77,8 @@
                   <%
                   if(Object.keys(countries).length){
                     for(var key in countries) { %>
-                  <option <%= (bin.country_id && bin.country_id == key) ? "selected" : (req.param('country') && req.param('country') == key) ? "selected" : '' %>
-                    value="<%= key %>"><%= countries[key].name %></option>
+                  <option <%= (bin.country_id && bin.country_id == countries[key]['key']) ? "selected" : (req.param('country') && req.param('country') == countries[key]['key']) ? "selected" : '' %>
+                    value="<%= countries[key]['key'] %>"><%= countries[key].name %></option>
                   <% }
                   } %>
                 </select>
@@ -98,8 +98,8 @@
                   <%
                   if(Object.keys(states).length){
                     for(var key in states) { %>
-                  <option <%= (bin.state_id && bin.state_id == key) ? "selected" : (req.param('state') && req.param('state') == key) ? "selected" : '' %>
-                    value="<%= key %>"><%= states[key].name %></option>
+                  <option <%= (bin.state_id && bin.state_id == states[key]['key']) ? "selected" : (req.param('state') && req.param('state') == states[key]['key']) ? "selected" : '' %>
+                    value="<%= states[key]['key'] %>"><%= states[key].name %></option>
                   <% }
                   } %>
                 </select>
@@ -121,8 +121,8 @@
                   <%
                   if(Object.keys(cities).length){
                     for(var key in cities) { %>
-                  <option <%= (bin.city_id && bin.city_id == key) ? "selected" : (req.param('city') && req.param('city') == key) ? "selected" : '' %>
-                    value="<%= key %>"><%= cities[key].name %></option>
+                  <option <%= (bin.city_id && bin.city_id == cities[key]['key']) ? "selected" : (req.param('city') && req.param('city') == cities[key]['key']) ? "selected" : '' %>
+                    value="<%= cities[key]['key'] %>"><%= cities[key].name %></option>
                   <% }
                   } %>
                 </select>
@@ -143,8 +143,8 @@
                   <%
                   if(Object.keys(circles).length){
                     for(var key in circles) { %>
-                  <option <%= (bin.circle_id && bin.circle_id == key) ? "selected" : (req.param('circle') && req.param('circle') == key) ? "selected" : '' %>
-                    value="<%= key %>"><%= circles[key].name %></option>
+                  <option <%= (bin.circle_id && bin.circle_id == circles[key]['key']) ? "selected" : (req.param('circle') && req.param('circle') == circles[key]['key']) ? "selected" : '' %>
+                    value="<%= circles[key]['key'] %>"><%= circles[key].name %></option>
                   <% }
                   } %>
                 </select>
@@ -165,8 +165,8 @@
                   <%
                   if(Object.keys(wards).length){
                     for(var key in wards) { %>
-                  <option <%= (bin.ward_id && bin.ward_id == key) ? "selected" : (req.param('ward') && req.param('ward') == key) ? "selected" : '' %>
-                    value="<%= key %>"><%= wards[key].name %></option>
+                  <option <%= (bin.ward_id && bin.ward_id == wards[key]['key']) ? "selected" : (req.param('ward') && req.param('ward') == wards[key]['key']) ? "selected" : '' %>
+                    value="<%= wards[key]['key'] %>"><%= wards[key].name %></option>
                   <% }
                   } %>
                 </select>
@@ -179,14 +179,14 @@
               </div>
               <div class="col-md-3">
                 <label for="is_active">Area<span class="star-icon">*</span></label>
-                <select name="area" id="area" class="form-control" required onchange="changeArea(this.value)"
+                <select name="area" id="area" class="form-control" required
                         data-parsley-required-message="<%= Bin.message.area_required %>">
                   <option value="">Select Area</option>
                   <%
                   if(Object.keys(areas).length){
                     for(var key in areas) { %>
-                  <option <%= (bin.area_id && bin.area_id == key) ? "selected" : (req.param('area') && req.param('area') == key) ? "selected" : '' %>
-                    value="<%= key %>"><%= areas[key].name %></option>
+                  <option <%= (bin.area_id && bin.area_id == areas[key]['key']) ? "selected" : (req.param('area') && req.param('area') == key) ? "selected" : '' %>
+                    value="<%= areas[key]['key'] %>"><%= areas[key].name %></option>
                   <% }
                   } %>
                 </select>
@@ -196,6 +196,7 @@
 <strong><%= (errors.area != undefined) ? errors.areaId.message : '' %>
 </strong>
 </span>
+                <input type="hidden" name="area_name" id="area_name" value="<%= (bin.area_name) ? (bin.area_name) : (req.param('area_name')) ? req.param('area_name') : '' %>">
               </div>
             </div>
             <div class="form-group">
@@ -268,13 +269,7 @@
                      title="<%= (bin.name) ? bin.name : '' %>"
                      alt="<%= (bin.name) ? bin.name : '' %>">
                 <% } %>
-                <input type="file" class="form-control" name="image" id="image" accept="image/*"
-                  <% if(!Object.keys(bin).length){ %>
-                       required
-                       data-parsley-required-message="<%= Bin.message.bin_image_required %>"
-                  <% } %>
-                       data-parsley-max-file-size="<%= sails.config.length.max_file_upload_kb %>"
-                       data-parsley-filemimetypes="image/jpeg, image/png"/>
+                <input type="file" class="form-control" name="image" id="image" accept="image/*"/>
 
                 <span class="help-block">
 <strong><%= (errors.image != undefined) ? errors.image.message : '' %>

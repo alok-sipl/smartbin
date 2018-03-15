@@ -89,10 +89,20 @@ module.exports = {
         /* types listing*/
         var ref = db.ref("types");
         ref.once("value", function (snapshot) {
-          var types = snapshot.val();
+          var types = CountryService.snapshotToArray(snapshot);
+          types = types.sort(function (a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
           var driversRef = db.ref("drivers");
           driversRef.once("value", function (driversRefSnapshot) {
-            var drivers = driversRefSnapshot.val();
+            var drivers = CountryService.snapshotToArray(driversRefSnapshot);
+            drivers = drivers.sort(function (a, b) {
+              var textA = a.name.toUpperCase();
+              var textB = b.name.toUpperCase();
+              return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
             return res.view('add-update-vehicle', {
               'title': sails.config.title.add_vehicle,
               'vehicle': vehicle,
@@ -142,11 +152,21 @@ module.exports = {
     } else {
       var ref = db.ref("types");
       ref.once("value", function (typesSnapshot) {
-        var types = typesSnapshot.val();
+        var types = CountryService.snapshotToArray(typesSnapshot);
+        types = types.sort(function (a, b) {
+          var textA = a.name.toUpperCase();
+          var textB = b.name.toUpperCase();
+          return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
         /* wards listing*/
         var ref = db.ref("drivers");
         ref.once("value", function (snapshot) {
-          var drivers = snapshot.val();
+          var drivers = CountryService.snapshotToArray(snapshot);
+          drivers = drivers.sort(function (a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
           return res.view('add-update-vehicle', {
             'title': sails.config.title.add_vehicle,
             'types': types,
@@ -177,7 +197,7 @@ module.exports = {
     var ref = db.ref("vehicles/" + req.params.id);
     ref.once("value", function (snapshot) {
       var vehicle = snapshot.val();
-      if(vehicle != null){
+      if (vehicle != null) {
         /* driver listing*/
         var ref = db.ref("drivers");
         ref.once("value", function (driverSnapshot) {
@@ -198,7 +218,7 @@ module.exports = {
         }, function (errorObject) {
           return res.serverError(errorObject.code);
         });
-      }else{
+      } else {
         req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
         return res.redirect(sails.config.base_url + 'vehicle');
       }
@@ -220,23 +240,34 @@ module.exports = {
     if (req.method == "POST") {
       errors = ValidationService.validate(req);
       if (Object.keys(errors).length) {
-
         /* driver detail */
         var ref = db.ref("vehicles/" + req.params.id);
         ref.once("value", function (snapshot) {
-          var vehicle = snapshot.val();
-          if(vehicle != null){
+          var vehicle = CountryService.snapshotToArray(snapshot);
+          vehicle = vehicle.sort(function (a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
+          if (vehicle != null) {
             /* driver listing*/
             var ref = db.ref("drivers");
             ref.once("value", function (driverSnapshot) {
-              var driver = driverSnapshot.val();
-
+              var driver = CountryService.snapshotToArray(driverSnapshot);
+              driver = driver.sort(function (a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+              });
               /* type listing*/
               var ref = db.ref("types");
               ref.once("value", function (snapshot) {
-                var types = snapshot.val();
-
-                /* city name */
+                var types = CountryService.snapshotToArray(snapshot);
+                types = types.sort(function (a, b) {
+                  var textA = a.name.toUpperCase();
+                  var textB = b.name.toUpperCase();
+                  return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                });
                 return res.view('add-update-vehicle', {
                   title: sails.config.title.edit_vehicle,
                   'vehicle': vehicle,
@@ -250,7 +281,7 @@ module.exports = {
             }, function (errorObject) {
               return res.serverError(errorObject.code);
             });
-          }else{
+          } else {
             req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
             return res.redirect(sails.config.base_url + 'vehicle');
           }
@@ -283,26 +314,33 @@ module.exports = {
       var ref = db.ref("vehicles/" + req.params.id);
       ref.once("value", function (snapshot) {
         var vehicle = snapshot.val();
-        if(vehicle != null){
-          var ref = db.ref("types");
-          ref.once("value", function (typeSnapshot) {
-            var types = typeSnapshot.val();
-            var ref = db.ref("drivers");
-            ref.once("value", function (driversSnapshot) {
-              var drivers = driversSnapshot.val();
-              /* city name */
-              ref.once("value", function (snapshot) {
-                var cities = snapshot.val();
-                return res.view('add-update-vehicle', {
-                  title: sails.config.title.edit_vehicle,
-                  'vehicle': vehicle,
-                  "drivers": drivers,
-                  "types": types,
-                  "vehicles": vehicle,
-                  "errors": errors
-                });
-              }, function (errorObject) {
-                return res.serverError(errorObject.code);
+        if (vehicle != null){
+        var ref = db.ref("types");
+        ref.once("value", function (typeSnapshot) {
+          var types = CountryService.snapshotToArray(typeSnapshot);
+          types = types.sort(function (a, b) {
+            var textA = a.name.toUpperCase();
+            var textB = b.name.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+          });
+          var ref = db.ref("drivers");
+          ref.once("value", function (driversSnapshot) {
+            var drivers = CountryService.snapshotToArray(driversSnapshot);
+            drivers = drivers.sort(function (a, b) {
+              var textA = a.name.toUpperCase();
+              var textB = b.name.toUpperCase();
+              return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
+            /* city name */
+            ref.once("value", function (snapshot) {
+              var cities = snapshot.val();
+              return res.view('add-update-vehicle', {
+                title: sails.config.title.edit_vehicle,
+                'vehicle': vehicle,
+                "drivers": drivers,
+                "types": types,
+                "vehicles": vehicle,
+                "errors": errors
               });
             }, function (errorObject) {
               return res.serverError(errorObject.code);
@@ -310,42 +348,53 @@ module.exports = {
           }, function (errorObject) {
             return res.serverError(errorObject.code);
           });
-        }else{
-          req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
-          return res.redirect(sails.config.base_url + 'vehicle');
-        }
-      }, function (errorObject) {
-        return res.serverError(errorObject.code);
-      });
-    }
-  },
-
-  /*
-    * Name: updateStatus
-    * Created By: A-SIPL
-    * Created Date: 8-dec-2017
-    * Purpose: add new supplier
-    * @param  req
-    */
-  updateStatus: function (req, res) {
-    var id = req.body.id;
-    var status = req.body.is_active;
-    if (id != '') {
-      db.ref('/vehicles/' + id)
-        .update({
-          'is_deleted': status
-        })
-        .then(function () {
-          return res.json({'status': true});
-        })
-        .catch(function (err) {
-          res.json({'status': false, 'message': err});
+        }, function (errorObject) {
+          return res.serverError(errorObject.code);
         });
-    } else {
-      return res.json({'status': false, message: sails.config.flash.something_went_wronge});
+      }
+    else
+      {
+        req.flash('flashMessage', '<div class="alert alert-danger">' + sails.config.flash.something_went_wronge + '</div>');
+        return res.redirect(sails.config.base_url + 'vehicle');
+      }
     }
+  ,
+
+    function (errorObject) {
+      return res.serverError(errorObject.code);
+    }
+
+  );
+}
+},
+
+/*
+  * Name: updateStatus
+  * Created By: A-SIPL
+  * Created Date: 8-dec-2017
+  * Purpose: add new supplier
+  * @param  req
+  */
+updateStatus: function (req, res) {
+  var id = req.body.id;
+  var status = req.body.is_active;
+  if (id != '') {
+    db.ref('/vehicles/' + id)
+      .update({
+        'is_deleted': status
+      })
+      .then(function () {
+        return res.json({'status': true});
+      })
+      .catch(function (err) {
+        res.json({'status': false, 'message': err});
+      });
+  } else {
+    return res.json({'status': false, message: sails.config.flash.something_went_wronge});
   }
-};
+}
+}
+;
 
 /*
    * Name: getDriverList

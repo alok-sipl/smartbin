@@ -36,7 +36,7 @@
             <% if (req.session.flash) { %>
             <%- req.flash('flashMessage') %>
             <% } %>
-            <div class="forg-group">
+            <div class="form-group">
               <div class="col-md-3">
                 <label for="last_name">Name<span class="star-icon">*</span></label>
                 <input type="text" name="name" class="form-control" id="name" required
@@ -74,8 +74,8 @@
                     <%
                     if(Object.keys(types).length){
                       for(var key in types) { %>
-                    <option <%= (vehicle.type && vehicle.type == key) ? "selected" : (req.param('type') && req.param('type') == key) ? "selected" : '' %>
-                      value="<%= key %>"><%= types[key].name %></option>
+                    <option <%= (vehicle.type && vehicle.type == types[key]['key']) ? "selected" : (req.param('type') && req.param('type') == types[key]['key']) ? "selected" : '' %>
+                      value="<%= types[key]['key'] %>"><%= types[key].name %></option>
                     <% }
                     } %>
                   </select>
@@ -94,8 +94,8 @@
                     <%
                     if(drivers && drivers != null && Object.keys(drivers).length){
                       for(var key in drivers) { %>
-                    <option <%= (vehicle.assign_to && vehicle.assign_to == key) ? "selected" : (req.param('assign_to') && req.param('assign_to') == key) ? "selected" : '' %>
-                      value="<%= key %>"><%= drivers[key].name %></option>
+                    <option <%= (vehicle.assign_to && vehicle.assign_to == drivers[key]['key']) ? "selected" : (req.param('assign_to') && req.param('assign_to') == drivers[key]['key']) ? "selected" : '' %>
+                      value="<%= drivers[key]['key'] %>"><%= drivers[key].name %></option>
                     <% }
                     } %>
                   </select>
@@ -107,6 +107,7 @@
             </div>
             <div class="form-group">
               <div class="col-md-3">
+                <div class="status">
                 <label for="is_active">Status<span class="star-icon">*</span></label>
                 <select name="status" id="status" class="form-control" required
                         data-parsley-required-message="<%= User.message.status_required %>">
@@ -118,6 +119,7 @@
                     value="true">In Active
                   </option>
                 </select>
+                </div>
                 <span class="help-block">
                                         <strong><%= (errors.status != undefined) ? errors.status.message : '' %>
                                         </strong>
