@@ -20,6 +20,9 @@
     </div>
   </div>
 </div>
+<% if (req.session.flash) { %>
+<%- req.flash('flashMessage') %>
+<% } %>
 <div class="row">
   <div class="col-md-12">
     <div class="hpanel">

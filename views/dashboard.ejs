@@ -18,6 +18,11 @@
     </div>
   </div>
 </div>
+<div class="alert alert-success" style="display: none"></div>
+<div class="alert alert-danger" style="display: none"></div>
+<% if (req.session.flash) { %>
+<%- req.flash('flashMessage') %>
+<% } %>
 <div class="hpanel">
   <div class="panel-body">
     <div class="form-inline custom-inline-form">

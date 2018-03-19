@@ -356,10 +356,10 @@ module.exports = {
           'is_deleted': status
         })
         .then(function () {
-          return res.json({'status': true});
+          return res.json({'status': true, message: sails.config.flash.update_successfully});
         })
         .catch(function (err) {
-          res.json({'status': false, 'message': err});
+          return res.json({'status': false, message: sails.config.flash.something_went_wronge});
         });
     } else {
       return res.json({'status': false, message: sails.config.flash.something_went_wronge});
