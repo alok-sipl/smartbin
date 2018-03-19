@@ -3568,7 +3568,7 @@ label{font-weight: 600; color: #000;}
 
 .navbar-nav > li > a {padding: 25px 20px 25px;font-size: 15px;height: 90px !important;}
 .navbar-nav > li > a:hover, .navbar-nav > li.active > a{background-color:#ea6941 !important;color:white !important;}
-.navbar-nav > li > a.logout {font-size: 25px;padding: 25px 20px;}
+.navbar-nav > li > a.logout {padding: 25px 20px;}
 .navbar-nav li .active {color:#e65022 !important; background-color:#e65022 !important;}
 
 #header{height: 90px;}
