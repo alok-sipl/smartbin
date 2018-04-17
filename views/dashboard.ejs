@@ -140,10 +140,12 @@
   }
 
   function createmarkers(add, lat, lng, latest_dust_level, alert_level) {
-    if (latest_dust_level > alert_level) {
-      var pinColor = "FE7569";
-    } else {
-      var pinColor = "34BA46";
+    if (latest_dust_level <= <%= sails.config.length.min_fill_level %>) {
+      var pinColor = "008000";
+    } else  if (latest_dust_level > <%= sails.config.length.min_fill_level %> && latest_dust_level <= <%= sails.config.length.avrage_fill_level %>){
+      var pinColor = "FFA500";
+    }else{
+      var pinColor = "FF0000";
     }
     var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
       new google.maps.Size(21, 34),

@@ -4,6 +4,8 @@
 /* All message will be declared here */
 var CONST = {
   MSGTIMEOUT: 4000,
+  MIN_FILL_LEVEL: 40,
+  AVERAGE_FILL_LEVEL : 70
 }
 
 $(document).ready(function () {
@@ -539,10 +541,10 @@ $(document).ready(function () {
     gridComplete: function () {
       for (var i = 0; i < rowsToColor.length; i++) {
         var status = $("#" + rowsToColor[i]).find("td").eq(1).html();
-        if (status < 40) {
+        if (status <= CONST.MIN_FILL_LEVEL) {
           $("#" + rowsToColor[i]).find("td").css("background-color", "green");
           $("#" + rowsToColor[i]).find("td").css("color", "white");
-        } else if (status >= 40 && status < 70) {
+        } else if (status > CONST.MIN_FILL_LEVEL && status <= CONST.AVERAGE_FILL_LEVEL) {
           $("#" + rowsToColor[i]).find("td").css("background-color", "orange");
           $("#" + rowsToColor[i]).find("td").css("color", "white");
         } else {

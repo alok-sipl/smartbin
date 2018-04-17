@@ -403,7 +403,7 @@ module.exports = {
                 if (binsList != null) {
                   for (var i in binsList) {
                     if (bin_type == 'true') {
-                      if (binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true || binsList[i]['alert_level'] == undefined || binsList[i]['alert_level'] == '' || binsList[i]['latest_dust_level'] == undefined || binsList[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
+                      if (binsList[i]['area_id'] == undefined || binsList[i]['area_id'] == driverDetail.area_id || binsList[i]['is_deleted'] == undefined || binsList[i]['is_deleted'] == true || binsList[i]['alert_level'] == undefined || binsList[i]['alert_level'] == '' || binsList[i]['latest_dust_level'] == undefined || binsList[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) < sails.config.length.avrage_fill_level) {
                         delete binsList[i];
                       }
                     } else {
@@ -427,7 +427,7 @@ module.exports = {
                 if (bins != null) {
                   for (var i in bins) {
                     if (bin_type == 'true') {
-                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
+                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) < sails.config.length.avrage_fill_level) {
                         delete bins[i];
                       }
                     } else {
@@ -458,7 +458,7 @@ module.exports = {
               if (bins != null) {
                 for (var i in bins) {
                   if (bin_type == 'true') {
-                    if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
+                    if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) < sails.config.length.avrage_fill_level) {
                       delete bins[i];
                     }
                   } else {
@@ -479,7 +479,7 @@ module.exports = {
                 if (bins != null) {
                   for (var i in bins) {
                     if (bin_type == 'true') {
-                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
+                      if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) < sails.config.length.avrage_fill_level) {
                         delete bins[i];
                       }
                     } else {
@@ -507,7 +507,7 @@ module.exports = {
             if (bins != null) {
               for (var i in bins) {
                 if (bin_type == 'true') {
-                  if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
+                  if (bins[i]['is_deleted'] == undefined || bins[i]['is_deleted'] == true || bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) < sails.config.length.avrage_fill_level) {
                     delete bins[i];
                   }
                 } else {
@@ -531,7 +531,7 @@ module.exports = {
           if (bin_type == 'true') {
             if (bins != null) {
               for (var i in bins) {
-                if (bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) <= parseInt(bins[i]['alert_level'])) {
+                if (bins[i]['alert_level'] == undefined || bins[i]['alert_level'] == '' || bins[i]['latest_dust_level'] == undefined || bins[i]['latest_dust_level'] == '' || (parseInt((((parseInt(bins[i]['alert_level']) - parseInt(bins[i]['latest_dust_level']))) * 100) / parseInt(bins[i]['alert_level']))) < sails.config.length.avrage_fill_level) {
                   delete bins[i];
                 }
               }

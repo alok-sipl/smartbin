@@ -101,7 +101,9 @@
     max_password: 16,
     max_file_upload: 4000000,
     max_file_upload_kb: 40,
-    bin_id: 15
+    bin_id: 15,
+    min_fill_level : 40,
+    avrage_fill_level : 70,
   },
 
   regex:{
