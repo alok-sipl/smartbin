@@ -104,15 +104,7 @@ module.exports = {
         db.ref('users/' + req.session.userid)
           .update({
             'name': req.param('name'),
-            'account_number': req.param('account_number'),
-            'country_id': req.param('country'),
-            'country_name': req.param('country_name'),
-            'city_id': req.param('city'),
-            'city_name': req.param('city_name'),
-            'area': req.param('area'),
-            'latitude': req.param('latitude'),
-            'longitude': req.param('longitude')
-          }).then(function () {
+           }).then(function () {
           user = firebaseAuth.auth().currentUser;
         }).then(function () {
           user.updateProfile({
@@ -122,7 +114,7 @@ module.exports = {
           req.session.user.displayName = req.param('name');
           req.session.user.photoURL = sails.config.base_url + "images/profile.png";
         })
-          .then(function (res) {
+          .then(function () {
             req.flash('flashMessage', '<div class="alert alert-success">' + sails.config.flash.profile_update_success + '</div>');
             return res.redirect(sails.config.base_url + 'dashboard/profile');
           })
